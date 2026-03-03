@@ -6,8 +6,8 @@ import confetti from 'canvas-confetti';
 
 const Countdown = () => {
   // Event dates (February 20-21, 2026)
-  const EVENT_START = '2026-02-20T00:00:00';
-  const EVENT_END = '2026-02-25T23:59:59';
+  const EVENT_START = '2026-03-24T00:00:00';
+  const EVENT_END = '2026-03-25T23:59:59';
   
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -127,8 +127,8 @@ const Countdown = () => {
         <div className="live-event">
           <div className="live-badge pulse">LIVE NOW</div>
           <div className="celebrate-message">
-            <p>TRISHNA 2K25 IS LIVE</p>
-            <p className="event-date"><b>Feb 20 - 25</b></p>
+            <p>CODEATHON 2K26 IS LIVE</p>
+            <p className="event-date"><b>Mar 24 - 25</b></p>
             Join the Event! <span className="emoji">🎉</span>
           </div>
           <button className="join-button" onClick={handleLiveUpdatesClick}>
@@ -139,7 +139,7 @@ const Countdown = () => {
 
       {eventStatus === 'past' && (
         <div className="past-event">
-          <p>TRISHNA 2K25 WAS A GRAND SUCCESS!</p>
+          <p>CODEATHON 2K25 WAS A GRAND SUCCESS!</p>
           <p>Thank you to all 500+ participants!</p>
           <div className="highlights-link">
             <a href="/gallery">View Event Highlights →</a>

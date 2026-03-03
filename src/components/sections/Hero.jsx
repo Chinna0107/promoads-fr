@@ -225,7 +225,7 @@ const Hero = () => {
 
             {/* Buttons - In a row, centered below logo */}
             <div className="hero-buttons flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 -mt-8" style={{ marginTop: '-2rem' }}>
-              <button onClick={() => navigate('/events')} className="px-6 py-2.5 bg-cyan-400 text-black text-base font-sci-fi font-medium rounded-full shadow-xl transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-opacity-75 border-2 border-cyan-400 hover:bg-transparent hover:text-cyan-400 hover:border-cyan-400">
+              <button onClick={() => navigate('/events')} className="px-6 py-2.5 bg-gradient-to-r from-white to-green-400 text-black text-base font-sci-fi font-medium rounded-full shadow-xl focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-opacity-75 border-2 border-green-400">
                 <span className="menu-btn-text">Register Now</span>
               </button>
             </div>

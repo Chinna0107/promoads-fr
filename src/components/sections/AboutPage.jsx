@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Image imports
-import heroImage from '../../assets/images/Poster.png';
+// import heroImage from '../../assets/images/Poster.png';
 import collegeImg from '../../assets/images/AITT MASCOT.jpg';
 import departmentImg from '../../assets/images/ECE MASCOT.jpg';
 import ieteImg from '../../assets/images/IETE MASCOT.jpg';
@@ -119,7 +119,7 @@ const AboutPage = () => {
             </div>
           </div>
           <div className="hero-image-container">
-            <img src={heroImage} alt="TRISHNA Fest" className="hero-image" />
+            <img src='https://res.cloudinary.com/dbkhniuzt/image/upload/v1772569162/co6_ygyida.jpg' alt="TRISHNA Fest" className="hero-image" />
             <div className="hero-image-overlay"></div>
           </div>
         </div>
