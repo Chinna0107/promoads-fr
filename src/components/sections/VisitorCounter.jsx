@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import '../../styles/VisitorCounter.css';
-import trishnaLogo from '../../assets/images/tk logo.png';
+import trishnaLogo from '../../assets/images/tk26.png';
 import config from '../../config';
 
 const VisitorCounter = () => {

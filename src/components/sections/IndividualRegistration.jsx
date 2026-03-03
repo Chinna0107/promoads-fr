@@ -34,6 +34,7 @@ const IndividualRegistration = () => {
   const [eventName, setEventName] = useState('');
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const eventsList = [
     { id: 'project-expo', name: 'Project Expo' },
@@ -785,56 +786,143 @@ const IndividualRegistration = () => {
         </motion.div>
 
         <form onSubmit={handlePayment}>
-          <motion.input
-            placeholder="Enter Transaction ID / UPI Reference"
-            required
-            whileFocus={{ scale: 1.02 }}
-            style={{
-              padding: '14px',
-              borderRadius: '12px',
-              border: '2px solid transparent',
-              outline: 'none',
-              fontSize: '1rem',
-              background: 'rgba(255,255,255,0.95)',
-              color: '#333',
-              width: '100%',
-              marginBottom: '15px'
-            }}
-          />
-
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{
-              display: 'block',
-              marginBottom: '10px',
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              textAlign: 'left'
-            }}>
-              🔗 Google Drive Link for Payment Screenshot *
+          {/* Payment Method Selection */}
+          <div style={{ marginBottom: '25px', textAlign: 'left' }}>
+            <label style={{ display: 'block', marginBottom: '15px', fontSize: '1.1rem', fontWeight: 'bold' }}>
+              💳 Select Payment Method *
             </label>
-            <motion.input
-              type="url"
-              placeholder="https://drive.google.com/..."
-              value={screenshotLink}
-              onChange={(e) => setScreenshotLink(e.target.value)}
-              required
-              whileFocus={{ scale: 1.02 }}
-              style={{
-                padding: '14px',
-                borderRadius: '12px',
-                border: '2px solid transparent',
-                outline: 'none',
-                fontSize: '1rem',
-                background: 'rgba(255,255,255,0.95)',
-                color: '#333',
-                width: '100%',
-                marginBottom: '15px'
-              }}
-            />
-            <p style={{ fontSize: '0.85rem', color: '#e0e0e0', textAlign: 'left', marginTop: '5px' }}>
-              Please ensure the link has view access enabled
-            </p>
+            <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
+              <motion.button
+                type="button"
+                onClick={() => setPaymentMethod('upi')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                style={{
+                  padding: '15px 30px',
+                  borderRadius: '12px',
+                  background: paymentMethod === 'upi' ? '#4CAF50' : 'rgba(255,255,255,0.1)',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  border: paymentMethod === 'upi' ? '2px solid #4CAF50' : '2px solid rgba(255,255,255,0.3)',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+              >
+                📱 UPI Payment
+              </motion.button>
+              <motion.button
+                type="button"
+                onClick={() => setPaymentMethod('cash')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                style={{
+                  padding: '15px 30px',
+                  borderRadius: '12px',
+                  background: paymentMethod === 'cash' ? '#4CAF50' : 'rgba(255,255,255,0.1)',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  border: paymentMethod === 'cash' ? '2px solid #4CAF50' : '2px solid rgba(255,255,255,0.3)',
+                  cursor: 'pointer',
+                  fontSize: '1rem'
+                }}
+              >
+                💵 Hand Cash
+              </motion.button>
+            </div>
           </div>
+
+          {/* UPI Payment Section */}
+          {paymentMethod === 'upi' && (
+            <>
+              <motion.input
+                placeholder="Enter Transaction ID / UPI Reference"
+                required
+                whileFocus={{ scale: 1.02 }}
+                style={{
+                  padding: '14px',
+                  borderRadius: '12px',
+                  border: '2px solid transparent',
+                  outline: 'none',
+                  fontSize: '1rem',
+                  background: 'rgba(255,255,255,0.95)',
+                  color: '#333',
+                  width: '100%',
+                  marginBottom: '15px'
+                }}
+              />
+
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{
+                  display: 'block',
+                  marginBottom: '10px',
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  textAlign: 'left'
+                }}>
+                  🔗 Google Drive Link for Payment Screenshot *
+                </label>
+                <motion.input
+                  type="url"
+                  placeholder="https://drive.google.com/..."
+                  value={screenshotLink}
+                  onChange={(e) => setScreenshotLink(e.target.value)}
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                  style={{
+                    padding: '14px',
+                    borderRadius: '12px',
+                    border: '2px solid transparent',
+                    outline: 'none',
+                    fontSize: '1rem',
+                    background: 'rgba(255,255,255,0.95)',
+                    color: '#333',
+                    width: '100%',
+                    marginBottom: '15px'
+                  }}
+                />
+                <p style={{ fontSize: '0.85rem', color: '#e0e0e0', textAlign: 'left', marginTop: '5px' }}>
+                  Please ensure the link has view access enabled
+                </p>
+              </div>
+            </>
+          )}
+
+          {/* Hand Cash Section */}
+          {paymentMethod === 'cash' && (
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{
+                display: 'block',
+                marginBottom: '10px',
+                fontSize: '1rem',
+                fontWeight: 'bold',
+                textAlign: 'left'
+              }}>
+                🆔 Google Drive Link for ID Card *
+              </label>
+              <motion.input
+                type="url"
+                placeholder="https://drive.google.com/..."
+                value={screenshotLink}
+                onChange={(e) => setScreenshotLink(e.target.value)}
+                required
+                whileFocus={{ scale: 1.02 }}
+                style={{
+                  padding: '14px',
+                  borderRadius: '12px',
+                  border: '2px solid transparent',
+                  outline: 'none',
+                  fontSize: '1rem',
+                  background: 'rgba(255,255,255,0.95)',
+                  color: '#333',
+                  width: '100%',
+                  marginBottom: '15px'
+                }}
+              />
+              <p style={{ fontSize: '0.85rem', color: '#e0e0e0', textAlign: 'left', marginTop: '5px' }}>
+                Upload your college ID card. Ensure the link has view access enabled
+              </p>
+            </div>
+          )}
 
           <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <motion.button

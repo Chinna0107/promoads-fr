@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import UserMenu from '../user/UserMenu';
 import config from '../../config';
-import tkLogo from '../../assets/images/tk26.png';
+// import tkLogo from 'https://res.cloudinary.com/dbkhniuzt/image/upload/v1772559590/co1_mlx7ok.jpg';Ft
 
 const Home = () => {
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ const Home = () => {
         {/* Logo in top right corner */}
         <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 10 }}>
           <img 
-            src={tkLogo} 
+            src='https://res.cloudinary.com/dbkhniuzt/image/upload/v1772559590/co1_mlx7ok.jpg'
             alt="TK26 Logo" 
             style={{ 
               height: '35px', 
