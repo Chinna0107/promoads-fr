@@ -100,7 +100,7 @@ const AboutPage = () => {
         <div className="hero-content">
           <div className="hero-text">
             <h1 className="hero-title">
-              <span className="title-gradient">TRISHNA</span> <span className="year-glitch" data-text="2K25">2K25</span>
+              <span className="title-gradient">CODEATHON</span> 
             </h1>
             <p className="hero-subtitle">TECHNICAL SYMPOSIUM</p>
             <p className="hero-description">
@@ -189,9 +189,9 @@ const AboutPage = () => {
             <img src={trishnaImg} alt="About Trishna 2K26" />
           </div>
           <div className="about-section-content">
-            <h2>About Trishna 2K26</h2>
+            <h2>About CODEATHON 2K26</h2>
             <p>
-              Trishna 2K26, an exciting and vibrant two-day event, is going to host by Department of ECE at Annamacharya Institute of Technology & Sciences (AITS), Tirupati, on 18th and 19th October 2026. The event was meticulously organising to provide a platform for students to demonstrate their technical expertise, creativity, and leadership abilities in a competitive yet friendly environment. The event is going to attract a large number of participants from both the host institution and other colleges, with a total of 18 diverse competitions and spread on two days.
+              CODEATHON 2K26, an exciting and vibrant two-day event, is going to host by Department of ECE at Annamacharya Institute of Technology & Sciences (AITS), Tirupati, on 18th and 19th October 2026. The event was meticulously organising to provide a platform for students to demonstrate their technical expertise, creativity, and leadership abilities in a competitive yet friendly environment. The event is going to attract a large number of participants from both the host institution and other colleges, with a total of 18 diverse competitions and spread on two days.
             </p>
           </div>
         </section>
@@ -205,10 +205,10 @@ const AboutPage = () => {
           <div className="about-section-content">
             <h2>About Mascot Design</h2>
             <p>
-              🌟 Meet “TRISHAN” – The Hybrid Spirit of TRISHNA 2K25 🐘🦚🦉🐅🦜
+              🌟 Meet "CODEATHON 2K26" – The Hybrid Spirit of CODEATHON 2K26 🐘🦚🦉🐅🦜
             </p>
             <p>
-              TRISHAN, the official mascot of TRISHNA 2K25, is not just a character — it's a symbol of unity, intelligence, creativity, and energy. Crafted as a hybrid of five magnificent creatures, each element reflects the core values and visionary goals of the fest:
+              CODEATHON, the official mascot of CODEATHON 2K26, is not just a character — it's a symbol of unity, intelligence, creativity, and energy. Crafted as a hybrid of five magnificent creatures, each element reflects the core values and visionary goals of the fest:
             </p>
             <ul style={{marginLeft: '1.2em'}}>
               <li><b>🐘 Elephant</b> – The base of strength, wisdom, and legacy. It reflects the technical foundation, memory, and leadership needed in engineering and innovation.</li>

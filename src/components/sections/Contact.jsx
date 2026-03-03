@@ -72,15 +72,15 @@ function Contact() {
     { 
       icon: '📧', 
       title: 'Email', 
-      info: 'tri-cod@gmail.com', 
+      info: 'codeathon2k25@gmail.com', 
       desc: 'Send us an email anytime',
-      action: () => window.open('mailto:tri-cod@gmail.com')
+      action: () => window.open('mailto:codeathon2k25@gmail.com')
     },
     { 
       icon: '📱', 
       title: 'Phone', 
       info: '+91 8179860935', 
-      desc: 'Call us during office hours',
+      desc: 'Call us during college hours',
       action: () => window.open('tel:+918179860935')
     },
     { 
@@ -215,7 +215,7 @@ function Contact() {
               opacity: 0.8
             }}
           >
-            Have questions about TechnoKriti 2K25? We're here to help!
+            Have questions about <b>CODEATHON 2K26</b>? We're here to help!
           </motion.p>
         </motion.div>
 

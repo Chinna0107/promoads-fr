@@ -33,8 +33,8 @@ const Events = () => {
   const [typedTexts, setTypedTexts] = useState({});
   const categories = [
     { key: 'technical', label: 'Technical', icon: <FaCode size={20} />, desc: 'Code, Create, Innovate' },
-    { key: 'nontechnical', label: 'Non Technical', icon: <FaGamepad size={20} />, desc: 'Fun, Creative, Engaging' },
-    { key: 'robotics', label: 'Robotics', icon: <FaRobot size={20} />, desc: 'Build, Race, Compete' },
+    // { key: 'nontechnical', label: 'Non Technical', icon: <FaGamepad size={20} />, desc: 'Fun, Creative, Engaging' },
+    // { key: 'robotics', label: 'Robotics', icon: <FaRobot size={20} />, desc: 'Build, Race, Compete' },
     // { key: 'workshops', label: 'Workshops', icon: <FaChalkboardTeacher size={20} />, desc: 'Learn, Practice, Master' },
     // { key: 'guest', label: 'Guest Lectures', icon: <FaMicrophone size={20} />, desc: 'Inspire, Educate, Connect' },
   ];
@@ -329,6 +329,77 @@ const Events = () => {
             </div>
           </>
         )}
+        
+        {/* Banner Section */}
+        {!category && (
+          <div style={{
+            backgroundImage: `url(${imgHackathon})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            borderRadius: '20px',
+            padding: '60px 40px',
+            margin: '0 2rem 2rem 2rem',
+            position: 'relative',
+            overflow: 'hidden',
+            boxShadow: '0 12px 40px rgba(0,234,255,0.3)',
+            border: '2px solid rgba(0,234,255,0.4)'
+          }}>
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0,0,0,0.7)',
+              backdropFilter: 'blur(5px)'
+            }}></div>
+            <div style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
+              <h2 style={{
+                color: '#00eaff',
+                fontFamily: 'Orbitron, monospace',
+                fontSize: 'clamp(1.8rem, 4vw, 3rem)',
+                fontWeight: 700,
+                marginBottom: '20px',
+                textShadow: '0 0 20px rgba(0,234,255,0.8)'
+              }}>
+                Ready to Join CODEATHON 2K26?
+              </h2>
+              <p style={{
+                color: 'rgba(255,255,255,0.9)',
+                fontSize: 'clamp(1rem, 2vw, 1.3rem)',
+                marginBottom: '30px',
+                fontWeight: 500
+              }}>
+                Registration Started! Don't miss your chance to compete.
+              </p>
+              <Link
+                to="/events"
+                style={{
+                  background: 'linear-gradient(90deg, #00eaff 0%, #0057ff 100%)',
+                  color: '#fff',
+                  padding: '15px 40px',
+                  borderRadius: '12px',
+                  fontSize: '1.1rem',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  display: 'inline-block',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 20px rgba(0,234,255,0.4)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 6px 30px rgba(0,234,255,0.6)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,234,255,0.4)';
+                }}
+              >
+                Register Now
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
       <BottomNavBar />
     </section>
@@ -339,28 +410,28 @@ const Events = () => {
 function filteredEvents(category) {
   const allEvents = {
     technical: [
-      { id: '1', eventId: 'project-expo', title: 'Project Expo', description: 'Showcase your innovative projects and compete with the best minds.', tags: ['Team', 'Engineering'], image: imgProjectExpo, pdf: samplePdf, icon: <FaLightbulb /> },
+      // { id: '1', eventId: 'project-expo', title: 'Project Expo', description: 'Showcase your innovative projects and compete with the best minds.', tags: ['Team', 'Engineering'], image: imgProjectExpo, pdf: samplePdf, icon: <FaLightbulb /> },
       { id: '2', eventId: 'circuitron', title: 'Circuitron', description: 'Design and build electronic circuits to solve challenges.', tags: ['Team', 'Electronics'], image: imgWebDesign, pdf: samplePdf, icon: <FaNetworkWired /> },
-      { id: '3', eventId: 'presentation', title: 'Presentation', description: 'Present your ideas and innovations to a panel of judges.', tags: ['Team', 'Communication'], image: imgProjectExpo, pdf: samplePdf, icon: <FaChalkboardTeacher /> },
+      // { id: '3', eventId: 'presentation', title: 'Presentation', description: 'Present your ideas and innovations to a panel of judges.', tags: ['Team', 'Communication'], image: imgProjectExpo, pdf: samplePdf, icon: <FaChalkboardTeacher /> },
       { id: '4', eventId: 'tech-quiz', title: 'Tech Quiz', description: 'Test your technical knowledge in this exciting quiz competition.', tags: ['Individual', 'Quiz'], image: imgNextCode, pdf: samplePdf, icon: <FaBrain /> },
-      { id: '5', eventId: 'poster-design', title: 'Poster Design', description: 'Show your creativity by designing eye-catching posters.', tags: ['Individual', 'Design'], image: imgPosterDesign, pdf: samplePdf, icon: <FaPalette /> },
-      { id: '6', eventId: 'web-design', title: 'Web Designing', description: 'Design and build creative websites in a time-bound challenge.', tags: ['Individual', 'UI/UX'], image: imgWebDesign, pdf: samplePdf, icon: <FaPalette /> },
-      { id: '7', eventId: 'coding', title: 'Coding / Problem Solving', description: 'Solve challenging coding problems and algorithms.', tags: ['Individual', 'Coding'], image: imgNextCode, pdf: samplePdf, icon: <FaCode /> },
-      { id: '8', eventId: 'debugging', title: 'Debugging', description: 'Find and fix bugs in code under time pressure. (NEW)', tags: ['Individual', 'Coding'], image: imgNextCode, pdf: samplePdf, icon: <FaLaptopCode /> },
+      // { id: '5', eventId: 'poster-design', title: 'Poster Design', description: 'Show your creativity by designing eye-catching posters.', tags: ['Individual', 'Design'], image: imgPosterDesign, pdf: samplePdf, icon: <FaPalette /> },
+      { id: '6', eventId: 'web-design', title: 'Web Development', description: 'Design and build creative websites in a time-bound challenge.', tags: ['Individual', 'UI/UX'], image: imgWebDesign, pdf: samplePdf, icon: <FaPalette /> },
+      { id: '7', eventId: 'codeathon 2k25', title: 'Codeathon 2K25', description: 'Solve challenging coding problems and algorithms.', tags: ['Individual', 'Coding'], image: imgNextCode, pdf: samplePdf, icon: <FaCode /> },
+      // { id: '8', eventId: 'debugging', title: 'Debugging', description: 'Find and fix bugs in code under time pressure. (NEW)', tags: ['Individual', 'Coding'], image: imgNextCode, pdf: samplePdf, icon: <FaLaptopCode /> },
       { id: '9', eventId: 'hackathon', title: 'Hackathon', description: 'Solve real-world problems in a 24-hour coding marathon. (NEW)', tags: ['Team', 'Coding'], image: imgHackathon, pdf: samplePdf, icon: <FaLaptopCode /> },
       // { id: '10', eventId: 'algorithm-building', title: 'Algorithm Building', description: 'Design and write efficient algorithms for complex problems. (NEW)', tags: ['Individual', 'Coding'], image: imgNextCode, pdf: samplePdf, icon: <FaCode /> },
     ],
-    nontechnical: [
-      { id: '11', eventId: 'rube-cube', title: 'Rube A Cube', description: 'Solve fun and tricky puzzles in a race against time.', tags: ['Individual', 'Puzzle'], image: imgRubeCube, pdf: samplePdf, icon: <FaCube /> },
-      { id: '12', eventId: 'cook-without-fire', title: 'Cook Without Fire', description: 'A unique event to test your creativity in the kitchen—without fire!', tags: ['Team', 'Creativity'], image: imgCookWithoutFood, pdf: samplePdf, icon: <FaUtensils /> },
-      { id: '13', eventId: 'crossword-sudoku', title: 'Crossword And Sudoku', description: 'Challenge your mind with crossword puzzles and sudoku.', tags: ['Individual', 'Puzzle'], image: imgRubeCube, pdf: samplePdf, icon: <FaBrain /> },
-      { id: '14', eventId: 'fun-tech', title: 'Fun Tech (Mind Games)', description: 'Engage in fun tech-based mind games and challenges. (NEW)', tags: ['Individual', 'Games'], image: imgRubeCube, pdf: samplePdf, icon: <FaGamepad /> },
-    ],
-    robotics: [
-      { id: '15', eventId: 'line-tracer', title: 'Line Tracer', description: 'Build robots that can follow a line autonomously.', tags: ['Team', 'Robotics'], image: imgRoboRace, pdf: samplePdf, icon: <FaRobot /> },
-      { id: '16', eventId: 'over-drive', title: 'Over Drive', description: 'Push your robots to the limit in this high-speed event.', tags: ['Team', 'Speed'], image: imgOverDrive, pdf: samplePdf, icon: <FaRocket /> },
-      { id: '17', eventId: 'robo-vehicle-race', title: 'Robo Vehicle Race', description: 'Build and race your robots on challenging tracks.', tags: ['Team', 'Race'], image: imgRoboRace, pdf: samplePdf, icon: <FaCar /> },
-    ],
+    // nontechnical: [
+    //   { id: '11', eventId: 'rube-cube', title: 'Rube A Cube', description: 'Solve fun and tricky puzzles in a race against time.', tags: ['Individual', 'Puzzle'], image: imgRubeCube, pdf: samplePdf, icon: <FaCube /> },
+    //   { id: '12', eventId: 'cook-without-fire', title: 'Cook Without Fire', description: 'A unique event to test your creativity in the kitchen—without fire!', tags: ['Team', 'Creativity'], image: imgCookWithoutFood, pdf: samplePdf, icon: <FaUtensils /> },
+    //   { id: '13', eventId: 'crossword-sudoku', title: 'Crossword And Sudoku', description: 'Challenge your mind with crossword puzzles and sudoku.', tags: ['Individual', 'Puzzle'], image: imgRubeCube, pdf: samplePdf, icon: <FaBrain /> },
+    //   { id: '14', eventId: 'fun-tech', title: 'Fun Tech (Mind Games)', description: 'Engage in fun tech-based mind games and challenges. (NEW)', tags: ['Individual', 'Games'], image: imgRubeCube, pdf: samplePdf, icon: <FaGamepad /> },
+    // ],
+    // robotics: [
+    //   { id: '15', eventId: 'line-tracer', title: 'Line Tracer', description: 'Build robots that can follow a line autonomously.', tags: ['Team', 'Robotics'], image: imgRoboRace, pdf: samplePdf, icon: <FaRobot /> },
+    //   { id: '16', eventId: 'over-drive', title: 'Over Drive', description: 'Push your robots to the limit in this high-speed event.', tags: ['Team', 'Speed'], image: imgOverDrive, pdf: samplePdf, icon: <FaRocket /> },
+    //   { id: '17', eventId: 'robo-vehicle-race', title: 'Robo Vehicle Race', description: 'Build and race your robots on challenging tracks.', tags: ['Team', 'Race'], image: imgRoboRace, pdf: samplePdf, icon: <FaCar /> },
+    // ],
   };
   return allEvents[category] || [];
 }
