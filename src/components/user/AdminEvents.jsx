@@ -26,10 +26,10 @@ import cyberSecurityLectureImage from '../../assets/images/Codeathon 2k25 Invita
 // Updated placeholder data with image paths
 const categoriesData = [
   { id: 'technical', name: 'Technical', image: technicalCategoryImage },
-  { id: 'non-tech', name: 'Non-Tech', image: nonTechCategoryImage },
-  { id: 'robotics', name: 'Robotics', image: roboticsCategoryImage },
-  { id: 'workshops', name: 'Workshops', image: workshopsCategoryImage },
-  { id: 'guest-lectures', name: 'Guest Lectures', image: guestLecturesCategoryImage },
+  // { id: 'non-tech', name: 'Non-Tech', image: nonTechCategoryImage },
+  // { id: 'robotics', name: 'Robotics', image: roboticsCategoryImage },
+  // { id: 'workshops', name: 'Workshops', image: workshopsCategoryImage },
+  // { id: 'guest-lectures', name: 'Guest Lectures', image: guestLecturesCategoryImage },
 ];
 
 const eventsData = {

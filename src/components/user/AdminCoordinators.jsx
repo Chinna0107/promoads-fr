@@ -72,28 +72,28 @@ const AdminCoordinators = () => {
   const getFilteredEvents = (category) => {
     const eventsByCategory = {
       'Technical': [
-        'Project Expo',
+        // 'Project Expo',
         'Circuitron',
-        'Presentation',
+        // 'Presentation',
         'Tech Quiz',
-        'Poster Design',
-        'Web designing',
-        'Coding / Problem Solving',
-        'Debugging',
+        // 'Poster Design',
+        'Web development',
+        'Codeathon 2k25',
+        // 'Debugging',
         'Hackathon',
-        'Algorithm Building / Writing'
+        // 'Algorithm Building / Writing'
       ],
-      'Non-Technical': [
-        'Rube a Cube',
-        'Cook without fire',
-        'Crossword and sudoku',
-        'Fun Tech (mind games)'
-      ],
-      'Robotics': [
-        'Line Tracer',
-        'Over drive',
-        'Robo vehicle race'
-      ]
+      // 'Non-Technical': [
+      //   'Rube a Cube',
+      //   'Cook without fire',
+      //   'Crossword and sudoku',
+      //   'Fun Tech (mind games)'
+      // ],
+      // 'Robotics': [
+      //   'Line Tracer',
+      //   'Over drive',
+      //   'Robo vehicle race'
+      // ]
     };
     
     return eventsByCategory[category] || [];
@@ -368,8 +368,8 @@ const AdminCoordinators = () => {
                 >
                   <option value="">Select Category 1</option>
                   <option value="Technical">Technical</option>
-                  <option value="Non-Technical">Non-Technical</option>
-                  <option value="Robotics">Robotics</option>
+                  {/* <option value="Non-Technical">Non-Technical</option>
+                  <option value="Robotics">Robotics</option> */}
                 </select>
                 <select
                   name="event1"
@@ -416,8 +416,8 @@ const AdminCoordinators = () => {
                 >
                   <option value="">Select Category 2</option>
                   <option value="Technical">Technical</option>
-                  <option value="Non-Technical">Non-Technical</option>
-                  <option value="Robotics">Robotics</option>
+                  {/* <option value="Non-Technical">Non-Technical</option>
+                  <option value="Robotics">Robotics</option> */}
                 </select>
                 <select
                   name="event2"
