@@ -138,7 +138,7 @@ const Events = () => {
         )}
         {/* Category selection cards */}
         {!category && (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', marginBottom: '2.5rem', marginTop: '5rem', padding: '0 2rem', paddingBottom: '120px', minHeight: '60vh' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', marginBottom: '2.5rem', marginTop: '5rem', padding: '0 2rem', paddingBottom: '120px', minHeight: '60vh', flexDirection: window.innerWidth < 768 ? 'column' : 'row' }}>
             {categories.map((cat) => {
               const categoryImages = {
                 development: imgProjectExpo,
@@ -193,9 +193,6 @@ const Events = () => {
                   <div style={{ padding: '1.5rem', textAlign: 'center' }}>
                     <div style={{ fontSize: '2.5rem', color: '#00ff88', marginBottom: '1rem' }}>{cat.icon}</div>
                     <h3 style={{ color: '#00ff88', fontFamily: 'Orbitron, monospace', fontSize: '1.3rem', fontWeight: 700, margin: '0 0 1rem 0' }}>{cat.label}</h3>
-                    <p style={{ color: 'rgba(255,255,255,0.8)', fontFamily: 'Orbitron, monospace', fontSize: '0.95rem', margin: 0, minHeight: '24px' }}>
-                      {typedTexts[cat.key] || ''}<span style={{ animation: 'blink 1s infinite' }}>|</span>
-                    </p>
                   </div>
                 </div>
               );
