@@ -27,7 +27,7 @@ function Location() {
     pincode: '517520',
     phone: '+91 81798 60935',
     email: 'codeathon2k25@gmail.com',
-    mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3806.6334!2d78.486671!3d17.385044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTfCsDIzJzA2LjIiTiA3OMKwMjknMTIuMCJF!5e0!3m2!1sen!2sin!4v1234567890'
+    mapUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.8234567890123!2d79.4197!3d13.6288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4d4b0c6d2e8f90%3A0x1234567890abcdef!2sAnnamacharya%20Institute%20of%20Technology%20%26%20Sciences!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin'
   };
 
   return (

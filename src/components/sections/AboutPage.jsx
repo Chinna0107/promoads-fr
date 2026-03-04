@@ -102,10 +102,9 @@ const AboutPage = () => {
             <h1 className="hero-title">
               <span className="title-gradient">CODEATHON</span> 
             </h1>
-            <p className="hero-subtitle">TECHNICAL SYMPOSIUM</p>
+            <p className="hero-subtitle">Annual Event </p>
             <p className="hero-description">
-              Join India's premier technical fest with 20+ events, workshops, and competitions
-              showcasing cutting-edge technology and innovation
+              CODEATHON 2K26, an exciting and vibrant two-day event, is going to host by Department of ECE at Annamacharya Institute of Technology & Sciences (AITS), Tirupati, on 24th and 25th March 2026. The event was meticulously organising to provide a platform for students to demonstrate their technical expertise, creativity, and leadership abilities in a competitive yet friendly environment. The event is going to attract a large number of participants from both the host institution and other colleges, with a total of 6 diverse competitions and spread on two days.
             </p>
             <div className="hero-buttons">
               <button onClick={() => navigate('/events')} className="btn-primary btn-hover-glow">
@@ -119,7 +118,7 @@ const AboutPage = () => {
             </div>
           </div>
           <div className="hero-image-container">
-            <img src='https://res.cloudinary.com/dbkhniuzt/image/upload/v1772569162/co6_ygyida.jpg' alt="TRISHNA Fest" className="hero-image" />
+            <img src='https://res.cloudinary.com/dgyykbmt6/image/upload/v1772642480/co91_n7iepy.jpg' alt="TRISHNA Fest" className="hero-image" />
             <div className="hero-image-overlay"></div>
           </div>
         </div>
@@ -186,7 +185,7 @@ const AboutPage = () => {
           className="about-section alt"
         >
           <div className="about-section-img">
-            <img src={trishnaImg} alt="About Trishna 2K26" />
+            <img src='https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647608/2_fdev28.png' alt="About Trishna 2K26" />
           </div>
           <div className="about-section-content">
             <h2>About CODEATHON 2K26</h2>
@@ -200,7 +199,7 @@ const AboutPage = () => {
           className="about-section"
         >
           <div className="about-section-img">
-            <img src={mascotImg} alt="Mascot Design" />
+            <img src= 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647614/3_ecchiu.png'alt="Mascot Design" />
           </div>
           <div className="about-section-content">
             <h2>About Mascot Design</h2>

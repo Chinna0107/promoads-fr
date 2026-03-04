@@ -1,571 +1,371 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import Swal from 'sweetalert2'
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa'
 import tkLogo from '../../assets/images/tk26.png'
 import BottomNavBar from './BottomNavBar'
-import config from '../../config'
 
-function Contact() {
-  const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+const Contact = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
+  const [hoveredField, setHoveredField] = useState(null)
+  const [submitted, setSubmitted] = useState(false)
+  const isMobile = window.innerWidth < 768
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    setIsSubmitting(true)
-    
-    try {
-      const response = await fetch(`${config.BASE_URL}/api/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-      
-      const data = await response.json()
-      
-      if (response.ok) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Message Sent!',
-          text: "We'll get back to you soon.",
-          confirmButtonColor: '#00eaff'
-        })
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
-      } else {
-        throw new Error(data.message || 'Failed to send message')
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Failed to Send',
-        text: error.message || 'Please try again later.',
-        confirmButtonColor: '#00eaff'
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
+    const mailtoLink = `mailto:codeathon2k25@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\\nEmail: ${formData.email}\\n\\nMessage:\\n${formData.message}`)}`
+    window.location.href = mailtoLink
+    setSubmitted(true)
+    setTimeout(() => setSubmitted(false), 3000)
+    setFormData({ name: '', email: '', subject: '', message: '' })
   }
 
-  const subjects = [
-    { value: 'registration', label: '📝 Registration Query' },
-    { value: 'technical', label: '💻 Technical Support' },
-    { value: 'sponsorship', label: '🤝 Sponsorship' },
-    { value: 'general', label: '❓ General Inquiry' },
-    { value: 'media', label: '📺 Media & Press' },
-    { value: 'volunteer', label: '🙋 Volunteer Opportunity' }
+  const contacts = [
+    { name: 'Contact 1', phone: '8179860935', ws: 'https://wa.me/918179860935' },
+    { name: 'Contact 2', phone: '9177067341', ws: 'https://wa.me/919177067341' }
   ]
 
-  const contactInfo = [
-    { 
-      icon: '📧', 
-      title: 'Email', 
-      info: 'codeathon2k25@gmail.com', 
-      desc: 'Send us an email anytime',
-      action: () => window.open('mailto:codeathon2k25@gmail.com')
-    },
-    { 
-      icon: '📱', 
-      title: 'Phone', 
-      info: '+91 8179860935', 
-      desc: 'Call us during college hours',
-      action: () => window.open('tel:+918179860935')
-    },
-    { 
-      icon: '📍', 
-      title: 'Address', 
-      info: 'AITS, Tirupati', 
-      desc: 'Annamacharya Institute of Technology & Sciences',
-      action: () => window.open('https://maps.google.com/?q=AITS+Tirupati')
-    },
-    { 
-      icon: '🕒', 
-      title: 'College Hours', 
-      info: '9:30 AM - 5:00 PM', 
-      desc: 'Monday to Saturday'
-    }
+  const allCards = [
+    ...contacts,
+    { Icon: FaEnvelope, title: 'Email', text: 'codeathon2k25@gmail.com', isContact: false },
+    { Icon: FaMapMarkerAlt, title: 'Location', text: 'AITS, Tirupati', isContact: false }
   ]
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#000',
-      padding: '50px 20px',
+      background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 25%, #0f1428 50%, #1a1f3a 75%, #0a0e27 100%)',
+      padding: isMobile ? '30px 16px 120px' : '100px 60px 80px',
       position: 'relative',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
     }}>
-
-      
-      {/* Enhanced TK Logo top left */}
-      <div className="logo-container" style={{
+      <div style={{
         position: 'absolute',
-        top: '20px',
-        left: '20px',
-        zIndex: 10
-      }}>
-        <img 
-          src={tkLogo} 
-          alt="TK26 Logo" 
-          style={{ 
-            height: '35px', 
-            width: 'auto', 
-            objectFit: 'contain',
-            filter: 'drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2)',
-            animation: 'glow 2s ease-in-out infinite alternate'
-          }} 
-        />
-      </div>
+        top: isMobile ? '-30%' : '-50%',
+        right: isMobile ? '-20%' : '-10%',
+        width: isMobile ? '300px' : '500px',
+        height: isMobile ? '300px' : '500px',
+        background: 'radial-gradient(circle, rgba(0,255,136,0.1) 0%, transparent 70%)',
+        borderRadius: '50%',
+        animation: 'float 20s ease-in-out infinite'
+      }} />
+      <div style={{
+        position: 'absolute',
+        bottom: isMobile ? '-30%' : '-20%',
+        left: isMobile ? '-15%' : '-5%',
+        width: isMobile ? '250px' : '400px',
+        height: isMobile ? '250px' : '400px',
+        background: 'radial-gradient(circle, rgba(0,234,255,0.1) 0%, transparent 70%)',
+        borderRadius: '50%',
+        animation: 'float 25s ease-in-out infinite reverse'
+      }} />
+
+      <img src={tkLogo} alt="Logo" style={{ position: 'absolute', top: '15px', left: '16px', height: '30px', zIndex: 10 }} />
 
       <style>{`
-        @keyframes glow {
-          0%, 100% { filter: drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2); }
-          50% { filter: drop-shadow(0 0 12px rgba(255,255,0,1)) brightness(1.4); }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-        }
-        .contact-card {
-          transition: all 0.3s ease;
-        }
-        .contact-card:hover {
-          transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 20px 40px rgba(0,234,255,0.3);
-        }
-        .form-input {
-          transition: all 0.3s ease;
-        }
-        .form-input:focus {
-          transform: scale(1.02);
-          box-shadow: 0 0 20px rgba(0,234,255,0.4);
-          border-color: #00eaff !important;
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(30px); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        input:focus, textarea:focus { outline: none; }
         @media (max-width: 768px) {
-          .contact-grid { grid-template-columns: 1fr !important; gap: 30px !important; }
-          .form-grid { grid-template-columns: 1fr !important; gap: 15px !important; }
-          .contact-header h1 { font-size: 2.5rem !important; }
-          .contact-header p { font-size: 1rem !important; }
-          .contact-form { padding: 30px 20px !important; }
-          .contact-info-card { padding: 20px !important; }
-          .map-section { padding: 20px !important; }
-          .logo-container { top: 10px !important; left: 10px !important; }
-        }
-        @media (max-width: 480px) {
-          .contact-header h1 { font-size: 2rem !important; }
-          .contact-form { padding: 20px 15px !important; }
-          .form-input { padding: 15px !important; font-size: 1rem !important; }
+          input, textarea { font-size: 16px !important; }
         }
       `}</style>
 
-      <div style={{ maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="contact-header"
-          style={{ textAlign: 'center', marginBottom: '60px', position: 'relative' }}
-        >
-          <motion.h1
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.6 }}
-            style={{
-              fontSize: '3.5rem',
-              fontWeight: 'bold',
-              color: '#00eaff',
-              textShadow: '0 0 20px rgba(0,234,255,0.5)',
-              marginBottom: '20px',
-              fontFamily: 'Orbitron, monospace'
-            }}
-          >
-            📞 Get In Touch
-          </motion.h1>
-          
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            style={{
-              fontSize: '1.2rem',
-              color: '#00eaff',
-              maxWidth: '700px',
-              margin: '0 auto',
-              lineHeight: '1.6',
-              fontFamily: 'Orbitron, monospace',
-              opacity: 0.8
-            }}
-          >
-            Have questions about <b>CODEATHON 2K26</b>? We're here to help!
-          </motion.p>
-        </motion.div>
+      <div style={{ maxWidth: '1500px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div style={{ textAlign: 'center', marginBottom: isMobile ? '50px' : '80px', marginTop: isMobile ? '30px' : '20px' }}>
+          <h1 style={{
+            fontSize: isMobile ? '1.8rem' : '4rem',
+            fontWeight: '800',
+            background: 'linear-gradient(135deg, #00ff88 0%, #00eaff 50%, #667eea 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            marginBottom: isMobile ? '15px' : '20px',
+            letterSpacing: '-1px',
+            lineHeight: '1.2'
+          }}>
+            Let's Connect
+          </h1>
+          <div style={{
+            width: '60px',
+            height: '3px',
+            background: 'linear-gradient(90deg, #00ff88, #00eaff)',
+            margin: isMobile ? '15px auto 20px' : '20px auto 30px',
+            borderRadius: '2px'
+          }} />
+          <p style={{
+            fontSize: isMobile ? '0.9rem' : '1.2rem',
+            color: '#a0a0b0',
+            maxWidth: '700px',
+            margin: '0 auto',
+            lineHeight: '1.6'
+          }}>
+            Have questions about Codeathon 2K26? We're here to help!
+          </p>
+        </div>
 
-        <div className="contact-grid" style={{
+        <div style={{
           display: 'grid',
-          gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : '1fr 1fr',
-          gap: '50px',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? '40px' : '80px',
           alignItems: 'start'
         }}>
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="contact-card contact-form"
-            style={{
-              background: 'rgba(0,234,255,0.08)',
-              backdropFilter: 'blur(20px)',
-              borderRadius: '20px',
-              padding: '50px',
-              border: '1px solid #00eaff33',
-              boxShadow: '0 15px 35px rgba(0,234,255,0.1)'
-            }}
-          >
-            <motion.h2
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              style={{
-                color: '#00eaff',
-                fontSize: '2.5rem',
-                marginBottom: '30px',
-                textAlign: 'center',
-                textShadow: '0 0 10px rgba(0,234,255,0.5)',
-                fontFamily: 'Orbitron, monospace'
-              }}
-            >
-              📝 Send Us a Message
-            </motion.h2>
+          <div>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '18px' : '24px' }}>
+              {[
+                { name: 'name', label: 'Full Name', type: 'text', icon: FaPhone },
+                { name: 'email', label: 'Email Address', type: 'email', icon: FaEnvelope },
+                { name: 'subject', label: 'Subject', type: 'text', icon: FaMapMarkerAlt }
+              ].map((field, idx) => {
+                const IconComponent = field.icon
+                return (
+                  <div key={field.name} style={{ position: 'relative', animation: `slideUp 0.6s ease-out ${idx * 0.1}s both` }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                      <IconComponent style={{ fontSize: isMobile ? '1rem' : '1.2rem', color: '#00ff88' }} />
+                      <label style={{
+                        color: '#a0a0b0',
+                        fontSize: isMobile ? '0.8rem' : '0.9rem',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px'
+                      }}>
+                        {field.label}
+                      </label>
+                    </div>
+                    <input
+                      type={field.type}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                      onFocus={() => setHoveredField(field.name)}
+                      onBlur={() => setHoveredField(null)}
+                      placeholder={field.label}
+                      required
+                      style={{
+                        width: '100%',
+                        padding: isMobile ? '14px 14px' : '16px 18px',
+                        background: hoveredField === field.name ? 'rgba(0,255,136,0.08)' : 'rgba(255,255,255,0.04)',
+                        border: `2px solid ${hoveredField === field.name ? '#00ff88' : 'rgba(0,255,136,0.15)'}`,
+                        borderRadius: '12px',
+                        color: '#fff',
+                        fontSize: isMobile ? '1rem' : '1rem',
+                        transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                        backdropFilter: 'blur(10px)',
+                        boxShadow: hoveredField === field.name ? '0 0 30px rgba(0,255,136,0.2)' : 'none'
+                      }}
+                    />
+                  </div>
+                )
+              })}
 
-            <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '25px' }}>
-              <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                <input
-                  name="name"
-                  placeholder="Your Name *"
-                  value={formData.name}
+              <div style={{ position: 'relative', animation: 'slideUp 0.6s ease-out 0.3s both' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                  <FaEnvelope style={{ fontSize: isMobile ? '1rem' : '1.2rem', color: '#00ff88' }} />
+                  <label style={{
+                    color: '#a0a0b0',
+                    fontSize: isMobile ? '0.8rem' : '0.9rem',
+                    fontWeight: '600',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}>
+                    Message
+                  </label>
+                </div>
+                <textarea
+                  name="message"
+                  value={formData.message}
                   onChange={handleChange}
+                  onFocus={() => setHoveredField('message')}
+                  onBlur={() => setHoveredField(null)}
+                  placeholder="Tell us about your inquiry..."
+                  rows={isMobile ? "4" : "6"}
                   required
-                  className="form-input"
                   style={{
-                    padding: '18px',
-                    borderRadius: '15px',
-                    border: '2px solid transparent',
-                    outline: 'none',
-                    fontSize: '1.1rem',
-                    background: 'rgba(255,255,255,0.95)',
-                    color: '#333',
-                    fontWeight: '500'
-                  }}
-                />
-
-                <input
-                  name="phone"
-                  type="tel"
-                  placeholder="Your Phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="form-input"
-                  style={{
-                    padding: '18px',
-                    borderRadius: '15px',
-                    border: '2px solid transparent',
-                    outline: 'none',
-                    fontSize: '1.1rem',
-                    background: 'rgba(255,255,255,0.95)',
-                    color: '#333',
-                    fontWeight: '500'
+                    width: '100%',
+                    padding: isMobile ? '14px 14px' : '16px 18px',
+                    background: hoveredField === 'message' ? 'rgba(0,255,136,0.08)' : 'rgba(255,255,255,0.04)',
+                    border: `2px solid ${hoveredField === 'message' ? '#00ff88' : 'rgba(0,255,136,0.15)'}`,
+                    borderRadius: '12px',
+                    color: '#fff',
+                    fontSize: isMobile ? '1rem' : '1rem',
+                    transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: hoveredField === 'message' ? '0 0 30px rgba(0,255,136,0.2)' : 'none',
+                    fontFamily: 'inherit',
+                    resize: 'none'
                   }}
                 />
               </div>
 
-              <input
-                name="email"
-                type="email"
-                placeholder="Your Email *"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="form-input"
-                style={{
-                  padding: '18px',
-                  borderRadius: '15px',
-                  border: '2px solid transparent',
-                  outline: 'none',
-                  fontSize: '1.1rem',
-                  background: 'rgba(255,255,255,0.95)',
-                  color: '#333',
-                  fontWeight: '500'
-                }}
-              />
-
-              <select
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                required
-                className="form-input"
-                style={{
-                  padding: '18px',
-                  borderRadius: '15px',
-                  border: '2px solid transparent',
-                  outline: 'none',
-                  fontSize: '1.1rem',
-                  background: 'rgba(255,255,255,0.95)',
-                  color: '#333',
-                  fontWeight: '500'
-                }}
-              >
-                <option value="">Select Subject *</option>
-                {subjects.map(subject => (
-                  <option key={subject.value} value={subject.value}>
-                    {subject.label}
-                  </option>
-                ))}
-              </select>
-
-              <textarea
-                name="message"
-                placeholder="Your Message *"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows="6"
-                className="form-input"
-                style={{
-                  padding: '18px',
-                  borderRadius: '15px',
-                  border: '2px solid transparent',
-                  outline: 'none',
-                  fontSize: '1.1rem',
-                  background: 'rgba(255,255,255,0.95)',
-                  color: '#333',
-                  resize: 'vertical',
-                  fontFamily: 'inherit',
-                  fontWeight: '500'
-                }}
-              />
-
-              <motion.button
+              <button
                 type="submit"
-                disabled={isSubmitting}
-                whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
-                whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
                 style={{
-                  padding: '20px 40px',
-                  background: isSubmitting 
-                    ? 'linear-gradient(45deg, #ccc, #999)' 
-                    : 'linear-gradient(45deg, #00eaff, #667eea)',
-                  color: '#fff',
+                  padding: isMobile ? '14px 32px' : '16px 40px',
+                  background: 'linear-gradient(135deg, #00ff88 0%, #00eaff 100%)',
+                  color: '#000',
                   border: 'none',
                   borderRadius: '12px',
-                  fontSize: '1.2rem',
-                  fontWeight: 'bold',
-                  cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 8px 25px rgba(0,234,255,0.2)',
-                  fontFamily: 'Orbitron, monospace',
-                  position: 'relative',
-                  overflow: 'hidden'
+                  fontSize: isMobile ? '1rem' : '1.1rem',
+                  fontWeight: '700',
+                  cursor: 'pointer',
+                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  boxShadow: '0 10px 40px rgba(0,255,136,0.3)',
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  marginTop: '10px',
+                  animation: 'slideUp 0.6s ease-out 0.4s both',
+                  width: isMobile ? '100%' : 'auto'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isMobile) {
+                    e.target.style.transform = 'translateY(-4px)'
+                    e.target.style.boxShadow = '0 20px 60px rgba(0,255,136,0.5)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isMobile) {
+                    e.target.style.transform = 'translateY(0)'
+                    e.target.style.boxShadow = '0 10px 40px rgba(0,255,136,0.3)'
+                  }
                 }}
               >
-                {isSubmitting ? (
-                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                    <div style={{
-                      width: '20px',
-                      height: '20px',
-                      border: '2px solid #fff',
-                      borderTop: '2px solid transparent',
-                      borderRadius: '50%',
-                      animation: 'spin 1s linear infinite'
-                    }} />
-                    Sending...
-                  </span>
-                ) : (
-                  'Send Message 🚀'
-                )}
-              </motion.button>
+                {submitted ? '✓ Message Sent!' : 'Send Message'}
+              </button>
             </form>
-          </motion.div>
-
-          {/* Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
-            style={{ display: 'grid', gap: '20px' }}
-          >
-            {contactInfo.map((contact, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
-                className="contact-card contact-info-card"
-                onClick={contact.action}
-                style={{
-                  background: 'rgba(255,255,255,0.1)',
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: '20px',
-                  padding: '30px',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
-                  cursor: contact.action ? 'pointer' : 'default',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '25px',
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)';
-                  e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,234,255,0.4), inset 0 1px 0 rgba(255,255,255,0.3)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)';
-                }}
-              >
-                {/* Pin decoration */}
-                <div style={{
-                  position: 'absolute',
-                  top: '15px',
-                  right: '15px',
-                  width: '12px',
-                  height: '12px',
-                  background: 'linear-gradient(45deg, #00eaff, #667eea)',
-                  borderRadius: '50%',
-                  boxShadow: '0 0 10px rgba(0,234,255,0.6), inset 0 2px 4px rgba(255,255,255,0.3)',
-                  border: '2px solid rgba(255,255,255,0.4)'
-                }} />
-                <div style={{
-                  position: 'absolute',
-                  top: '10px',
-                  right: '10px',
-                  width: '22px',
-                  height: '22px',
-                  border: '2px solid rgba(0,234,255,0.3)',
-                  borderRadius: '50%'
-                }} />
-                <div style={{
-                  fontSize: '3rem',
-                  animation: 'float 3s ease-in-out infinite',
-                  animationDelay: `${index * 0.5}s`
-                }}>
-                  {contact.icon}
-                </div>
-                <div>
-                  <h3 style={{
-                    color: '#fff',
-                    fontSize: '1.4rem',
-                    marginBottom: '8px',
-                    fontWeight: 'bold',
-                    fontFamily: 'Orbitron, monospace',
-                    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
-                  }}>
-                    {contact.title}
-                  </h3>
-                  <p style={{
-                    color: '#00eaff',
-                    fontSize: '1.2rem',
-                    fontWeight: 'bold',
-                    marginBottom: '8px',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.3)'
-                  }}>
-                    {contact.info}
-                  </p>
-                  <p style={{
-                    color: 'rgba(255,255,255,0.8)',
-                    fontSize: '1rem',
-                    margin: 0,
-                    lineHeight: '1.4',
-                    textShadow: '0 1px 2px rgba(0,0,0,0.3)'
-                  }}>
-                    {contact.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Map Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-          className="map-section"
-          style={{
-            marginTop: '60px',
-            background: 'rgba(0,234,255,0.08)',
-            backdropFilter: 'blur(20px)',
-            borderRadius: '20px',
-            padding: '40px',
-            border: '1px solid #00eaff33',
-            textAlign: 'center'
-          }}
-        >
-          <h3 style={{
-            color: '#00eaff',
-            fontSize: '2.5rem',
-            marginBottom: '30px',
-            fontFamily: 'Orbitron, monospace'
-          }}>
-            🗺️ Find Us
-          </h3>
-          <div style={{
-            background: 'rgba(0,234,255,0.05)',
-            borderRadius: '20px',
-            padding: '20px',
-            border: '1px solid #00eaff22',
-            overflow: 'hidden'
-          }}>
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.8234567890123!2d79.4197!3d13.6288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a4d4b0c6d2e8f90%3A0x1234567890abcdef!2sAnnamacharya%20Institute%20of%20Technology%20%26%20Sciences!5e0!3m2!1sen!2sin!4v1234567890123!5m2!1sen!2sin"
-              width="100%"
-              height="400"
-              style={{
-                border: 'none',
-                borderRadius: '15px',
-                filter: 'hue-rotate(180deg) invert(90%) contrast(120%)'
-              }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="AITS Location"
-            />
-            <p style={{ 
-              marginTop: '15px', 
-              fontSize: '1.1rem', 
-              opacity: 0.8, 
-              fontFamily: 'Orbitron, monospace',
-              textAlign: 'center',
-              color: '#00eaff'
-            }}>
-              AITS Campus, Tirupati, Andhra Pradesh<br/>
-              Annamacharya Institute of Technology & Sciences
-            </p>
           </div>
-        </motion.div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '30px' : '40px', padding: isMobile ? '0' : '20px' }}>
+            <div style={{
+              display: 'flex',
+              gap: isMobile ? '6px' : '10px',
+              justifyContent: 'center',
+              flexWrap: isMobile ? 'wrap' : 'nowrap',
+              overflowX: isMobile ? 'auto' : 'visible'
+            }}>
+              {allCards.map((item, idx) => (
+                <div key={idx} style={{
+                  background: 'rgba(0,0,0,0.8)',
+                  backdropFilter: 'blur(20px)',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  borderRadius: '12px',
+                  padding: isMobile ? '10px 12px' : '14px 16px',
+                  textAlign: 'center',
+                  transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  animation: `slideUp 0.6s ease-out ${idx * 0.1}s both`,
+                  minWidth: isMobile ? '120px' : '140px',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
+                }} onMouseEnter={(e) => {
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(-8px)'
+                    e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.2)'
+                  }
+                }} onMouseLeave={(e) => {
+                  if (!isMobile) {
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
+                  }
+                }}>
+                  {item.isContact !== false ? (
+                    <>
+                      <h3 style={{ color: '#00ff88', fontWeight: '700', marginBottom: '8px', fontSize: isMobile ? '0.8rem' : '0.9rem' }}>
+                        {item.name}
+                      </h3>
+                      <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginBottom: '8px' }}>
+                        <a href={`tel:${item.phone}`} style={{
+                          padding: '4px 8px',
+                          background: 'rgba(0,255,136,0.2)',
+                          border: '1px solid #00ff88',
+                          borderRadius: '4px',
+                          color: '#00ff88',
+                          textDecoration: 'none',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '3px',
+                          fontWeight: '600',
+                          fontSize: '0.65rem',
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer'
+                        }} onMouseEnter={(e) => {
+                          e.target.style.background = '#00ff88'
+                          e.target.style.color = '#000'
+                        }} onMouseLeave={(e) => {
+                          e.target.style.background = 'rgba(0,255,136,0.2)'
+                          e.target.style.color = '#00ff88'
+                        }}>
+                          <FaPhone size={10} /> Call
+                        </a>
+                        <a href={item.ws} target="_blank" rel="noopener noreferrer" style={{
+                          padding: '4px 8px',
+                          background: 'rgba(52,211,153,0.2)',
+                          border: '1px solid #34d399',
+                          borderRadius: '4px',
+                          color: '#34d399',
+                          textDecoration: 'none',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '3px',
+                          fontWeight: '600',
+                          fontSize: '0.65rem',
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer'
+                        }} onMouseEnter={(e) => {
+                          e.target.style.background = '#34d399'
+                          e.target.style.color = '#000'
+                        }} onMouseLeave={(e) => {
+                          e.target.style.background = 'rgba(52,211,153,0.2)'
+                          e.target.style.color = '#34d399'
+                        }}>
+                          <FaWhatsapp size={10} /> WA
+                        </a>
+                      </div>
+                      <p style={{ color: '#a0a0b0', fontSize: '0.7rem', margin: 0 }}>
+                        {item.phone}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <item.Icon style={{ fontSize: '1.2rem', marginBottom: '6px', color: item.title === 'Email' ? '#00eaff' : '#667eea' }} />
+                      <h3 style={{ color: item.title === 'Email' ? '#00eaff' : '#667eea', fontWeight: '700', marginBottom: '4px', fontSize: '0.8rem' }}>
+                        {item.title}
+                      </h3>
+                      <p style={{ color: '#a0a0b0', fontSize: '0.65rem', margin: 0 }}>
+                        {item.text}
+                      </p>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div style={{
+              background: 'rgba(0,0,0,0.8)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: isMobile ? '14px' : '16px',
+              overflow: 'hidden',
+              height: isMobile ? '280px' : '350px',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+              position: 'relative',
+              animation: 'slideUp 0.6s ease-out 0.3s both'
+            }}>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3840.7701234567!2d79.4969104!3d13.6638794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1sAnnamacharya%20Institute%20of%20Technology%20%26%20Sciences!2s13.6638742,79.4994853!5e0!3m2!1sen!2sin!4v1700000000000"
+                width="100%"
+                height="100%"
+                style={{ border: 'none', filter: 'invert(0.9) hue-rotate(180deg)' }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      
+
       <BottomNavBar />
     </div>
   )

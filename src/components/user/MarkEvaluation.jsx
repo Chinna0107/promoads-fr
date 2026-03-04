@@ -73,11 +73,7 @@ const MarkEvaluation = () => {
       input: 'number',
       inputLabel: 'Enter score (0-100)',
       inputPlaceholder: '0-100',
-      inputAttributes: {
-        min: 0,
-        max: 100,
-        step: 1
-      },
+      inputAttributes: { min: 0, max: 100, step: 1 },
       showCancelButton: true,
       confirmButtonText: 'Save Score',
       cancelButtonText: 'Cancel',
@@ -90,21 +86,16 @@ const MarkEvaluation = () => {
     });
 
     if (score) {
-      const participantName = participant.name.replace(/\s+/g, '-').toLowerCase();
-      navigate(`/coordinator/mark-evaluation/${eventName}/${participantName}`, { replace: true });
       await saveScore(participant.id, parseInt(score));
     }
   };
 
   const saveScore = async (participantId, score) => {
-    // Show loading
     Swal.fire({
       title: 'Saving Score...',
       text: 'Please wait while we save the evaluation',
       allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
+      didOpen: () => Swal.showLoading()
     });
 
     try {
@@ -124,9 +115,8 @@ const MarkEvaluation = () => {
       });
 
       if (res.ok) {
-        // Update participant as evaluated
         setParticipants(prev => prev.map(p => 
-          p.id === participantId ? { ...p, evaluated: true, score } : p
+          p.id === participantId ? { ...p, evaluated: true, score, juryMember: selectedJury } : p
         ));
         
         Swal.fire({
@@ -168,29 +158,20 @@ const MarkEvaluation = () => {
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <CoordinatorMenu />
       <div style={{ marginLeft: '280px', flex: 1, background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)', padding: '40px' }} className="mark-eval-content">
-        <style>
-          {`
-            @media (max-width: 768px) {
-              .mark-eval-content { margin-left: 0 !important; padding: 20px !important; padding-top: 80px !important; }
-              .mark-eval-card { flex-direction: column !important; text-align: center !important; padding: 15px !important; }
-              .mark-eval-avatar { margin-bottom: 10px !important; }
-              .mark-eval-name { font-size: 1rem !important; }
-              .mark-eval-email { font-size: 0.8rem !important; }
-              .mark-eval-content > div { padding: 20px !important; }
-              .mark-eval-content h1 { font-size: 1.8rem !important; }
-              .mark-eval-content h2 { font-size: 1.3rem !important; }
-              .mark-eval-content h3 { font-size: 1.1rem !important; }
-              .mark-eval-content > div > div { padding: 20px !important; border-radius: 10px !important; }
-              .mark-eval-content > div > div > div { padding: 15px !important; }
-            }
-          `}
-        </style>
+        <style>{`
+          @media (max-width: 768px) {
+            .mark-eval-content { margin-left: 0 !important; padding: 20px !important; padding-top: 80px !important; }
+            .mark-eval-card { flex-direction: column !important; text-align: center !important; padding: 15px !important; }
+            .mark-eval-avatar { margin-bottom: 10px !important; }
+            .mark-eval-name { font-size: 1rem !important; }
+            .mark-eval-email { font-size: 0.8rem !important; }
+          }
+        `}</style>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h1 style={{ color: '#2d3748', fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '30px' }}>📝 Mark Evaluation - {eventName}</h1>
 
-          {/* Jury Member Selection */}
           <div style={{ background: '#fff', borderRadius: '15px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', marginBottom: '20px', padding: '20px' }}>
-            <h3 style={{ color: '#2d3748', margin: '0 0 15px 0', fontSize: '1.2rem', fontWeight: 'bold' }}>👨‍⚖️ Select Jury Member:</h3>
+            <h3 style={{ color: '#2d3748', margin: '0 0 15px 0', fontSize: '1.2rem', fontWeight: 'bold' }}>👨⚖️ Select Jury Member:</h3>
             <select
               value={selectedJury}
               onChange={(e) => setSelectedJury(e.target.value)}
@@ -245,8 +226,8 @@ const MarkEvaluation = () => {
                       background: participant.evaluated ? '#f7fafc' : 'transparent'
                     }}
                     className="mark-eval-card"
-                    onMouseOver={(e) => !participant.evaluated && (e.target.style.background = '#f7fafc')}
-                    onMouseOut={(e) => !participant.evaluated && (e.target.style.background = 'transparent')}
+                    onMouseOver={(e) => !participant.evaluated && (e.currentTarget.style.background = '#f7fafc')}
+                    onMouseOut={(e) => !participant.evaluated && (e.currentTarget.style.background = 'transparent')}
                   >
                     <div style={{
                       width: '50px',
@@ -269,6 +250,11 @@ const MarkEvaluation = () => {
                       <p style={{ color: participant.evaluated ? '#9ca3af' : '#718096', margin: 0, fontSize: '0.9rem' }} className="mark-eval-email">
                         {participant.email} • {participant.rollNo || 'N/A'}
                       </p>
+                      {participant.evaluated && participant.juryMember && (
+                        <p style={{ color: '#667eea', margin: '5px 0 0 0', fontSize: '0.85rem', fontWeight: '500' }}>
+                          👨⚖️ {participant.juryMember}
+                        </p>
+                      )}
                     </div>
                     <div style={{ color: participant.evaluated ? '#9ca3af' : '#667eea', fontSize: '1.2rem' }}>
                       {participant.evaluated ? '🔒' : '➤'}

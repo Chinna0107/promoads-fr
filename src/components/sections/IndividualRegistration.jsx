@@ -779,7 +779,7 @@ const IndividualRegistration = () => {
             borderRadius: '10px',
             border: '2px solid #4CAF50'
           }}>
-            💰 Amount: ₹100
+            💰 Amount: ₹50
           </div>
         </motion.div>
 

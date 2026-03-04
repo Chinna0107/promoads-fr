@@ -23,9 +23,9 @@ const MENU_ITEMS_BASE = [
 const MORE_SUB_ITEMS_FA = [
   //  { label: 'Contests', url: '/contests', icon: faTrophy, hoverColor: 'hover:text-amber-500' }, // Amber/gold for trophies/contests
   { label: 'Team', url: '/team', icon: faUsers, hoverColor: 'hover:text-indigo-500' }, // Indigo for teamwork/collaboration
-  { label: 'Playground', url: '/playground', icon: faGamepad, hoverColor: 'hover:text-orange-500' }, // Red for gaming/energy
+  // { label: 'Playground', url: '/playground', icon: faGamepad, hoverColor: 'hover:text-orange-500' }, // Red for gaming/energy
   // { label: 'Stay', url: '/stay', icon: faBed, hoverColor: 'hover:text-pink-500' }, // Rose for comfort/accommodation
-  { label: 'Location', url: '/location', icon: faMapMarker, hoverColor: 'hover:text-emerald-500' }, // Emerald for maps/location
+  // { label: 'Location', url: '/location', icon: faMapMarker, hoverColor: 'hover:text-emerald-500' }, // Emerald for maps/location
   { label: 'Contact Us', url: '/contact', icon: faLaptop, hoverColor: 'hover:text-orange-500' }, // Orange for learning/workshops
   //gallery
   { label: 'Gallery', url: '/gallery', icon: faInfoCircle, hoverColor: 'hover:text-orange-500' }, // Orange for learning/workshops
@@ -61,6 +61,7 @@ const BottomNavBar = () => {
     if (item.action === 'modal' && item.label === 'About') {
       handleAboutOpen();
     } else if (item.url) {
+      window.scrollTo(0, 0);
       navigate(item.url);
     }
     if (showMorePopup) {

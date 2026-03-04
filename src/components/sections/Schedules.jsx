@@ -1,126 +1,410 @@
-import React, { useState, useEffect } from 'react';
-import { FaCalendarAlt, FaClock } from 'react-icons/fa';
+import React, { useState, useMemo } from "react";
 import tkLogo from '../../assets/images/tk26.png';
 import BottomNavBar from './BottomNavBar';
 
-const Schedule = () => {
-  const [typedText, setTypedText] = useState('');
-  const fullText = 'Schedule will be updated soon with time & dates';
-
-  useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index <= fullText.length) {
-        setTypedText(fullText.slice(0, index));
-        index++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 60);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <section style={{
-      minHeight: '100vh',
-      background: '#000',
-      position: 'relative',
-      overflow: 'hidden',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '2rem',
-    }}>
-
-      
-      {/* Enhanced TK Logo top left */}
-      <div style={{
-        position: 'absolute',
-        top: '20px',
-        left: '20px',
-        zIndex: 10
-      }}>
-        <img 
-          src={tkLogo} 
-          alt="TK26 Logo" 
-          style={{ 
-            height: '35px', 
-            width: 'auto', 
-            objectFit: 'contain',
-            filter: 'drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2)',
-            animation: 'glow 2s ease-in-out infinite alternate'
-          }} 
-        />
-      </div>
-      
-      <style>
-        {`
-          @keyframes glow {
-            0%, 100% { filter: drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2); }
-            50% { filter: drop-shadow(0 0 12px rgba(255,255,0,1)) brightness(1.4); }
-          }
-        `}
-      </style>
-      
-      <div style={{
-        position: 'relative',
-        zIndex: 1,
-        background: 'rgba(255,255,255,0.1)',
-        backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255,255,255,0.2)',
-        borderRadius: '20px',
-        padding: '60px 40px',
-        maxWidth: '600px',
-        textAlign: 'center',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
-        overflow: 'hidden'
-      }}>
-        {/* Corner Pins */}
-        <div style={{ position: 'absolute', top: '10px', left: '10px', width: '8px', height: '8px', background: '#ff0000', borderRadius: '50%' }}></div>
-        <div style={{ position: 'absolute', top: '10px', right: '10px', width: '8px', height: '8px', background: '#ff0000', borderRadius: '50%' }}></div>
-        <div style={{ position: 'absolute', bottom: '10px', left: '10px', width: '8px', height: '8px', background: '#ff0000', borderRadius: '50%' }}></div>
-        <div style={{ position: 'absolute', bottom: '10px', right: '10px', width: '8px', height: '8px', background: '#ff0000', borderRadius: '50%' }}></div>
-        <div style={{ fontSize: '4rem', marginBottom: '2rem' }}>
-          <FaCalendarAlt style={{ color: '#00eaff' }} />
-        </div>
-        <h1 style={{
-          color: '#00eaff',
-          fontFamily: 'Orbitron, monospace',
-          fontSize: '2.5rem',
-          marginBottom: '15px',
-          fontWeight: 'bold',
-          textShadow: '0 2px 4px rgba(0,0,0,0.3)'
-        }}>
-          Coming Soon
-        </h1>
-        <p style={{
-          color: 'rgba(255,255,255,0.8)',
-          fontFamily: 'Orbitron, monospace',
-          fontSize: '1.1rem',
-          marginBottom: '30px',
-          lineHeight: '1.6',
-          minHeight: '60px'
-        }}>
-          {typedText}<span style={{ animation: 'blink 1s infinite' }}>|</span>
-        </p>
-        <div style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          padding: '15px 30px',
-          borderRadius: '12px',
-          color: '#fff',
-          fontWeight: 'bold',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '10px'
-        }}>
-          <FaClock size={20} />
-          📅 Feature Under Development
-        </div>
-      </div>
-      
-      <BottomNavBar />
-    </section>
-  );
+const schedule = {
+  day1: [
+    { time: "09:30 AM", event: "Inauguration", category: "ceremony", duration: "1 hour", icon: "🎉", desc: "Opening ceremony & welcome address", venue: "Main Auditorium" },
+    { time: "10:30 AM - 01:30 PM", event: "Web Development", category: "development", duration: "3 hours", icon: "🌐", desc: "Build responsive websites", venue: "Lab A" },
+    { time: "10:30 AM - 05:00 PM", event: "Hackathon", category: "development", duration: "6.5 hours", icon: "💻", desc: "24-hour coding marathon", venue: "Lab B & C" },
+    { time: "02:00 PM - 04:00 PM", event: "Tech Quiz", category: "competitive", duration: "2 hours", icon: "🧠", desc: "Test your technical knowledge", venue: "Seminar Hall" },
+  ],
+  day2: [
+    { time: "09:30 AM", event: "Crack the Code", category: "development", duration: "3 hours", icon: "🔐", desc: "Solve coding challenges", venue: "Lab A" },
+    { time: "01:00 PM - 03:00 PM", event: "Circuitron", category: "competitive", duration: "2 hours", icon: "⚡", desc: "Electronics & circuit design", venue: "Lab D" },
+    { time: "03:30 PM - 05:00 PM", event: "Presentation", category: "competitive", duration: "1.5 hours", icon: "🎤", desc: "Showcase your projects", venue: "Main Auditorium" },
+    { time: "05:30 PM", event: "Closing Ceremony", category: "ceremony", duration: "1 hour", icon: "🏆", desc: "Prize distribution & awards", venue: "Main Auditorium" },
+  ]
 };
 
-export default Schedule;
+function Schedules() {
+  const [activeDay, setActiveDay] = useState(1);
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [expandedCard, setExpandedCard] = useState(null);
+  const [hoveredStat, setHoveredStat] = useState(null);
+  const [hoveredLegend, setHoveredLegend] = useState(null);
+
+  const getColor = (category) => {
+    if (category === "development") return "#00ff88";
+    if (category === "competitive") return "#00ccff";
+    return "#ffaa00";
+  };
+
+  const getGradient = (category) => {
+    if (category === "development") return "linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05))";
+    if (category === "competitive") return "linear-gradient(135deg, rgba(0,204,255,0.15), rgba(0,204,255,0.05))";
+    return "linear-gradient(135deg, rgba(255,170,0,0.15), rgba(255,170,0,0.05))";
+  };
+
+  const EventCard = ({ item, idx, isMobile }) => (
+    <div
+      key={idx}
+      style={{
+        display: "flex",
+        gap: isMobile ? "15px" : "25px",
+        marginBottom: isMobile ? "25px" : "35px",
+        animation: `slideIn 0.6s ease-out ${idx * 0.1}s both`
+      }}
+      onMouseEnter={() => !isMobile && setHoveredCard(idx)}
+      onMouseLeave={() => !isMobile && setHoveredCard(null)}
+    >
+      {/* Timeline dot and line */}
+      <div style={{ position: "relative", width: isMobile ? "40px" : "60px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        {idx < (activeDay === 1 ? schedule.day1.length - 1 : schedule.day2.length - 1) && (
+          <div style={{
+            position: "absolute",
+            top: isMobile ? "35px" : "50px",
+            left: "50%",
+            width: "3px",
+            height: isMobile ? "calc(100% + 25px)" : "calc(100% + 35px)",
+            background: `linear-gradient(180deg, ${getColor(item.category)}, ${getColor(item.category)}40)`,
+            transform: "translateX(-50%)",
+            zIndex: 0
+          }} />
+        )}
+        
+        <div style={{
+          width: isMobile ? "24px" : "32px",
+          height: isMobile ? "24px" : "32px",
+          background: getColor(item.category),
+          borderRadius: "50%",
+          border: "4px solid #000",
+          boxShadow: `0 0 20px ${getColor(item.category)}, inset 0 0 10px rgba(255,255,255,0.3)`,
+          zIndex: 2,
+          transition: "all 0.3s ease",
+          transform: hoveredCard === idx ? "scale(1.3)" : "scale(1)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: isMobile ? "0.8rem" : "1rem"
+        }}>
+          {item.icon}
+        </div>
+      </div>
+
+      {/* Card */}
+      <div
+        onClick={() => setExpandedCard(expandedCard === idx ? null : idx)}
+        style={{
+          flex: 1,
+          background: getGradient(item.category),
+          border: `2px solid ${getColor(item.category)}`,
+          borderRadius: isMobile ? "10px" : "14px",
+          padding: isMobile ? "16px 18px" : "24px 28px",
+          backdropFilter: "blur(15px)",
+          transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          cursor: "pointer",
+          transform: hoveredCard === idx ? "translateX(15px) scale(1.03)" : "translateX(0)",
+          boxShadow: hoveredCard === idx 
+            ? `0 15px 40px ${getColor(item.category)}50, inset 0 1px 0 rgba(255,255,255,0.2)` 
+            : `0 8px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)`,
+          position: "relative",
+          overflow: "hidden",
+          maxHeight: expandedCard === idx ? "500px" : "auto"
+        }}>
+        {hoveredCard === idx && (
+          <div style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: `linear-gradient(135deg, ${getColor(item.category)}10, transparent)`,
+            pointerEvents: "none"
+          }} />
+        )}
+
+        <div style={{ position: "relative", zIndex: 1 }}>
+          {/* Time */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginBottom: "10px"
+          }}>
+            <span style={{
+              fontSize: isMobile ? "1.8rem" : "2.2rem",
+              animation: hoveredCard === idx ? "pulse 0.6s ease-in-out" : "none"
+            }}>
+              {item.icon}
+            </span>
+            <p style={{
+              color: getColor(item.category),
+              fontSize: isMobile ? "0.85rem" : "0.95rem",
+              margin: 0,
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "1px"
+            }}>
+              ⏰ {item.time}
+            </p>
+          </div>
+
+          {/* Event title */}
+          <h3 style={{
+            color: "#fff",
+            fontSize: isMobile ? "1.2rem" : "1.5rem",
+            margin: "8px 0",
+            fontFamily: "Orbitron, monospace",
+            fontWeight: "bold",
+            letterSpacing: "0.5px"
+          }}>
+            {item.event}
+          </h3>
+
+          {/* Description */}
+          <p style={{
+            color: "rgba(255,255,255,0.75)",
+            fontSize: isMobile ? "0.8rem" : "0.9rem",
+            margin: "8px 0",
+            lineHeight: "1.4"
+          }}>
+            {item.desc}
+          </p>
+
+          {/* Expanded content */}
+          {expandedCard === idx && (
+            <div style={{
+              marginTop: "15px",
+              paddingTop: "15px",
+              borderTop: `1px solid ${getColor(item.category)}30`,
+              animation: "slideIn 0.3s ease-out"
+            }}>
+              <div style={{ display: "flex", gap: "15px", marginBottom: "10px" }}>
+                <span style={{ color: getColor(item.category), fontWeight: "bold" }}>📍 Venue:</span>
+                <span style={{ color: "rgba(255,255,255,0.8)" }}>{item.venue}</span>
+              </div>
+              <div style={{ display: "flex", gap: "15px" }}>
+                <span style={{ color: getColor(item.category), fontWeight: "bold" }}>👥 Participants:</span>
+                <span style={{ color: "rgba(255,255,255,0.8)" }}>Limited Seats</span>
+              </div>
+            </div>
+          )}
+
+          {/* Footer info */}
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "12px",
+            paddingTop: "12px",
+            borderTop: `1px solid ${getColor(item.category)}30`
+          }}>
+            <span style={{
+              color: "rgba(255,255,255,0.6)",
+              fontSize: isMobile ? "0.75rem" : "0.85rem"
+            }}>
+              ⏱️ {item.duration}
+            </span>
+            <span style={{
+              background: getColor(item.category),
+              color: "#000",
+              padding: isMobile ? "5px 10px" : "6px 12px",
+              borderRadius: "20px",
+              fontSize: isMobile ? "0.7rem" : "0.8rem",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px"
+            }}>
+              {item.category === "development" ? "🔧 Dev" : item.category === "competitive" ? "🏆 Comp" : "🎉 Event"}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const isMobile = window.innerWidth < 768;
+  const currentEvents = activeDay === 1 ? schedule.day1 : schedule.day2;
+
+  const memoizedEventCards = useMemo(() => {
+    return currentEvents.map((item, idx) => (
+      <EventCard key={idx} item={item} idx={idx} isMobile={isMobile} />
+    ));
+  }, [activeDay, isMobile]);
+
+  return (
+    <div style={{
+      background: 'linear-gradient(135deg, #000 0%, #1a1a2e 50%, #16213e 100%)',
+      minHeight: '100vh',
+      padding: isMobile ? '40px 20px' : '60px 50px',
+      fontFamily: 'Orbitron, monospace',
+      color: '#fff',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Animated background */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        background: 'radial-gradient(circle at 20% 50%, rgba(0,255,136,0.08) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(0,204,255,0.08) 0%, transparent 50%)',
+        pointerEvents: 'none'
+      }} />
+
+      {/* TK Logo */}
+      <div style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 10 }}>
+        <img src={tkLogo} alt="TK26 Logo" style={{ height: '35px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2)', animation: 'glow 2s ease-in-out infinite alternate' }} />
+      </div>
+
+      <style>{`
+        @keyframes glow {
+          0%, 100% { filter: drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2); }
+          50% { filter: drop-shadow(0 0 12px rgba(255,255,0,1)) brightness(1.4); }
+        }
+        @keyframes slideIn {
+          from { opacity: 0; transform: translateX(-40px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.15); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+        }
+      `}</style>
+
+      {/* Header */}
+      <div style={{ textAlign: 'center', marginBottom: isMobile ? '40px' : '60px', marginTop: '40px', position: 'relative', zIndex: 1 }}>
+        <h1 style={{ fontSize: isMobile ? '2.2rem' : '3.8rem', color: '#00ff88', textShadow: '0 0 40px rgba(0,255,136,0.7)', marginBottom: '15px', fontWeight: 'bold', letterSpacing: '3px' }}>
+          📅 CODEATHON 2K26
+        </h1>
+        <p style={{ fontSize: isMobile ? '1rem' : '1.4rem', color: '#00ff88', opacity: 0.85, marginBottom: '8px', fontWeight: '600' }}>Event Schedule & Timeline</p>
+        <p style={{ fontSize: isMobile ? '0.9rem' : '1.1rem', color: '#00ccff', opacity: 0.75 }}>24th - 25th March 2026 | AITS, Tirupati</p>
+      </div>
+
+      {/* Day Selector */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: isMobile ? '12px' : '25px', marginBottom: isMobile ? '35px' : '55px', position: 'relative', zIndex: 1, flexWrap: 'wrap' }}>
+        {[1, 2].map(day => (
+          <button
+            key={day}
+            onClick={() => setActiveDay(day)}
+            style={{
+              padding: isMobile ? '11px 22px' : '14px 35px',
+              background: activeDay === day ? 'linear-gradient(135deg, #00ff88, #00cc66)' : 'rgba(0,255,136,0.1)',
+              border: `2px solid ${activeDay === day ? '#00ff88' : 'rgba(0,255,136,0.3)'}`,
+              color: activeDay === day ? '#000' : '#00ff88',
+              borderRadius: '10px',
+              fontSize: isMobile ? '0.95rem' : '1.1rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              fontFamily: 'Orbitron, monospace',
+              textTransform: 'uppercase',
+              letterSpacing: '1.5px',
+              boxShadow: activeDay === day ? '0 0 25px rgba(0,255,136,0.6)' : 'none'
+            }}
+            onMouseEnter={(e) => {
+              if (activeDay !== day) {
+                e.target.style.background = 'rgba(0,255,136,0.2)';
+                e.target.style.transform = 'scale(1.05)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (activeDay !== day) {
+                e.target.style.background = 'rgba(0,255,136,0.1)';
+                e.target.style.transform = 'scale(1)';
+              }
+            }}
+          >
+            Day {day} - March {23 + day}
+          </button>
+        ))}
+      </div>
+
+      {/* Timeline Container */}
+      <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        {memoizedEventCards}
+      </div>
+
+      {/* Stats Section */}
+      <div style={{
+        marginTop: isMobile ? '60px' : '100px',
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)',
+        gap: isMobile ? '15px' : '25px',
+        maxWidth: '1000px',
+        margin: isMobile ? '60px auto 0' : '100px auto 0',
+        position: 'relative',
+        zIndex: 1
+      }}>
+        {[
+          { label: 'Total Events', value: '6', icon: '🎯' },
+          { label: 'Total Hours', value: '16.5', icon: '⏱️' },
+          { label: 'Registrations', value: 'On going', icon: '👥' },
+          { label: 'Prizes', value: 'Surprise gifts', icon: '🏆' }
+        ].map((stat, idx) => (
+          <div key={idx} 
+            onMouseEnter={() => !isMobile && setHoveredStat(idx)}
+            onMouseLeave={() => !isMobile && setHoveredStat(null)}
+            style={{
+              background: 'linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,204,255,0.05))',
+              border: '2px solid rgba(0,255,136,0.25)',
+              borderRadius: '12px',
+              padding: isMobile ? '15px' : '20px',
+              textAlign: 'center',
+              backdropFilter: 'blur(10px)',
+              animation: `float 3s ease-in-out infinite`,
+              animationDelay: `${idx * 0.2}s`,
+              transition: 'all 0.3s ease',
+              transform: hoveredStat === idx ? 'scale(1.08) translateY(-8px)' : 'scale(1)',
+              boxShadow: hoveredStat === idx ? '0 20px 50px rgba(0,255,136,0.4)' : '0 8px 20px rgba(0,0,0,0.3)',
+              cursor: 'pointer'
+            }}>
+            <div style={{ fontSize: isMobile ? '2rem' : '2.5rem', marginBottom: '8px', transition: 'transform 0.3s ease', transform: hoveredStat === idx ? 'scale(1.2) rotate(10deg)' : 'scale(1)' }}>{stat.icon}</div>
+            <p style={{ color: '#00ff88', fontWeight: 'bold', fontSize: isMobile ? '1.2rem' : '1.5rem', margin: '0 0 5px 0', transition: 'color 0.3s ease', color: hoveredStat === idx ? '#00ffaa' : '#00ff88' }}>{stat.value}</p>
+            <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: isMobile ? '0.8rem' : '0.9rem', margin: 0 }}>{stat.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Legend */}
+      <div style={{
+        marginTop: isMobile ? '60px' : '100px',
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+        gap: isMobile ? '18px' : '35px',
+        padding: isMobile ? '25px 18px' : '40px 35px',
+        background: 'linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,204,255,0.05))',
+        borderRadius: '16px',
+        border: '2px solid rgba(0,255,136,0.25)',
+        maxWidth: '1000px',
+        margin: isMobile ? '60px auto 0' : '100px auto 0',
+        position: 'relative',
+        zIndex: 1,
+        backdropFilter: 'blur(10px)'
+      }}>
+        {[
+          { icon: '🔧', title: 'Development', color: '#00ff88', desc: 'Web Dev • Hackathon • Crack Code' },
+          { icon: '🏆', title: 'Competitive', color: '#00ccff', desc: 'Tech Quiz • Circuitron • Presentation' },
+          { icon: '🎉', title: 'Ceremonies', color: '#ffaa00', desc: 'Inauguration • Closing' }
+        ].map((legend, idx) => (
+          <div key={idx}
+            onMouseEnter={() => !isMobile && setHoveredLegend(idx)}
+            onMouseLeave={() => !isMobile && setHoveredLegend(null)}
+            style={{ 
+              textAlign: 'center', 
+              padding: '15px',
+              transition: 'all 0.3s ease',
+              transform: hoveredLegend === idx ? 'scale(1.05)' : 'scale(1)',
+              borderRadius: '10px',
+              background: hoveredLegend === idx ? `${legend.color}15` : 'transparent',
+              cursor: 'pointer'
+            }}>
+            <div style={{ fontSize: isMobile ? '2.8rem' : '3.2rem', marginBottom: '12px', animation: 'pulse 2s infinite', animationDelay: `${idx * 0.2}s`, transition: 'transform 0.3s ease', transform: hoveredLegend === idx ? 'scale(1.15)' : 'scale(1)' }}>{legend.icon}</div>
+            <p style={{ color: legend.color, margin: 0, fontWeight: 'bold', fontSize: isMobile ? '0.95rem' : '1.1rem', letterSpacing: '0.5px', transition: 'all 0.3s ease', textShadow: hoveredLegend === idx ? `0 0 15px ${legend.color}` : 'none' }}>{legend.title}</p>
+            <p style={{ color: `${legend.color}99`, margin: '8px 0 0 0', fontSize: isMobile ? '0.8rem' : '0.9rem', transition: 'color 0.3s ease', color: hoveredLegend === idx ? legend.color : `${legend.color}99` }}>{legend.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      <BottomNavBar />
+    </div>
+  );
+}
+
+export default Schedules;

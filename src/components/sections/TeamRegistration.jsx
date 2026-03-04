@@ -826,7 +826,7 @@ const TeamRegistration = () => {
           <div style={{
             fontSize: '1.3rem', fontWeight: 'bold', marginTop: '15px', padding: '15px',
             background: 'rgba(76, 175, 80, 0.3)', borderRadius: '10px', border: '2px solid #4CAF50'
-          }}>💰 Amount: ₹{(members.length + 1) * 100}</div>
+          }}>💰 Amount: ₹{(members.length + 1) * 50}</div>
         </div>
         <div style={{
           background: '#fff', padding: '20px', borderRadius: '15px', marginBottom: '20px', display: 'inline-block'
