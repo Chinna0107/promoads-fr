@@ -7,10 +7,10 @@ const schedule = {
     { time: "09:30 AM", event: "Inauguration", category: "ceremony", duration: "1 hour", icon: "🎉", desc: "Opening ceremony & welcome address", venue: "Main Auditorium" },
     { time: "10:30 AM ", event: "Web Development", category: "development", duration: "24 hours", icon: "🌐", desc: "Build responsive websites", venue: "Lab A" },
     { time: "10:30 AM ", event: "Hackathon", category: "development", duration: "24 hours", icon: "💻", desc: "24-hour coding marathon", venue: "Lab B & C" },
-    { time: "10.30 AM ", event: "Crack The Code", category: "development", duration: "4 hours", icon: "🧠", desc: "Test your technical knowledge", venue: "Seminar Hall" },
+    { time: "10.30 AM ", event: "Tech Quiz", category: "development", duration: "4 hours", icon: "🧠", desc: "Test your technical knowledge", venue: "Seminar Hall" },
   ],
   day2: [
-    { time: "09:30 AM", event: "Tech Quiz", category: "competitive", duration: "5 hours", icon: "🧠", desc: "Test your technical knowledge", venue: "Seminar Hall" },
+    { time: "09:30 AM", event: "Crack The Code", category: "competitive", duration: "5 hours", icon: "🧠", desc: "Test your technical knowledge", venue: "Seminar Hall" },
     { time: "09.30 AM ", event: "Circuitron", category: "competitive", duration: "5 hours", icon: "⚡", desc: "Electronics & circuit design", venue: "Lab D" },
     { time: "09:30 AM ", event: "Presentation", category: "competitive", duration: "1.5 hours", icon: "🎤", desc: "Showcase your projects", venue: "Main Auditorium" },
     { time: "05:30 PM", event: "Closing Ceremony", category: "ceremony", duration: "1 hour", icon: "🏆", desc: "Prize distribution & awards", venue: "Main Auditorium" },
