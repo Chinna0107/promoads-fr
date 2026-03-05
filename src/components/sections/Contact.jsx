@@ -4,9 +4,10 @@ import tkLogo from '../../assets/images/tk26.png'
 import BottomNavBar from './BottomNavBar'
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: '', message: '' })
   const [hoveredField, setHoveredField] = useState(null)
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
   const isMobile = window.innerWidth < 768
 
   const handleChange = (e) => {
@@ -15,11 +16,19 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const mailtoLink = `mailto:codeathon2k25@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\\nEmail: ${formData.email}\\n\\nMessage:\\n${formData.message}`)}`
-    window.location.href = mailtoLink
+    setLoading(true)
+    
+    const whatsappMessage = `Hello! I'm ${formData.name}\n\nEmail: ${formData.email}\nPhone: ${formData.phone || 'Not provided'}\nSubject: ${formData.subject}\n\nMessage: ${formData.message}`
+    const encodedMessage = encodeURIComponent(whatsappMessage)
+    const whatsappUrl = `https://wa.me/918179860935?text=${encodedMessage}`
+    
     setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 3000)
-    setFormData({ name: '', email: '', subject: '', message: '' })
+    setTimeout(() => {
+      window.open(whatsappUrl, '_blank')
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+      setSubmitted(false)
+      setLoading(false)
+    }, 500)
   }
 
   const contacts = [
@@ -29,15 +38,14 @@ const Contact = () => {
 
   const allCards = [
     ...contacts,
-    { Icon: FaEnvelope, title: 'Email', text: 'codeathon2k25@gmail.com', isContact: false },
-    { Icon: FaMapMarkerAlt, title: 'Location', text: 'AITS, Tirupati', isContact: false }
+    { Icon: FaEnvelope, title: 'Email', text: 'codeathon2k26@gmail.com', link: 'mailto:codeathon2k26@gmail.com', isContact: false }
   ]
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0a0e27 0%, #1a1f3a 25%, #0f1428 50%, #1a1f3a 75%, #0a0e27 100%)',
-      padding: isMobile ? '30px 16px 120px' : '100px 60px 80px',
+      background: '#000',
+      padding: isMobile ? '30px 16px 180px' : '100px 60px 120px',
       position: 'relative',
       overflow: 'hidden',
       fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
@@ -68,6 +76,7 @@ const Contact = () => {
       <style>{`
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(30px); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         input:focus, textarea:focus { outline: none; }
         @media (max-width: 768px) {
           input, textarea { font-size: 16px !important; }
@@ -110,13 +119,15 @@ const Contact = () => {
           display: 'grid',
           gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
           gap: isMobile ? '40px' : '80px',
-          alignItems: 'start'
+          alignItems: 'stretch',
+          minHeight: '600px'
         }}>
           <div>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '18px' : '24px' }}>
               {[
                 { name: 'name', label: 'Full Name', type: 'text', icon: FaPhone },
                 { name: 'email', label: 'Email Address', type: 'email', icon: FaEnvelope },
+                { name: 'phone', label: 'Phone (Optional)', type: 'tel', icon: FaPhone },
                 { name: 'subject', label: 'Subject', type: 'text', icon: FaMapMarkerAlt }
               ].map((field, idx) => {
                 const IconComponent = field.icon
@@ -142,7 +153,8 @@ const Contact = () => {
                       onFocus={() => setHoveredField(field.name)}
                       onBlur={() => setHoveredField(null)}
                       placeholder={field.label}
-                      required
+                      required={field.name !== 'phone'}
+                      disabled={loading}
                       style={{
                         width: '100%',
                         padding: isMobile ? '14px 14px' : '16px 18px',
@@ -153,14 +165,16 @@ const Contact = () => {
                         fontSize: isMobile ? '1rem' : '1rem',
                         transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
                         backdropFilter: 'blur(10px)',
-                        boxShadow: hoveredField === field.name ? '0 0 30px rgba(0,255,136,0.2)' : 'none'
+                        boxShadow: hoveredField === field.name ? '0 0 30px rgba(0,255,136,0.2)' : 'none',
+                        opacity: loading ? 0.6 : 1,
+                        cursor: loading ? 'not-allowed' : 'text'
                       }}
                     />
                   </div>
                 )
               })}
 
-              <div style={{ position: 'relative', animation: 'slideUp 0.6s ease-out 0.3s both' }}>
+              <div style={{ position: 'relative', animation: 'slideUp 0.6s ease-out 0.4s both' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                   <FaEnvelope style={{ fontSize: isMobile ? '1rem' : '1.2rem', color: '#00ff88' }} />
                   <label style={{
@@ -182,6 +196,7 @@ const Contact = () => {
                   placeholder="Tell us about your inquiry..."
                   rows={isMobile ? "4" : "6"}
                   required
+                  disabled={loading}
                   style={{
                     width: '100%',
                     padding: isMobile ? '14px 14px' : '16px 18px',
@@ -194,49 +209,57 @@ const Contact = () => {
                     backdropFilter: 'blur(10px)',
                     boxShadow: hoveredField === 'message' ? '0 0 30px rgba(0,255,136,0.2)' : 'none',
                     fontFamily: 'inherit',
-                    resize: 'none'
+                    resize: 'none',
+                    opacity: loading ? 0.6 : 1,
+                    cursor: loading ? 'not-allowed' : 'text'
                   }}
                 />
               </div>
 
               <button
                 type="submit"
+                disabled={loading}
                 style={{
                   padding: isMobile ? '14px 32px' : '16px 40px',
-                  background: 'linear-gradient(135deg, #00ff88 0%, #00eaff 100%)',
+                  background: loading ? 'rgba(0,255,136,0.5)' : 'linear-gradient(135deg, #00ff88 0%, #00eaff 100%)',
                   color: '#000',
                   border: 'none',
                   borderRadius: '12px',
                   fontSize: isMobile ? '1rem' : '1.1rem',
                   fontWeight: '700',
-                  cursor: 'pointer',
+                  cursor: loading ? 'not-allowed' : 'pointer',
                   transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
                   boxShadow: '0 10px 40px rgba(0,255,136,0.3)',
                   letterSpacing: '0.5px',
                   textTransform: 'uppercase',
                   marginTop: '10px',
-                  animation: 'slideUp 0.6s ease-out 0.4s both',
-                  width: isMobile ? '100%' : 'auto'
+                  animation: 'slideUp 0.6s ease-out 0.5s both',
+                  width: isMobile ? '100%' : 'auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px'
                 }}
                 onMouseEnter={(e) => {
-                  if (!isMobile) {
+                  if (!isMobile && !loading) {
                     e.target.style.transform = 'translateY(-4px)'
                     e.target.style.boxShadow = '0 20px 60px rgba(0,255,136,0.5)'
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (!isMobile) {
+                  if (!isMobile && !loading) {
                     e.target.style.transform = 'translateY(0)'
                     e.target.style.boxShadow = '0 10px 40px rgba(0,255,136,0.3)'
                   }
                 }}
               >
-                {submitted ? '✓ Message Sent!' : 'Send Message'}
+                {loading && <div style={{ width: '16px', height: '16px', border: '2px solid rgba(0,0,0,0.3)', borderTop: '2px solid #000', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />}
+                {loading ? 'Sending...' : submitted ? '✓ Message Sent!' : 'Send Message'}
               </button>
             </form>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '30px' : '40px', padding: isMobile ? '0' : '20px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? '30px' : '40px', padding: isMobile ? '0' : '20px', height: '100%' }}>
             <div style={{
               display: 'flex',
               gap: isMobile ? '6px' : '10px',
@@ -327,7 +350,7 @@ const Contact = () => {
                       </p>
                     </>
                   ) : (
-                    <>
+                    <a href={item.link} style={{ textDecoration: 'none', color: 'inherit' }}>
                       <item.Icon style={{ fontSize: '1.2rem', marginBottom: '6px', color: item.title === 'Email' ? '#00eaff' : '#667eea' }} />
                       <h3 style={{ color: item.title === 'Email' ? '#00eaff' : '#667eea', fontWeight: '700', marginBottom: '4px', fontSize: '0.8rem' }}>
                         {item.title}
@@ -335,7 +358,7 @@ const Contact = () => {
                       <p style={{ color: '#a0a0b0', fontSize: '0.65rem', margin: 0 }}>
                         {item.text}
                       </p>
-                    </>
+                    </a>
                   )}
                 </div>
               ))}
@@ -347,7 +370,7 @@ const Contact = () => {
               border: '1px solid rgba(255,255,255,0.2)',
               borderRadius: isMobile ? '14px' : '16px',
               overflow: 'hidden',
-              height: isMobile ? '280px' : '350px',
+              flex: 1,
               boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
               position: 'relative',
               animation: 'slideUp 0.6s ease-out 0.3s both'

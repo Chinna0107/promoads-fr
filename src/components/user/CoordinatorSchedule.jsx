@@ -18,27 +18,14 @@ const CoordinatorSchedule = () => {
     }
     
     const mockSchedules = [
-      {
-        eventName: 'Tech Quiz',
-        category: 'Technical',
-        date: 'January 20, 2025',
-        time: '10:00 AM - 12:00 PM',
-        venue: 'Main Auditorium'
-      },
-      {
-        eventName: 'Code Sprint',
-        category: 'Technical',
-        date: 'January 21, 2025',
-        time: '2:00 PM - 5:00 PM',
-        venue: 'Computer Lab 1'
-      },
-      {
-        eventName: 'Web Design',
-        category: 'Technical',
-        date: 'January 22, 2025',
-        time: '9:00 AM - 1:00 PM',
-        venue: 'Design Studio'
-      }
+      { eventName: 'Inauguration', category: 'Ceremony', date: '24th March 2026', time: '09:30 AM', duration: '1 hour', venue: 'Main Auditorium', desc: 'Opening ceremony & welcome address' },
+      { eventName: 'Web Development', category: 'Development', date: '24th March 2026', time: '10:30 AM', duration: '24 hours', venue: 'E - Class Room', desc: 'Build responsive websites' },
+      { eventName: 'Hackathon', category: 'Development', date: '24th March 2026', time: '10:30 AM', duration: '24 hours', venue: 'E - Class Room', desc: '24-hour coding marathon' },
+      { eventName: 'Crack The Code', category: 'Development', date: '24th March 2026', time: '10:30 AM', duration: '4 hours', venue: 'D & E Labs', desc: 'Test your technical knowledge' },
+      { eventName: 'Tech Quiz', category: 'Competitive', date: '25th March 2026', time: '09:30 AM', duration: '5 hours', venue: 'MPMC Lab', desc: 'Test your technical knowledge' },
+      { eventName: 'Circuitron', category: 'Competitive', date: '25th March 2026', time: '09:30 AM', duration: '5 hours', venue: 'EDC & STLD Lab', desc: 'Electronics & circuit design' },
+      { eventName: 'Presentation', category: 'Competitive', date: '25th March 2026', time: '09:30 AM', duration: '1.5 hours', venue: 'MBA Seminar Hall', desc: 'Showcase your projects' },
+      { eventName: 'Closing Ceremony', category: 'Ceremony', date: '25th March 2026', time: '05:30 PM', duration: '1 hour', venue: 'E - Class Room', desc: 'Prize distribution & awards' }
     ];
     
     setTimeout(() => {
@@ -72,7 +59,7 @@ const CoordinatorSchedule = () => {
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <CoordinatorMenu />
-      <div style={{ marginLeft: '280px', flex: 1, background: '#000', padding: 'clamp(10px, 3vw, 20px)', position: 'relative' }} className="schedule-content">
+      <div style={{ marginLeft: '280px', flex: 1, background: '#000', padding: 'clamp(10px, 3vw, 20px) clamp(10px, 3vw, 20px) clamp(180px, 10vw, 200px)', position: 'relative' }} className="schedule-content">
         <style>
           {`
             @keyframes glow {
@@ -80,7 +67,7 @@ const CoordinatorSchedule = () => {
               50% { filter: drop-shadow(0 0 12px rgba(255,255,0,1)) brightness(1.4); }
             }
             @media (max-width: 768px) {
-              .schedule-content { margin-left: 0 !important; padding: 10px !important; padding-top: 80px !important; }
+              .schedule-content { margin-left: 0 !important; padding: 10px !important; padding-top: 80px !important; padding-bottom: 180px !important; }
             }
           `}
         </style>
@@ -125,6 +112,10 @@ const CoordinatorSchedule = () => {
                     <div style={{ background: 'rgba(255,255,255,0.1)', padding: '15px', borderRadius: '10px' }}>
                       <p style={{ color: '#ccc', fontSize: '0.85rem', marginBottom: '5px' }}>🕐 Time</p>
                       <p style={{ color: '#fff', fontWeight: 'bold', fontSize: '1rem', margin: 0 }}>{schedule.time}</p>
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.1)', padding: '15px', borderRadius: '10px' }}>
+                      <p style={{ color: '#ccc', fontSize: '0.85rem', marginBottom: '5px' }}>⏱️ Duration</p>
+                      <p style={{ color: '#fff', fontWeight: 'bold', fontSize: '1rem', margin: 0 }}>{schedule.duration}</p>
                     </div>
                     <div style={{ background: 'rgba(255,255,255,0.1)', padding: '15px', borderRadius: '10px' }}>
                       <p style={{ color: '#ccc', fontSize: '0.85rem', marginBottom: '5px' }}>📍 Venue</p>

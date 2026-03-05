@@ -39,7 +39,7 @@ const Home = () => {
       const eventsData = regs.registrations || regs || [];
       setRegisteredEvents(eventsData.slice(0, 4)); // Show max 4 events
       setStats({
-        totalEvents: 20,
+        totalEvents: 6,
         myRegistrations: eventsData.length || 0
       });
     } catch (err) {

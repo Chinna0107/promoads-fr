@@ -5,14 +5,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaCode, FaGamepad, FaChalkboardTeacher, FaMicrophone, FaLaptopCode, FaPalette, FaLightbulb, FaCube, FaUtensils, FaBrain, FaGithub, FaNetworkWired } from 'react-icons/fa';
 import tkLogo from '../../assets/images/tk26.png';
-import eventpic from '../../assets/images/elephant-removebg-preview (1).png';
-import samplePdf from '../../assets/images/21AK1A0427 APSCHE.pdf';
-import imgProjectExpo from '../../assets/images/12979916_5079835.jpg';
-import imgRubeCube from '../../assets/images/Comp.png';
 import '../../styles/Home.css';
 import BottomNavBar from './BottomNavBar';
 import TechQuiz from '../../assets/Rules/techquiz.pdf';
-// import Webdev from '../../assets/Rules/Web Development.pdf';
 import Webdev from '../../assets/Rules/WebDevelopmentRules.pdf';
 import Hackathon from '../../assets/Rules/Hackathon.pdf';
 import Circuitron from '../../assets/Rules/Circuitron2.pdf';
@@ -103,14 +98,14 @@ const Events = () => {
           `}
         </style>
         { !category && (
-          <img src={eventpic} alt="Theme Pic" className="mascot-image" style={{ position: 'absolute', right: 18, bottom: 18, width: 320, height: 'auto', zIndex: 101, opacity: 0.95 }} />
+          <img src='https://res.cloudinary.com/dwmjz9csc/image/upload/v1772687256/imgtourl/fd552f0611c2449ca663aa95e1788309.png' alt="Theme Pic moscot" className="mascot-image" style={{ position: 'absolute', right: 18, bottom: 18, width: 320, height: 'auto', zIndex: 101, opacity: 0.95 }} />
         )}
         {!category && (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', marginBottom: '2.5rem', marginTop: '5rem', padding: '0 2rem', paddingBottom: '120px', minHeight: '60vh', flexDirection: window.innerWidth < 768 ? 'column' : 'row' }}>
             {categories.map((cat) => {
               const categoryImages = {
-                development: imgProjectExpo,
-                competetive: imgRubeCube
+                development: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772685897/co2_gr2len.jpg',
+                competetive: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772685892/co1_o7auwb.jpg'
               };
               
               return (

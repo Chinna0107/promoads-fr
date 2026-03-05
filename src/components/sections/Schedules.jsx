@@ -5,14 +5,14 @@ import BottomNavBar from './BottomNavBar';
 const schedule = {
   day1: [
     { time: "09:30 AM", event: "Inauguration", category: "ceremony", duration: "1 hour", icon: "🎉", desc: "Opening ceremony & welcome address", venue: "Main Auditorium" },
-    { time: "10:30 AM - 01:30 PM", event: "Web Development", category: "development", duration: "3 hours", icon: "🌐", desc: "Build responsive websites", venue: "Lab A" },
-    { time: "10:30 AM - 05:00 PM", event: "Hackathon", category: "development", duration: "6.5 hours", icon: "💻", desc: "24-hour coding marathon", venue: "Lab B & C" },
-    { time: "02:00 PM - 04:00 PM", event: "Tech Quiz", category: "competitive", duration: "2 hours", icon: "🧠", desc: "Test your technical knowledge", venue: "Seminar Hall" },
+    { time: "10:30 AM ", event: "Web Development", category: "development", duration: "24 hours", icon: "🌐", desc: "Build responsive websites", venue: "Lab A" },
+    { time: "10:30 AM ", event: "Hackathon", category: "development", duration: "24 hours", icon: "💻", desc: "24-hour coding marathon", venue: "Lab B & C" },
+    { time: "10.30 AM ", event: "Crack The Code", category: "development", duration: "4 hours", icon: "🧠", desc: "Test your technical knowledge", venue: "Seminar Hall" },
   ],
   day2: [
-    { time: "09:30 AM", event: "Crack the Code", category: "development", duration: "3 hours", icon: "🔐", desc: "Solve coding challenges", venue: "Lab A" },
-    { time: "01:00 PM - 03:00 PM", event: "Circuitron", category: "competitive", duration: "2 hours", icon: "⚡", desc: "Electronics & circuit design", venue: "Lab D" },
-    { time: "03:30 PM - 05:00 PM", event: "Presentation", category: "competitive", duration: "1.5 hours", icon: "🎤", desc: "Showcase your projects", venue: "Main Auditorium" },
+    { time: "09:30 AM", event: "Tech Quiz", category: "competitive", duration: "5 hours", icon: "🧠", desc: "Test your technical knowledge", venue: "Seminar Hall" },
+    { time: "09.30 AM ", event: "Circuitron", category: "competitive", duration: "5 hours", icon: "⚡", desc: "Electronics & circuit design", venue: "Lab D" },
+    { time: "09:30 AM ", event: "Presentation", category: "competitive", duration: "1.5 hours", icon: "🎤", desc: "Showcase your projects", venue: "Main Auditorium" },
     { time: "05:30 PM", event: "Closing Ceremony", category: "ceremony", duration: "1 hour", icon: "🏆", desc: "Prize distribution & awards", venue: "Main Auditorium" },
   ]
 };
@@ -227,11 +227,11 @@ function Schedules() {
     <div style={{
       background: 'linear-gradient(135deg, #000 0%, #1a1a2e 50%, #16213e 100%)',
       minHeight: '100vh',
-      padding: isMobile ? '40px 20px' : '60px 50px',
+      padding: isMobile ? '40px 20px 180px' : '60px 50px 120px',
       fontFamily: 'Orbitron, monospace',
       color: '#fff',
       position: 'relative',
-      overflow: 'hidden'
+      overflow: 'auto'
     }}>
       {/* Animated background */}
       <div style={{
@@ -275,6 +275,52 @@ function Schedules() {
         </h1>
         <p style={{ fontSize: isMobile ? '1rem' : '1.4rem', color: '#00ff88', opacity: 0.85, marginBottom: '8px', fontWeight: '600' }}>Event Schedule & Timeline</p>
         <p style={{ fontSize: isMobile ? '0.9rem' : '1.1rem', color: '#00ccff', opacity: 0.75 }}>24th - 25th March 2026 | AITS, Tirupati</p>
+      </div>
+
+      {/* Scrolling Notice Banner */}
+      <div style={{
+        background: 'linear-gradient(90deg, rgba(255,170,0,0.15), rgba(255,170,0,0.05))',
+        border: '2px solid rgba(255,170,0,0.3)',
+        borderRadius: '10px',
+        padding: isMobile ? '12px 15px' : '15px 20px',
+        marginBottom: isMobile ? '30px' : '50px',
+        position: 'relative',
+        zIndex: 1,
+        overflow: 'hidden',
+        backdropFilter: 'blur(10px)'
+      }}>
+        <div style={{
+          display: 'flex',
+          gap: '50px',
+          animation: 'scroll 40s linear infinite'
+        }}>
+          <p style={{
+            color: '#ffaa00',
+            fontSize: isMobile ? '0.85rem' : '0.95rem',
+            margin: 0,
+            fontWeight: '600',
+            whiteSpace: 'nowrap',
+            flexShrink: 0
+          }}>
+            ⚠️ Notice: The schedule timings may change according to the events and will notify the schedules if any changes done. Team CODEATHON 2K26.
+          </p>
+          <p style={{
+            color: '#ffaa00',
+            fontSize: isMobile ? '0.85rem' : '0.95rem',
+            margin: 0,
+            fontWeight: '600',
+            whiteSpace: 'nowrap',
+            flexShrink: 0
+          }}>
+            ⚠️ Notice: The schedule timings may change according to the events and will notify the schedules if any changes done. Team CODEATHON 2K26
+          </p>
+        </div>
+        <style>{`
+          @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+        `}</style>
       </div>
 
       {/* Day Selector */}
@@ -334,7 +380,7 @@ function Schedules() {
       }}>
         {[
           { label: 'Total Events', value: '6', icon: '🎯' },
-          { label: 'Total Hours', value: '16.5', icon: '⏱️' },
+          { label: 'Total Hours', value: '48', icon: '⏱️' },
           { label: 'Registrations', value: 'On going', icon: '👥' },
           { label: 'Prizes', value: 'Surprise gifts', icon: '🏆' }
         ].map((stat, idx) => (
@@ -363,44 +409,7 @@ function Schedules() {
       </div>
 
       {/* Legend */}
-      <div style={{
-        marginTop: isMobile ? '60px' : '100px',
-        display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
-        gap: isMobile ? '18px' : '35px',
-        padding: isMobile ? '25px 18px' : '40px 35px',
-        background: 'linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,204,255,0.05))',
-        borderRadius: '16px',
-        border: '2px solid rgba(0,255,136,0.25)',
-        maxWidth: '1000px',
-        margin: isMobile ? '60px auto 0' : '100px auto 0',
-        position: 'relative',
-        zIndex: 1,
-        backdropFilter: 'blur(10px)'
-      }}>
-        {[
-          { icon: '🔧', title: 'Development', color: '#00ff88', desc: 'Web Dev • Hackathon • Crack Code' },
-          { icon: '🏆', title: 'Competitive', color: '#00ccff', desc: 'Tech Quiz • Circuitron • Presentation' },
-          { icon: '🎉', title: 'Ceremonies', color: '#ffaa00', desc: 'Inauguration • Closing' }
-        ].map((legend, idx) => (
-          <div key={idx}
-            onMouseEnter={() => !isMobile && setHoveredLegend(idx)}
-            onMouseLeave={() => !isMobile && setHoveredLegend(null)}
-            style={{ 
-              textAlign: 'center', 
-              padding: '15px',
-              transition: 'all 0.3s ease',
-              transform: hoveredLegend === idx ? 'scale(1.05)' : 'scale(1)',
-              borderRadius: '10px',
-              background: hoveredLegend === idx ? `${legend.color}15` : 'transparent',
-              cursor: 'pointer'
-            }}>
-            <div style={{ fontSize: isMobile ? '2.8rem' : '3.2rem', marginBottom: '12px', animation: 'pulse 2s infinite', animationDelay: `${idx * 0.2}s`, transition: 'transform 0.3s ease', transform: hoveredLegend === idx ? 'scale(1.15)' : 'scale(1)' }}>{legend.icon}</div>
-            <p style={{ color: legend.color, margin: 0, fontWeight: 'bold', fontSize: isMobile ? '0.95rem' : '1.1rem', letterSpacing: '0.5px', transition: 'all 0.3s ease', textShadow: hoveredLegend === idx ? `0 0 15px ${legend.color}` : 'none' }}>{legend.title}</p>
-            <p style={{ color: `${legend.color}99`, margin: '8px 0 0 0', fontSize: isMobile ? '0.8rem' : '0.9rem', transition: 'color 0.3s ease', color: hoveredLegend === idx ? legend.color : `${legend.color}99` }}>{legend.desc}</p>
-          </div>
-        ))}
-      </div>
+      {/* Removed legend section */}
 
       <BottomNavBar />
     </div>

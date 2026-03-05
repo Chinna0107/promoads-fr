@@ -202,7 +202,7 @@ const CoordinatorProfile = () => {
                     
                     {/* Event Name */}
                     <div style={{ marginBottom: '10px' }}>
-                      <p style={{ fontSize: '1.1rem', color: '#87CEEB', fontWeight: '600', margin: '0' }}>TRI-COD 2K26</p>
+                      <p style={{ fontSize: '1.1rem', color: '#87CEEB', fontWeight: '600', margin: '0' }}>CODEATHON 2K26</p>
                     </div>
                     
                     {/* Email */}

@@ -204,7 +204,7 @@ const AboutPage = () => {
           <div className="about-section-content">
             <h2>About Mascot Design</h2>
             <p>
-              🌟 Meet "CODEATHON 2K26" – The Hybrid Spirit of CODEATHON 2K26 🐘🦚🦉🐅🦜
+              🌟 Meet "MEDHAVI" – The Hybrid Spirit of CODEATHON 2K26 🐘🦚🦉🐅🦜
             </p>
             <p>
               CODEATHON, the official mascot of CODEATHON 2K26, is not just a character — it's a symbol of unity, intelligence, creativity, and energy. Crafted as a hybrid of five magnificent creatures, each element reflects the core values and visionary goals of the fest:

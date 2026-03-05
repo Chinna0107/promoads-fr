@@ -218,7 +218,7 @@ const Profile = () => {
                       {/* Event Name */}
                       <div style={{ marginBottom: '10px', display: 'flex' }}>
                         <span style={{ fontSize: '1.1rem', color: '#87CEEB', fontWeight: '600', minWidth: '100px' }}>Event :</span>
-                        <span style={{ fontSize: '1.1rem', color: '#87CEEB', fontWeight: '600', marginLeft: '10px' }}>TRISHNA 2K26</span>
+                        <span style={{ fontSize: '1.1rem', color: '#87CEEB', fontWeight: '600', marginLeft: '10px' }}>CODEATHON 2K26</span>
                       </div>
                       
                       {/* Email */}
