@@ -10,9 +10,9 @@ const topTechLeads = [
 const eventTeams = {
   'Web Development': [
 
-    { id: 18, name: "AKASH", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop", desc: "III - ECE" },
+    { id: 18, name: "AKASH", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772697350/co090_fgogcw.jpg", desc: "III - ECE" },
     { id: 20, name: "VARUN", image: "https://res.cloudinary.com/dwmjz9csc/image/upload/v1772649022/imgtourl/ccbad2d0d0e9438c98ff96482890cc51.jpg", desc: "II - ECE" },
-    { id: 21, name: "TILAK", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop", desc: "II - ECE" },
+    { id: 21, name: "TILAK", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772697361/thilak_kbwu1c.jpg", desc: "II - ECE" },
   ],
   'Hackathon': [
     { id: 16, name: "SANJANA", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772564658/co14_ci8f9h.jpg", desc: "III - ECE" },
@@ -23,7 +23,7 @@ const eventTeams = {
     { id: 6, name: "ANKITHA", image: "https://res.cloudinary.com/dwmjz9csc/image/upload/v1772649157/imgtourl/2640d289225f41f890fab8cabf914189.jpg", desc: "III - ECE" },
     { id: 8, name: "ANIL KUMAR", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772562706/co7_or7cgr.jpg", desc: "III - ECE" },
     { id: 9, name: "HANEESH", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772563256/co11_qzyl2o.jpg", desc: "III - ECE" },
-    { id: 12, name: "MOHAN", image: "https://res.cloudinary.com/dwmjz9csc/image/upload/v1772695640/imgtourl/f9b0d82d0e2f4471ac2a58165fb341a6.jpg", desc: "II - ECE" },
+    { id: 12, name: "MOHAN", image: "https://res.cloudinary.com/dwmjz9csc/image/upload/v1772696432/imgtourl/f9b34e8689e44f3396d71d9c239e7da6.jpg ", desc: "II - ECE" },
   ],
   'Crack the Code': [
     { id: 10, name: "SUSMITHA", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772561924/co4_n5pjfw.jpg", desc: "III - ECE" },
@@ -32,9 +32,9 @@ const eventTeams = {
   ],
   'Tech Quiz': [
     { id: 7, name: "HEMA", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772562879/co10_ix201q.jpg", desc: "III - ECE" },
-    { id: 19, name: "BHARATH", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop", desc: "III - ECE" },
-    { id: 22, name: "AFRIN", image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop", desc: "II - ECE" },
-    { id: 14, name: "CHANDRIKA", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&h=300&fit=crop", desc: "II - ECE" },
+    { id: 19, name: "BHARATH", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772697231/co099_b92fbg.jpg", desc: "III - ECE" },
+    { id: 22, name: "ASIN", image: "https://res.cloudinary.com/dwmjz9csc/image/upload/v1772696116/imgtourl/6a521d861e0d41dd83338905d43b9b5b.jpg", desc: "II - ECE" },
+    { id: 14, name: "CHANDRIKA", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772697455/chandrika_uikmtt.jpg", desc: "II - ECE" },
   ],
 }
 

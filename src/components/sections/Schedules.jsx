@@ -380,9 +380,9 @@ function Schedules() {
       }}>
         {[
           { label: 'Total Events', value: '6', icon: '🎯' },
-          { label: 'Total Hours', value: '48', icon: '⏱️' },
+          { label: 'Total Hours', value: '48+', icon: '⏱️' },
           { label: 'Registrations', value: 'On going', icon: '👥' },
-          { label: 'Prizes', value: 'Surprise gifts', icon: '🏆' }
+          { label: 'Prizes', value: 'Surprise', icon: '🏆' }
         ].map((stat, idx) => (
           <div key={idx} 
             onMouseEnter={() => !isMobile && setHoveredStat(idx)}
