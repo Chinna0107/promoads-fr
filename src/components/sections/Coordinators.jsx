@@ -23,7 +23,7 @@ const eventTeams = {
     { id: 6, name: "ANKITHA", image: "https://res.cloudinary.com/dwmjz9csc/image/upload/v1772649157/imgtourl/2640d289225f41f890fab8cabf914189.jpg", desc: "III - ECE" },
     { id: 8, name: "ANIL KUMAR", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772562706/co7_or7cgr.jpg", desc: "III - ECE" },
     { id: 9, name: "HANEESH", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772563256/co11_qzyl2o.jpg", desc: "III - ECE" },
-    { id: 12, name: "MOHAN", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop", desc: "II - ECE" },
+    { id: 12, name: "MOHAN", image: "https://res.cloudinary.com/dwmjz9csc/image/upload/v1772695640/imgtourl/f9b0d82d0e2f4471ac2a58165fb341a6.jpg", desc: "II - ECE" },
   ],
   'Crack the Code': [
     { id: 10, name: "SUSMITHA", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772561924/co4_n5pjfw.jpg", desc: "III - ECE" },
