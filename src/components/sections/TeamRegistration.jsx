@@ -35,6 +35,9 @@ const TeamRegistration = () => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [selectedCoordinator, setSelectedCoordinator] = useState('');
   const [transactionId, setTransactionId] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const qrCodeUrl = 'https://res.cloudinary.com/dwmjz9csc/image/upload/v1772714774/imgtourl/f04d05dc37d246fb85cb2511677804d6.png';
 
   const coordinators = [
     { id: 1, name: "B GURU GANGADHAR REDDY" },
@@ -486,26 +489,62 @@ const TeamRegistration = () => {
           {/* Password fields */}
           {!isExistingUser && (
             <>
-              <input
-                placeholder="Password"
-                name="password"
-                type="password"
-                value={teamLeader.password}
-                onChange={handleLeaderChange}
-                required
-                className="form-half-width"
-                style={inputStyle}
-              />
-              <input
-                placeholder="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                value={teamLeader.confirmPassword}
-                onChange={handleLeaderChange}
-                required
-                className="form-half-width"
-                style={inputStyle}
-              />
+              <div className="form-half-width" style={{ position: 'relative' }}>
+                <input
+                  placeholder="Password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={teamLeader.password}
+                  onChange={handleLeaderChange}
+                  required
+                  style={inputStyle}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '15px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontSize: '1.2rem'
+                  }}
+                >
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
+              <div className="form-half-width" style={{ position: 'relative' }}>
+                <input
+                  placeholder="Confirm Password"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={teamLeader.confirmPassword}
+                  onChange={handleLeaderChange}
+                  required
+                  style={inputStyle}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '15px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontSize: '1.2rem'
+                  }}
+                >
+                  {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
             </>
           )}
           <div className="form-full-width" style={{ display: 'flex', gap: '15px', justifyContent: 'center', marginTop: '10px' }}>
@@ -831,11 +870,9 @@ const TeamRegistration = () => {
         <div style={{
           background: '#fff', padding: '20px', borderRadius: '15px', marginBottom: '20px', display: 'inline-block'
         }}>
-          <div style={{
-            width: '200px', height: '200px', background: 'linear-gradient(45deg, #667eea, #764ba2)',
-            borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: '#fff', fontSize: '1.2rem', fontWeight: 'bold'
-          }}>QR Code</div>
+          <img src={qrCodeUrl} alt="QR Code" style={{
+            width: '200px', height: '200px', borderRadius: '10px', objectFit: 'cover'
+          }} />
           <p style={{ color: '#333', marginTop: '10px', fontSize: '0.9rem' }}>Scan to Pay</p>
         </div>
         <form onSubmit={handlePayment}>
@@ -968,7 +1005,7 @@ const TeamRegistration = () => {
                   }}
                 />
                 <p style={{ fontSize: '0.85rem', color: '#e0e0e0', textAlign: 'left', marginTop: '5px' }}>
-                  Upload your college ID card. Ensure the link has view access enabled
+                  Upload your college ID card by changing from <b>Image to URL</b>. Ensure the link has view access enabled
                 </p>
               </div>
             </>

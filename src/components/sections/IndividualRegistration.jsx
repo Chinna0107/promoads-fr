@@ -38,6 +38,9 @@ const IndividualRegistration = () => {
   const [selectedCoordinator, setSelectedCoordinator] = useState('');
   const [submittingPayment, setSubmittingPayment] = useState(false);
   const [transactionId, setTransactionId] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const qrCodeUrl = 'https://res.cloudinary.com/dwmjz9csc/image/upload/v1772714774/imgtourl/f04d05dc37d246fb85cb2511677804d6.png';
 
   const coordinators = [
     { id: 1, name: "B GURU GANGADHAR REDDY" },
@@ -560,48 +563,84 @@ const IndividualRegistration = () => {
           {/* Password fields */}
           {!isExistingUser && (
             <>
-              <motion.input
-                placeholder="Password"
-                name="password"
-                type="password"
-                value={participant.password}
-                onChange={handleChange}
-                required
-                className="form-half-width"
-                whileFocus={{ scale: 1.02 }}
-                style={{
-                  padding: '15px',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(0,220,255,0.3)',
-                  outline: 'none',
-                  fontSize: '1rem',
-                  background: 'rgba(255,255,255,0.05)',
-                  backdropFilter: 'blur(10px)',
-                  color: '#fff',
-                  transition: 'all 0.3s ease'
-                }}
-              />
-              <motion.input
-                placeholder="Confirm Password"
-                name="confirmPassword"
-                type="password"
-                value={participant.confirmPassword}
-                onChange={handleChange}
-                required
-                className="form-half-width"
-                whileFocus={{ scale: 1.02 }}
-                style={{
-                  padding: '15px',
-                  borderRadius: '12px',
-                  border: '1px solid rgba(0,220,255,0.3)',
-                  outline: 'none',
-                  fontSize: '1rem',
-                  background: 'rgba(255,255,255,0.05)',
-                  backdropFilter: 'blur(10px)',
-                  color: '#fff',
-                  transition: 'all 0.3s ease'
-                }}
-              />
+              <div style={{ position: 'relative' }}>
+                <input
+                  placeholder="Password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={participant.password}
+                  onChange={handleChange}
+                  required
+                  className="form-half-width"
+                  style={{
+                    padding: '15px',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(0,220,255,0.3)',
+                    outline: 'none',
+                    fontSize: '1rem',
+                    background: 'rgba(255,255,255,0.05)',
+                    backdropFilter: 'blur(10px)',
+                    color: '#fff',
+                    transition: 'all 0.3s ease'
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '15px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontSize: '1.2rem'
+                  }}
+                >
+                  {showPassword ? '👁️' : '👁️🗨️'}
+                </button>
+              </div>
+              <div style={{ position: 'relative' }}>
+                <input
+                  placeholder="Confirm Password"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={participant.confirmPassword}
+                  onChange={handleChange}
+                  required
+                  className="form-half-width"
+                  style={{
+                    padding: '15px',
+                    borderRadius: '12px',
+                    border: '1px solid rgba(0,220,255,0.3)',
+                    outline: 'none',
+                    fontSize: '1rem',
+                    background: 'rgba(255,255,255,0.05)',
+                    backdropFilter: 'blur(10px)',
+                    color: '#fff',
+                    transition: 'all 0.3s ease'
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  style={{
+                    position: 'absolute',
+                    right: '15px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    fontSize: '1.2rem'
+                  }}
+                >
+                  {showConfirmPassword ? '👁️' : '👁️🗨️'}
+                </button>
+              </div>
             </>
           )}
 
@@ -791,34 +830,14 @@ const IndividualRegistration = () => {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          style={{
-            background: '#fff',
-            padding: '20px',
-            borderRadius: '15px',
-            marginBottom: '20px',
-            display: 'inline-block'
-          }}
-        >
-          <div style={{
-            width: '200px',
-            height: '200px',
-            background: 'linear-gradient(45deg, #667eea, #764ba2)',
-            borderRadius: '10px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontSize: '1.2rem',
-            fontWeight: 'bold'
-          }}>
-            QR Code
-          </div>
+        <div style={{
+          background: '#fff', padding: '20px', borderRadius: '15px', marginBottom: '20px', display: 'inline-block'
+        }}>
+          <img src={qrCodeUrl} alt="QR Code" style={{
+            width: '200px', height: '200px', borderRadius: '10px', objectFit: 'cover'
+          }} />
           <p style={{ color: '#333', marginTop: '10px', fontSize: '0.9rem' }}>Scan to Pay</p>
-        </motion.div>
+        </div>
 
         <form onSubmit={handlePayment}>
           {/* Payment Method Selection */}
