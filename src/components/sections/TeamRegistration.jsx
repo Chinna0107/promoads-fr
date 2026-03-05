@@ -980,8 +980,29 @@ const TeamRegistration = () => {
               color: '#fff',
               fontWeight: 'bold', border: 'none', 
               cursor: submittingPayment ? 'not-allowed' : 'pointer', 
-              fontSize: '1.05rem'
-            }}>{submittingPayment ? 'Submitting...' : '✓ Submit Payment'}</button>
+              fontSize: '1.05rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              justifyContent: 'center',
+              minWidth: '150px'
+            }}>
+              {submittingPayment ? (
+                <>
+                  <div style={{
+                    width: '16px',
+                    height: '16px',
+                    border: '2px solid rgba(255,255,255,0.3)',
+                    borderTop: '2px solid #fff',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                  }} />
+                  Submitting...
+                </>
+              ) : (
+                '✓ Submit Payment'
+              )}
+            </button>
             <button type="button" onClick={() => setStep(2)} style={{
               padding: '14px 28px', borderRadius: '14px', background: 'rgba(255,255,255,0.2)', color: '#fff',
               fontWeight: 'bold', border: '1px solid rgba(255,255,255,0.3)', cursor: 'pointer'

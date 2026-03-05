@@ -36,6 +36,7 @@ const IndividualRegistration = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [selectedCoordinator, setSelectedCoordinator] = useState('');
+  const [submittingPayment, setSubmittingPayment] = useState(false);
 
   const coordinators = [
     { id: 1, name: "B GURU GANGADHAR REDDY" },
@@ -167,6 +168,7 @@ const IndividualRegistration = () => {
       return;
     }
     
+    setSubmittingPayment(true);
     try {
       const response = await fetch(`${BASE_URL}/register`, {
         method: 'POST',
@@ -201,6 +203,8 @@ const IndividualRegistration = () => {
       }
     } catch (error) {
       toast.error('Failed to connect to server. Please try again.');
+    } finally {
+      setSubmittingPayment(false);
     }
   };
 
@@ -989,21 +993,41 @@ const IndividualRegistration = () => {
           <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <motion.button
               type="submit"
-              whileHover={{ scale: 1.05, boxShadow: '0 8px 25px rgba(0,0,0,0.3)' }}
-              whileTap={{ scale: 0.95 }}
+              disabled={submittingPayment}
+              whileHover={{ scale: submittingPayment ? 1 : 1.05, boxShadow: submittingPayment ? 'none' : '0 8px 25px rgba(0,0,0,0.3)' }}
+              whileTap={{ scale: submittingPayment ? 1 : 0.95 }}
               style={{
                 padding: '14px 32px',
                 borderRadius: '14px',
-                background: '#4CAF50',
+                background: submittingPayment ? '#999' : '#4CAF50',
                 color: '#fff',
                 fontWeight: 'bold',
                 border: 'none',
-                cursor: 'pointer',
+                cursor: submittingPayment ? 'not-allowed' : 'pointer',
                 boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
-                fontSize: '1.05rem'
+                fontSize: '1.05rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                justifyContent: 'center',
+                minWidth: '150px'
               }}
             >
-              ✓ Submit Payment
+              {submittingPayment ? (
+                <>
+                  <div style={{
+                    width: '16px',
+                    height: '16px',
+                    border: '2px solid rgba(255,255,255,0.3)',
+                    borderTop: '2px solid #fff',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                  }} />
+                  Submitting...
+                </>
+              ) : (
+                '✓ Submit Payment'
+              )}
             </motion.button>
             <motion.button
               type="button"
