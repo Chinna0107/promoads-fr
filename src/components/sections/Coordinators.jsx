@@ -8,9 +8,15 @@ const topTechLeads = [
 ]
 
 const eventTeams = {
+  'Event coordinators': [
+
+    { id: 18, name: "K EEKSHITHA", image: "https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056217/oo00_vqdfcf.jpg", desc: "IV - ECE" },
+    { id: 20, name: "B GEETHIKA", image: "https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056040/co90_hjxvww.jpg", desc: "IV - ECE" },
+    // { id: 21, name: "TILAK", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772697361/thilak_kbwu1c.jpg", desc: "II - ECE" },
+  ],
   'Web Development': [
 
-    { id: 18, name: "AKASH", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772697350/co090_fgogcw.jpg", desc: "III - ECE" },
+    { id: 18, name: "AKASH", image: "https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056040/co99_kmi0az.jpg", desc: "III - ECE" },
     { id: 20, name: "VARUN", image: "https://res.cloudinary.com/dwmjz9csc/image/upload/v1772649022/imgtourl/ccbad2d0d0e9438c98ff96482890cc51.jpg", desc: "II - ECE" },
     { id: 21, name: "TILAK", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772697361/thilak_kbwu1c.jpg", desc: "II - ECE" },
   ],
@@ -39,6 +45,7 @@ const eventTeams = {
 }
 
 const eventColors = {
+  'Event coordinators': '#00eaff',
   'Web Development': '#00eaff',
   'Hackathon': '#00ff88',
   'Circuitron': '#ffaa00',
@@ -203,6 +210,7 @@ function Teams() {
         {/* Event Sections */}
         {Object.entries(eventTeams).map(([event, members]) => {
           const color = eventColors[event]
+          const isEventCoordinators = event === 'Event coordinators'
           return (
             <div key={event} style={{ marginBottom: '80px' }}>
               <div style={{
@@ -239,8 +247,10 @@ function Teams() {
               </div>
               <div style={{
                 display: 'grid',
-                gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-                gap: '40px'
+                gridTemplateColumns: isEventCoordinators ? (isMobile ? '1fr' : 'repeat(2, 1fr)') : (isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'),
+                gap: '40px',
+                maxWidth: isEventCoordinators ? (isTablet ? '100%' : '600px') : '100%',
+                margin: isEventCoordinators ? '0 auto' : '0'
               }}>
                 {members.map((member) => (
                   <CardComponent key={member.id} member={member} color={color} isCore={false} />
