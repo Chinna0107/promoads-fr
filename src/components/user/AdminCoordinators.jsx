@@ -78,7 +78,7 @@ const AdminCoordinators = () => {
         'Tech Quiz',
         // 'Poster Design',
         'Web development',
-        'Codeathon 2k25',
+        'Crack the Code',
         // 'Debugging',
         'Hackathon',
         // 'Algorithm Building / Writing'

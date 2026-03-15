@@ -134,7 +134,7 @@ mb-4">
                 {
                   title: "Participation Type",
                   description:
-                    "Online - Other College's Students, Offline - AITS College's Students",
+                    "Offline - Other College's Students, Offline - AITS College's Students",
                   icon: FaUser,
                 },
               ].map((item, index) => (
