@@ -6,6 +6,8 @@ import {
   faEllipsisH, faArrowRightToBracket, faUsers, faGamepad, faMapMarkerAlt as faMapMarker
 } from '@fortawesome/free-solid-svg-icons';
 import { label } from 'framer-motion/client';
+// import { FaCheckCircle } from "react-icons/fa";
+import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -25,8 +27,7 @@ const MORE_SUB_ITEMS_FA = [
   { label: 'Team', url: '/team', icon: faUsers, hoverColor: 'hover:text-indigo-500' }, // Indigo for teamwork/collaboration
   // { label: 'Playground', url: '/playground', icon: faGamepad, hoverColor: 'hover:text-orange-500' }, // Red for gaming/energy
   // { label: 'Stay', url: '/stay', icon: faBed, hoverColor: 'hover:text-pink-500' }, // Rose for comfort/accommodation
-  // { label: 'Location', url: '/location', icon: faMapMarker, hoverColor: 'hover:text-emerald-500' }, // Emerald for maps/location
-  { label: 'Contact Us', url: '/contact', icon: faLaptop, hoverColor: 'hover:text-orange-500' }, // Orange for learning/workshops
+ { label: 'Verify', url: '/verify', icon: faCheckCircle, hoverColor: 'hover:text-emerald-500' },{ label: 'Contact Us', url: '/contact', icon: faLaptop, hoverColor: 'hover:text-orange-500' }, // Orange for learning/workshops
   //gallery
   { label: 'Gallery', url: '/gallery', icon: faInfoCircle, hoverColor: 'hover:text-orange-500' }, // Orange for learning/workshops
 ];

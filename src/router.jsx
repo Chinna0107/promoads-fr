@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Hero from './components/sections/Hero';
 import AboutPage from './components/sections/AboutPage';
 import Events from './components/sections/Events';
-import LoginPage from './components/sections/Login'; // Changed import from Login to LoginPage
+import LoginPage from './components/sections/Login';
 import ForgotPassword from './components/sections/ForgotPassword';
 import Home from './components/sections/Home';
 import AdminHome from './components/sections/AdminHome';
@@ -12,20 +12,20 @@ import Profile from './components/sections/Profile';
 import Dashboard from './components/user/Dashboard';
 import AdminDashboard from './components/user/AdminDashboard';
 import ParticipantEvents from './components/user/ParticipantEvents';
-import Playground from './components/games/Playground'; // Import Playground component
+import Playground from './components/games/Playground';
 import RegistrationChoices from './components/sections/RegistrationChoices';
 import IndividualRegistration from './components/sections/IndividualRegistration';
 import TeamRegistration from './components/sections/TeamRegistration';
-import Schedule from './components/sections/Schedules'; // Import Schedule component
-import Coordinators from './components/sections/Coordinators'; // Import Coordinators 
+import Schedule from './components/sections/Schedules';
+import Coordinators from './components/sections/Coordinators';
 import Location from './components/sections/Location';
 import Contact from './components/sections/Contact';
-import CoordinatorsLogin from './components/sections/CoordinatorLogin'; // Import coordinatorsLogin component
-import CoordinatorDashboard from './components/user/CoordinatorDashboard'; // Import CoordinatorDashboard
-import CoordinatorMenu from './components/user/CoordinatorMenu'; // Import CoordinatorMenu
-import CoordinatorProfile from './components/user/CoordinatorProfile'; // Import CoordinatorProfile
-import CoordinatorEvents from './components/user/CoordinatorEvents'; // Import CoordinatorEvents
-import EventDetails from './components/user/EventDetails'; // Import EventDetails
+import CoordinatorsLogin from './components/sections/CoordinatorLogin';
+import CoordinatorDashboard from './components/user/CoordinatorDashboard';
+import CoordinatorMenu from './components/user/CoordinatorMenu';
+import CoordinatorProfile from './components/user/CoordinatorProfile';
+import CoordinatorEvents from './components/user/CoordinatorEvents';
+import EventDetails from './components/user/EventDetails';
 import TakeAttendance from './components/user/TakeAttendance';
 import ViewAttendance from './components/user/ViewAttendance';
 import CoordinatorSchedule from './components/user/CoordinatorSchedule';
@@ -39,6 +39,7 @@ import AdminWinnersData from './components/user/AdminWinnersData';
 import UserEvents from './components/user/UserEvents';
 import TestPage from './components/sections/TestPage';
 import Gallery from './components/sections/Gallery';
+import VerifyPage from './components/sections/VerifyPage';
 
 const Router = () => (
   <BrowserRouter>
@@ -46,16 +47,17 @@ const Router = () => (
       <Route path="/" element={<Hero />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/events" element={<Events />} />
-      <Route path="/login" element={<LoginPage />} /> // Changed component from Login to LoginPage
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/home" element={<Home />} />
       <Route path="/admin-home" element={<AdminHome />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/my-events" element={<UserEvents />} />
       <Route path="/test" element={<TestPage />} />
+      <Route path="/verify" element={<VerifyPage />} />
       <Route path="/user/dashboard" element={<Dashboard />} />
       <Route path="/admin/dashboard" element={<AdminDashboardWrapper />} />
-      <Route path="/playground" element={<Playground />} /> // Added route for Playground page
+      <Route path="/playground" element={<Playground />} />
       <Route path="/register" element={<RegistrationChoices />} />
       <Route path="/register/:eventId" element={<RegistrationChoices />} />
       <Route path="/individual-registration" element={<IndividualRegistration />} />
@@ -89,9 +91,7 @@ const Router = () => (
   </BrowserRouter>
 );
 
-// Wrapper to pass state from navigation to AdminDashboard
 function AdminDashboardWrapper() {
-  // Just render AdminDashboard, do not require navigation state
   return <AdminDashboard />;
 }
 
