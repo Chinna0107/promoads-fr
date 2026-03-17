@@ -8,12 +8,12 @@ const topTechLeads = [
 ]
 
 const eventTeams = {
-  'Event coordinators': [
+  // 'Event coordinators': [
 
-    { id: 18, name: "K EEKSHITHA", image: "https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056217/oo00_vqdfcf.jpg", desc: "IV - ECE" },
-    { id: 20, name: "B GEETHIKA", image: "https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056040/co90_hjxvww.jpg", desc: "IV - ECE" },
-    // { id: 21, name: "TILAK", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772697361/thilak_kbwu1c.jpg", desc: "II - ECE" },
-  ],
+  //   { id: 18, name: "K EEKSHITHA", image: "https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056217/oo00_vqdfcf.jpg", desc: "IV - ECE" },
+  //   { id: 20, name: "B GEETHIKA", image: "https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056040/co90_hjxvww.jpg", desc: "IV - ECE" },
+  //   // { id: 21, name: "TILAK", image: "https://res.cloudinary.com/dbkhniuzt/image/upload/v1772697361/thilak_kbwu1c.jpg", desc: "II - ECE" },
+  // ],
   'Web Development': [
 
     { id: 18, name: "AKASH", image: "https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056040/co99_kmi0az.jpg", desc: "III - ECE" },
