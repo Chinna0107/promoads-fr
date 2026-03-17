@@ -332,7 +332,7 @@ const AdminDashboard = () => {
           {renderContent()}
         </div>
         <footer className="admin-footer">
-          <p>&copy; {new Date().getFullYear()} TRISHNA 2K25. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} CODEATHON 2K26. All rights reserved.</p>
           
         </footer>
       </div>

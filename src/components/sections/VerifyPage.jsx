@@ -62,7 +62,7 @@ const VerifyPage = () => {
           // Input Form
           <div className="verify-form-card">
             <h1 className="verify-title">Participant Verification</h1>
-            <p className="verify-subtitle">Codeathon 2K26</p>
+            <p className="verify-subtitle">CODEATHON 2K26</p>
 
             <form onSubmit={handleVerify} className="verify-form">
               <div className="form-group">
@@ -74,7 +74,7 @@ const VerifyPage = () => {
                   type="text"
                   value={rollInput}
                   onChange={(e) => setRollInput(e.target.value.toUpperCase())}
-                  placeholder="e.g., 22A91A04D5"
+                  placeholder="e.g., 22AK1A0447"
                   className="form-input"
                   disabled={loading}
                   autoFocus
@@ -105,7 +105,7 @@ const VerifyPage = () => {
             </form>
 
             <div className="verify-info">
-              <p>📱 Scan the QR code on your ID card or enter your roll number manually</p>
+              <p> Enter your <b>Roll Number</b> to get <b>Verified....</b> </p>
             </div>
           </div>
         ) : (
