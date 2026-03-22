@@ -12,10 +12,9 @@ const MarkEvaluation = () => {
   const [loading, setLoading] = useState(true);
 
   const juryMembers = [
-    'Dr. Rajesh Kumar', 'Prof. Priya Sharma', 'Mr. Arjun Patel', 'Ms. Kavya Reddy', 'Dr. Suresh Nair',
-    'Prof. Meera Singh', 'Mr. Vikram Gupta', 'Ms. Anita Joshi', 'Dr. Ramesh Iyer', 'Prof. Sunita Das',
-    'Mr. Kiran Kumar', 'Ms. Deepika Rao', 'Dr. Ashok Verma', 'Prof. Ritu Agarwal', 'Mr. Sanjay Mehta',
-    'Ms. Pooja Bansal', 'Dr. Manoj Tiwari', 'Prof. Neha Kapoor', 'Mr. Rohit Saxena', 'Ms. Shreya Pandey'
+    'Dr. D. Jithendra Reddy', 'Dr. Naga Bhushanam', 'Mr. Y. Penchalaiah', 'Ms. S. Thejaswini', 'Ms. Vasantha',
+    'Mr. K. Bhanu Prakash', 'Mr. D. Rohith Rajendran', 'Ms. K. S. Deveswari', 'Mrs. M. Hema', 'Mrs. A. S. Lavanya',
+    'Mrs. A. Vijaya Lakshmi', 'Dr. R. Senthamil Selvan',
   ];
 
   useEffect(() => {
