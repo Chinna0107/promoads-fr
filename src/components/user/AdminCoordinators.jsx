@@ -112,6 +112,7 @@ const AdminCoordinators = () => {
         body: JSON.stringify(formData)
       });
 
+      const data = await res.json();
       if (res.ok) {
         Swal.fire({
           icon: 'success',
@@ -123,11 +124,10 @@ const AdminCoordinators = () => {
         setShowForm(false);
         fetchCoordinators();
       } else {
-        const data = await res.json();
         Swal.fire({
           icon: 'error',
           title: 'Failed',
-          text: data.message || 'Failed to add coordinator.',
+          text: data.error || data.message || 'Failed to add coordinator.',
           confirmButtonColor: '#667eea'
         });
       }

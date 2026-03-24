@@ -40,6 +40,7 @@ import UserEvents from './components/user/UserEvents';
 import TestPage from './components/sections/TestPage';
 import Gallery from './components/sections/Gallery';
 import VerifyPage from './components/sections/VerifyPage';
+import EventsShowcase from './pages/EventsShowcase';
 
 const Router = () => (
   <BrowserRouter>
@@ -86,6 +87,7 @@ const Router = () => (
       <Route path="/admin/winners" element={<AdminWinnersData />} />
       <Route path="/admin/winners/:eventName" element={<AdminWinnersData />} />
       <Route path="/gallery" element={<Gallery />} />
+      <Route path="/events-showcase" element={<EventsShowcase />} />
       <Route path='*' element={<Hero />} />
     </Routes>
   </BrowserRouter>
