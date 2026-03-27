@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  FaCalendarAlt,
-  FaUser,
-  FaUniversity,
-  FaLaptopCode,
-  FaUserGraduate,
-  FaLightbulb,
-  FaTrophy,
-  FaChalkboardTeacher,
-  FaBuilding,
+  FaFilm,
+  FaWallet,
+  FaBrain,
+  FaBullhorn,
+  FaRocket,
+  FaBolt,
+  FaGlobe,
 } from "react-icons/fa";
 
 const Details = () => {
@@ -67,18 +65,11 @@ const Details = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <section>
           <div className="text-center">
-            <h2 className="text-3xl 
-font-bold 
-bg-gradient-to-r 
-from-green-400 
-to-green-600 
-bg-clip-text 
-text-transparent 
-mb-4">
-              AITS CODEATHON 2K26
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent mb-4">
+              Promo Ads — Event Highlights
             </h2>
             <p className="text-muted-foreground max-w-3xl mx-auto">
-              Join us for an exciting Codeathon in Annamacharya Tirupati Campus!
+              Everything that makes Promo Ads the #1 choice for events, brands, and celebrations across India.
             </p>
           </div>
         </section>
@@ -86,56 +77,50 @@ mb-4">
         <section className="py-16 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12 motion-up-blur">
-              <h2 className="text-3xl 
-font-bold 
-bg-gradient-to-r 
-from-green-400 
-to-green-600 
-bg-clip-text 
-text-transparent 
-mb-4">
-                Codeathon Details
+              <h2 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent mb-4">
+                What We Bring to the Table
               </h2>
               <p className="text-muted-foreground max-w-3xl mx-auto">
-                Everything you need to know about Codeathon 2K26
+                Key highlights of our services and what sets us apart
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  title: "Date & Venue",
-                  description: "24th & 25th March 2026",
-                  subDescription: "AITS, Tirupati",
-                  icon: FaCalendarAlt,
+                  title: "Cinematic Quality",
+                  description: "Professional-grade photo & video production that makes every moment look like a movie scene.",
+                  icon: FaFilm,
                 },
                 {
-                  title: "Eligibility",
-                  description:
-                    "Any undergraduate or postgraduate student, including BE, BTech, M.Tech and MCA",
-                  icon: FaUserGraduate,
+                  title: "Friendly Budget",
+                  description: "Flexible pricing plans for every scale — from intimate gatherings to large-scale brand campaigns.",
+                  icon: FaWallet,
                 },
                 {
-                  title: "Team Details",
-                  description: "Based on the event.",
-                  icon: FaUser,
+                  title: "Intelligent Event Modes",
+                  description: "Smart, adaptive formats designed for weddings, launches, corporate events, and more.",
+                  icon: FaBrain,
                 },
                 {
-                  title: "Inter-Colleges",
-                  description: "All Students Across all Depts",
-                  icon: FaUniversity,
+                  title: "Grab Attention Instantly",
+                  description: "Eye-catching setups, live coverage, and creative direction that keeps your audience engaged.",
+                  icon: FaBullhorn,
                 },
                 {
-                  title: "Tech",
-                  description:
-                    "C, Python, Java, Web Technologies  and more are allowed",
-                  icon: FaLaptopCode,
+                  title: "Brand Promotion",
+                  description: "Strategic placements, banners, reels, and campaigns that amplify your brand across platforms.",
+                  icon: FaRocket,
                 },
                 {
-                  title: "Participation Type",
-                  description:
-                    "Offline - Other College's Students, Offline - AITS College's Students",
-                  icon: FaUser,
+                  title: "Fast Response & Execution",
+                  description: "Quick turnaround on inquiries and on-ground execution — even on tight timelines.",
+                  icon: FaBolt,
+                },
+                {
+                  title: "Pan-India Operations",
+                  description: "We operate across metros, tier-2, and tier-3 cities — wherever your event is, we show up.",
+                  icon: FaGlobe,
                 },
               ].map((item, index) => (
                 <div
@@ -143,16 +128,11 @@ mb-4">
                   className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm motion-translate-y-in-[20%] h-48 flex flex-col justify-between hover:shadow-lg transition-shadow duration-300"
                 >
                   <div>
-                    <div className="text-3xl mb-2">
+                    <div className="text-3xl mb-2 text-green-400">
                       <item.icon />
                     </div>
                     <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                     <p className="text-muted-foreground">{item.description}</p>
-                    {item.subDescription && (
-                      <p className="text-muted-foreground">
-                        {item.subDescription}
-                      </p>
-                    )}
                   </div>
                 </div>
               ))}
@@ -163,7 +143,7 @@ mb-4">
                 className="bg-green-600 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg motion-translate-y-in-[20%]"
                 onClick={() => navigate('/events')}
               >
-                Register Now
+                Get a Quote
               </button>
             </div>
           </div>
@@ -180,44 +160,56 @@ to-green-600
 bg-clip-text 
 text-transparent 
 mb-4">
-                Why to Participate?
+                Why Promo Ads?
               </h2>
               <p className="text-muted-foreground max-w-3xl mx-auto">
-                Discover the benefits of joining Codeathon 2K26.
+                Here's why brands and individuals trust us to make their events unforgettable.
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  title: "Hands-on Experience",
+                  title: "Cinematic Image / Video Quality",
                   description:
-                    "Engage in practical, real-world problem-solving activities.",
-                  icon: FaLaptopCode,
+                    "We deliver stunning, high-definition cinematic visuals that make your event look like a blockbuster production.",
+                  icon: FaFilm,
                 },
                 {
-                  title: "Innovative Projects",
+                  title: "Friendly Budget",
                   description:
-                    "Develop and create groundbreaking solutions to complex challenges.",
-                  icon: FaLightbulb,
+                    "Premium event experiences don't have to break the bank. We offer flexible, affordable packages for every budget.",
+                  icon: FaWallet,
                 },
                 {
-                  title: "Expert Guidance",
+                  title: "Intelligent Event Modes",
                   description:
-                    "Receive mentorship and advice from industry leaders and professionals.",
-                  icon: FaChalkboardTeacher,
+                    "Smart, adaptive event formats tailored to your audience — whether it's a launch, celebration, or campaign.",
+                  icon: FaBrain,
                 },
                 {
-                  title: "Recruitment Opportunities",
+                  title: "Grab People's Attention",
                   description:
-                    "Showcase your skills and get noticed by top companies for potential Internship offers.",
-                  icon: FaBuilding,
+                    "Our creative setups and engaging formats ensure your event stands out and keeps audiences hooked.",
+                  icon: FaBullhorn,
                 },
                 {
-                  title: "Exciting Prizes",
+                  title: "Promote Your Brand",
                   description:
-                    "Compete for cash prizes, internships, and other exciting rewards.",
-                  icon: FaTrophy,
+                    "Amplify your brand identity with strategic event placements, banners, and promotional campaigns.",
+                  icon: FaRocket,
+                },
+                {
+                  title: "Fast Response",
+                  description:
+                    "We respond quickly to inquiries and execute events on tight timelines without compromising quality.",
+                  icon: FaBolt,
+                },
+                {
+                  title: "Pan-India Operations",
+                  description:
+                    "From metros to tier-2 cities, we operate across India to bring your event vision to life anywhere.",
+                  icon: FaGlobe,
                 },
               ].map((item, index) => (
                 <div
@@ -251,108 +243,67 @@ mb-4">
                 Frequently Asked Questions
               </h2>
               <p className="text-muted-foreground max-w-3xl mx-auto">
-                Find answers to commonly asked questions about the codeathon 2K26
+                Got questions about our promo ad and event services? We've got answers.
               </p>
             </div>
 
             <div className="grid grid-cols-1 gap-8">
-              {/* FAQ Item 1 */}
               <div className="faq-item">
-                <button
-                  className="faq-question flex justify-between items-center w-full text-left"
-                  onClick={() => toggleFAQ("who")}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-white">
-                    Who is eligible to participate in the Codeathon 2026?
-                  </h3>
-                  <span className="faq-icon">
-                    {openFAQ === "who" ? "▴" : "▾"}
-                  </span>
+                <button className="faq-question flex justify-between items-center w-full text-left" onClick={() => toggleFAQ("who")}>
+                  <h3 className="text-xl font-semibold mb-2 text-white">Who can use Promo Ads services?</h3>
+                  <span className="faq-icon">{openFAQ === "who" ? "▴" : "▾"}</span>
                 </button>
                 {openFAQ === "who" && (
-                  <div
-                    id="who-answer"
-                    className="faq-answer text-white mt-2"
-                  >
-                    The Codeathon 2026 is open to all undergraduate and postgraduate
-                    students from all colleges across India. This
-                    includes students pursuing BE, BTech, M.Tech, MCA, and other
-                    relevant courses.
+                  <div className="faq-answer text-white mt-2">
+                    Anyone! Whether you're an individual planning a wedding or birthday, a business launching a product, a political campaign, or a brand looking to grow — Promo Ads is built for you. We serve clients across all industries and scales.
                   </div>
                 )}
               </div>
 
-              {/* FAQ Item 2 */}
               <div className="faq-item">
-                <button
-                  className="faq-question flex justify-between items-center w-full text-left"
-                  onClick={() => toggleFAQ("fee")}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-white">
-                    What is the registration fee structure?
-                  </h3>
-                  <span className="faq-icon">
-                    {openFAQ === "fee" ? "▴" : "▾"}
-                  </span>
+                <button className="faq-question flex justify-between items-center w-full text-left" onClick={() => toggleFAQ("budget")}>
+                  <h3 className="text-xl font-semibold mb-2 text-white">Are your packages affordable for small budgets?</h3>
+                  <span className="faq-icon">{openFAQ === "budget" ? "▴" : "▾"}</span>
                 </button>
-                {openFAQ === "fee" && (
-                  <div
-                    id="fee-answer"
-                    className="faq-answer text-white mt-2"
-                  >
-                    The registration fee is ₹50 per participant. This fee
-                    covers event participation
+                {openFAQ === "budget" && (
+                  <div className="faq-answer text-white mt-2">
+                    Absolutely. We offer flexible, budget-friendly packages tailored to your needs. From small personal events to large corporate campaigns, we ensure you get maximum value without overspending.
                   </div>
                 )}
               </div>
 
-              {/* FAQ Item 4 */}
               <div className="faq-item">
-                <button
-                  className="faq-question flex justify-between items-center w-full text-left"
-                  onClick={() => toggleFAQ("tech")}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-white">
-                    Which technologies and programming languages can we use?
-                  </h3>
-                  <span className="faq-icon">
-                    {openFAQ === "tech" ? "▴" : "▾"}
-                  </span>
+                <button className="faq-question flex justify-between items-center w-full text-left" onClick={() => toggleFAQ("quality")}>
+                  <h3 className="text-xl font-semibold mb-2 text-white">What kind of video and image quality do you provide?</h3>
+                  <span className="faq-icon">{openFAQ === "quality" ? "▴" : "▾"}</span>
                 </button>
-                {openFAQ === "tech" && (
-                  <div
-                    id="tech-answer"
-                    className="faq-answer text-white mt-2"
-                  >
-                    You have complete freedom to choose any programming language such as
-                    Python, Java, C, Web Technologies etc.
+                {openFAQ === "quality" && (
+                  <div className="faq-answer text-white mt-2">
+                    We deliver cinematic-grade, high-definition visuals using professional-grade equipment and editing. Every photo and video is crafted to look stunning across all platforms — social media, TV, hoardings, and more.
                   </div>
                 )}
               </div>
 
-              {/* FAQ Item 5 */}
               <div className="faq-item">
-                <button
-                  className="faq-question flex justify-between items-center w-full text-left"
-                  onClick={() => toggleFAQ("guidance")}
-                >
-                  <h3 className="text-xl font-semibold mb-2 text-white">
-                    What kind of guidance support will be available?
-                  </h3>
-                  <span className="faq-icon">
-                    {openFAQ === "guidance" ? "▴" : "▾"}
-                  </span>
+                <button className="faq-question flex justify-between items-center w-full text-left" onClick={() => toggleFAQ("response")}>
+                  <h3 className="text-xl font-semibold mb-2 text-white">How fast do you respond to inquiries?</h3>
+                  <span className="faq-icon">{openFAQ === "response" ? "▴" : "▾"}</span>
                 </button>
-                {openFAQ === "guidance" && (
-                  <div
-                    id="guidance-answer"
-                    className="faq-answer text-white mt-2"
-                  >
-                    Student coordinators and staff members will be available to
-                    guide you throughout the codeathon. They will assist you with
-                    understanding the problem statements, provide necessary support.
-                    Regular check-ins will be conducted to ensure teams have the
-                    guidance they need.
+                {openFAQ === "response" && (
+                  <div className="faq-answer text-white mt-2">
+                    We pride ourselves on fast response times. Most inquiries are addressed within a few hours. For urgent events, we have dedicated support to ensure nothing is delayed.
+                  </div>
+                )}
+              </div>
+
+              <div className="faq-item">
+                <button className="faq-question flex justify-between items-center w-full text-left" onClick={() => toggleFAQ("location")}>
+                  <h3 className="text-xl font-semibold mb-2 text-white">Do you operate outside major cities?</h3>
+                  <span className="faq-icon">{openFAQ === "location" ? "▴" : "▾"}</span>
+                </button>
+                {openFAQ === "location" && (
+                  <div className="faq-answer text-white mt-2">
+                    Yes! We operate Pan-India — from metros like Mumbai, Delhi, and Bangalore to tier-2 and tier-3 cities. Wherever your event is, we'll be there.
                   </div>
                 )}
               </div>

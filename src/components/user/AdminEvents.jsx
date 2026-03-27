@@ -1,213 +1,166 @@
-import React, { useState, useEffect } from 'react'; // Added useEffect
-import Swal from 'sweetalert2';
+import React, { useState, useEffect } from 'react';
+import { authFetch } from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
-import '../../styles/user/AdminEvents.css'; // Import the CSS file
-
-// Image Imports
-import technicalCategoryImage from '../../assets/images/12979916_5079835.jpg';
-import nonTechCategoryImage from '../../assets/images/7a43990d-d691-4aa5-a7d6-5f9c9c5d530f.jpg';
-import roboticsCategoryImage from '../../assets/images/a346fb78-710f-4faa-b5b1-a87812e13510.jpg';
-import workshopsCategoryImage from '../../assets/images/Codeathon 2k25 Invitation.jpg';
-import guestLecturesCategoryImage from '../../assets/images/12979916_5079835.jpg';
-
-import projectExpoImage from '../../assets/images/12979916_5079835.jpg';
-import hackathonImage from '../../assets/images/12979916_5079835.jpg';
-import nextCodeImage from '../../assets/images/12979916_5079835.jpg';
-import rubeACubeImage from '../../assets/images/7a43990d-d691-4aa5-a7d6-5f9c9c5d530f.jpg';
-import cookWithoutFireImage from '../../assets/images/7a43990d-d691-4aa5-a7d6-5f9c9c5d530f.jpg';
-import overdriveImage from '../../assets/images/7a43990d-d691-4aa5-a7d6-5f9c9c5d530f.jpg';
-import roboRaceImage from '../../assets/images/a346fb78-710f-4faa-b5b1-a87812e13510.jpg';
-import webDesignWorkshopImage from '../../assets/images/a346fb78-710f-4faa-b5b1-a87812e13510.jpg';
-import githubWorkshopImage from '../../assets/images/Codeathon 2k25 Invitation.jpg';
-import iotLectureImage from '../../assets/images/Codeathon 2k25 Invitation.jpg';
-import cyberSecurityLectureImage from '../../assets/images/Codeathon 2k25 Invitation.jpg';
-
-
-// Updated placeholder data with image paths
-const categoriesData = [
-  { id: 'technical', name: 'Technical', image: technicalCategoryImage },
-  // { id: 'non-tech', name: 'Non-Tech', image: nonTechCategoryImage },
-  // { id: 'robotics', name: 'Robotics', image: roboticsCategoryImage },
-  // { id: 'workshops', name: 'Workshops', image: workshopsCategoryImage },
-  // { id: 'guest-lectures', name: 'Guest Lectures', image: guestLecturesCategoryImage },
-];
-
-const eventsData = {
-  technical: [
-    { id: 'proj-expo', name: 'Project Expo', description: 'Showcase your innovative projects.', date: '2025-08-15', image: projectExpoImage },
-    { id: 'hackathon', name: 'Hackathon', description: 'A 24-hour coding marathon.', date: '2025-09-10', image: hackathonImage },
-    { id: 'nextcode', name: 'NextCode', description: 'Competitive coding challenge.', date: '2025-09-20', image: nextCodeImage },
-  ],
-  'non-tech': [
-    { id: 'rube-cube', name: 'Rube a Cube', description: "Solve the Rubik's cube challenge.", date: '2025-10-05', image: rubeACubeImage }, // Corrected escaped quote
-    { id: 'cook-off', name: 'Cook Without Fire', description: 'Culinary skills without fire.', date: '2025-10-10', image: cookWithoutFireImage },
-  ],
-  robotics: [
-    { id: 'overdrive', name: 'Overdrive', description: 'Robotic car racing.', date: '2025-11-01', image: overdriveImage },
-    { id: 'robo-race', name: 'Robo Race', description: 'Autonomous robot race.', date: '2025-11-05', image: roboRaceImage },
-  ],
-  workshops: [
-    { id: 'web-design', name: 'Web Design', description: 'Learn modern web design.', date: '2025-11-15', image: webDesignWorkshopImage },
-    { id: 'github-ws', name: 'GitHub', description: 'Master Git and GitHub.', date: '2025-11-20', image: githubWorkshopImage },
-  ],
-  'guest-lectures': [
-    { id: 'iot-lecture', name: 'IoT Insights', description: 'Exploring the Internet of Things.', date: '2025-12-01', image: iotLectureImage },
-    { id: 'cyber-security-gl', name: 'Cyber Security', description: 'Talk on modern cyber threats.', date: '2025-12-05', image: cyberSecurityLectureImage },
-  ],
-};
 
 const AdminEvents = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [eventCode, setEventCode] = useState('');
-  const [submissionStatus, setSubmissionStatus] = useState({ message: '', type: '' });
+  const [quotations, setQuotations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+  const [search, setSearch] = useState('');
+  const [expanded, setExpanded] = useState(null);
   const navigate = useNavigate();
-// State for animated heading
-  // Full text for animation
 
   useEffect(() => {
     const adminToken = localStorage.getItem('admintoken');
-    if (!adminToken) {
-      navigate('/login');
-    }
+    if (!adminToken) { navigate('/login'); return; }
+    fetchQuotations();
   }, [navigate]);
 
-
-
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-    setCurrentStep(2);
-    setSelectedEvent(null);
-    setSubmissionStatus({ message: '', type: '' });
-  };
-
-  const handleEventSelect = (event) => {
-    setSelectedEvent(event);
-    setCurrentStep(3);
-    setEventCode('');
-    setSubmissionStatus({ message: '', type: '' });
-  };
-
-  const handleCodeSubmit = (e) => {
-    e.preventDefault();
-    if (eventCode) {
-      console.log(`Code "${eventCode}" submitted for event "${selectedEvent?.name}"`);
-      // Changed submission message
-      setSubmissionStatus({ message: 'Navigating to event...', type: 'success' });
-      setEventCode('');
-      setTimeout(() => {
-        goToEventPage();
-      }, 2000);
-    } else {
-      setSubmissionStatus({ message: 'Please enter a code to submit.', type: 'error' });
+  const fetchQuotations = async () => {
+    try {
+      const res = await authFetch('/api/admin/quotations');
+      const data = await res.json();
+      setQuotations(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Error fetching quotations:', err);
+      setQuotations([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const goToEventPage = () => {
-    Swal.fire({
-      icon: 'info',
-      title: 'Navigation',
-      text: `Simulating navigation to the main page for ${selectedEvent?.name}`,
-      confirmButtonColor: '#00eaff'
-    });
-    // resetSelection(); // Optionally reset after navigation
-  };
-  
-  // const resetSelection = () => { // Commented out as it's not used after removing the start over button
-  //   setCurrentStep(1);
-  //   setSelectedCategory(null);
-  //   setSelectedEvent(null);
-  //   setEventCode('');
-  //   setSubmissionStatus({ message: '', type: '' });
-  // };
-
-  const renderStepContent = () => {
-    switch (currentStep) {
-      case 1: {
-        return (
-          <div className="step-content">
-            <h3>Select an Event Category</h3>
-            <div className="category-card-list">
-              {categoriesData.map((cat) => (
-                <div key={cat.id} className="category-card" onClick={() => handleCategorySelect(cat)}>
-                  <img src={cat.image} alt={cat.name} className="card-image" />
-                  <p className="card-name">{cat.name}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      }
-      case 2: {
-        if (!selectedCategory) return <p className="error-message">No category selected. Please go back.</p>;
-        const categoryEvents = eventsData[selectedCategory.id] || [];
-        return (
-          <div className="step-content">
-            <h3>Events in {selectedCategory.name}</h3>
-            <button onClick={() => setCurrentStep(1)} className="back-button sci-fi-button">Back to Categories</button>
-            <div className="event-card-list">
-              {categoryEvents.length > 0 ? (
-                categoryEvents.map((event) => (
-                  <div key={event.id} className="event-card" onClick={() => handleEventSelect(event)}>
-                    <img src={event.image} alt={event.name} className="card-image" />
-                    <p className="card-name">{event.name}</p>
-                  </div>
-                ))
-              ) : (
-                <p>No events found in this category.</p>
-              )}
-            </div>
-          </div>
-        );
-      }
-      case 3: {
-        if (!selectedEvent) return <p className="error-message">No event selected. Please go back.</p>;
-        return (
-          <div className="step-content event-details">
-            <h3>{selectedEvent.name}</h3>
-            <button onClick={() => setCurrentStep(2)} className="back-button sci-fi-button">Back to Events in {selectedCategory?.name}</button>
-            
-            {/* Centered Event Actions Container */}
-            <div className="event-actions-container">
-              
-              
-              <form onSubmit={handleCodeSubmit} className="event-actions-form">
-                {/* Removed the label for a cleaner look, placeholder is descriptive enough */}
-                {/* <label htmlFor="eventCode" className="event-code-label">Submit Code for Event:</label> */}
-                <div className="input-button-group"> {/* Changed class name for clarity */}
-                  <textarea
-                    id="eventCode"
-                    value={eventCode}
-                    onChange={(e) => setEventCode(e.target.value)}
-                    placeholder="Enter Event Code Here..."
-                    className="event-code-input"
-                    rows={1} // Start with a single row, it can expand if needed or styled with height
-                  />
-                  <button type="submit" className="submit-button sci-fi-button event-action-button">Go to Event</button>
-                </div>
-              </form>
-              {submissionStatus.message && 
-                <p className={`submission-status ${submissionStatus.type}`}>
-                  {submissionStatus.message}
-                </p>
-              }
-            </div>
-          </div>
-        );
-      }
-      default:
-        return <p className="error-message">Something went wrong. Please try again.</p>;
+  const updateStatus = async (id, status) => {
+    try {
+      await authFetch(`/api/admin/quotations/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      setQuotations(prev => prev.map(q => q._id === id || q.id === id ? { ...q, status } : q));
+      setExpanded(null);
+    } catch (err) {
+      console.error('Error updating status:', err);
     }
   };
+
+  const filtered = quotations.filter(q => {
+    const matchFilter = filter === 'all' || q.status === filter;
+    const matchSearch = !search ||
+      q.name?.toLowerCase().includes(search.toLowerCase()) ||
+      q.email?.toLowerCase().includes(search.toLowerCase()) ||
+      q.eventName?.toLowerCase().includes(search.toLowerCase());
+    return matchFilter && matchSearch;
+  });
+
+  const statusColor = { pending: '#ffd700', confirmed: '#00ff88', rejected: '#ff4444' };
+
+  const thStyle = { padding: '12px 14px', textAlign: 'left', color: '#00ff88', fontWeight: 600, fontSize: '0.85rem', borderBottom: '1px solid rgba(0,255,136,0.2)', whiteSpace: 'nowrap' };
+  const tdStyle = { padding: '12px 14px', color: '#fff', fontSize: '0.9rem', borderBottom: '1px solid rgba(255,255,255,0.06)', verticalAlign: 'top' };
 
   return (
-    <div className="admin-events-container">
-      {/* Removed the h2 title from here as it's now in AdminDashboard header */}
-      {/* Removed the Start Over button */}
-      <div className="event-steps-container">
-        {renderStepContent()}
+    <div style={{ padding: '10px' }}>
+      <h2 style={{ color: '#00ff88', fontFamily: 'Orbitron, monospace', marginBottom: 24 }}>Quotations</h2>
+
+      {/* Filters */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+        <input
+          placeholder="Search by name, email, event..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(0,255,136,0.3)', background: 'rgba(0,255,136,0.04)', color: '#fff', fontSize: '0.9rem', outline: 'none', minWidth: 240 }}
+        />
+        {['all', 'pending', 'confirmed', 'rejected'].map(f => (
+          <button key={f} onClick={() => setFilter(f)}
+            style={{ padding: '8px 18px', borderRadius: 8, border: `1px solid ${filter === f ? '#00ff88' : 'rgba(255,255,255,0.15)'}`, background: filter === f ? 'rgba(0,255,136,0.15)' : 'transparent', color: filter === f ? '#00ff88' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontWeight: filter === f ? 700 : 400, fontSize: '0.85rem', textTransform: 'capitalize' }}>
+            {f}
+          </button>
+        ))}
+        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.85rem', marginLeft: 'auto' }}>{filtered.length} result{filtered.length !== 1 ? 's' : ''}</span>
       </div>
+
+      {loading ? (
+        <div style={{ color: 'rgba(255,255,255,0.5)', padding: 40, textAlign: 'center' }}>Loading quotations...</div>
+      ) : filtered.length === 0 ? (
+        <div style={{ color: 'rgba(255,255,255,0.4)', padding: 40, textAlign: 'center' }}>No quotations found.</div>
+      ) : (
+        <div style={{ overflowX: 'auto' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', background: 'rgba(0,255,136,0.02)', borderRadius: 12, overflow: 'hidden' }}>
+            <thead>
+              <tr style={{ background: 'rgba(0,255,136,0.06)' }}>
+                <th style={thStyle}>#</th>
+                <th style={thStyle}>Name</th>
+                <th style={thStyle}>Email</th>
+                <th style={thStyle}>Mobile</th>
+                <th style={thStyle}>Event</th>
+                <th style={thStyle}>Date</th>
+                <th style={thStyle}>Budget</th>
+                <th style={thStyle}>Status</th>
+                <th style={thStyle}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((q, idx) => {
+                const id = q._id || q.id;
+                return (
+                  <React.Fragment key={id}>
+                    <tr style={{ cursor: 'pointer' }} onClick={() => setExpanded(expanded === id ? null : id)}>
+                      <td style={tdStyle}>{idx + 1}</td>
+                      <td style={tdStyle}>{q.name}</td>
+                      <td style={tdStyle}>{q.email}</td>
+                      <td style={tdStyle}>{q.mobile || '—'}</td>
+                      <td style={{ ...tdStyle, color: '#00ff88', fontWeight: 600 }}>{q.eventName}</td>
+                      <td style={tdStyle}>{q.eventDate ? new Date(q.eventDate).toLocaleDateString() : '—'}</td>
+                      <td style={{ ...tdStyle, color: '#ffd700' }}>{q.priceRange || '—'}</td>
+                      <td style={tdStyle}>
+                        <span style={{ background: `${statusColor[q.status] || '#999'}22`, color: statusColor[q.status] || '#999', padding: '3px 10px', borderRadius: 20, fontSize: '0.78rem', fontWeight: 600, textTransform: 'capitalize' }}>
+                          {q.status || 'pending'}
+                        </span>
+                      </td>
+                      <td style={tdStyle}>
+                        <button onClick={e => { e.stopPropagation(); setExpanded(expanded === id ? null : id); }}
+                          style={{ padding: '5px 12px', borderRadius: 6, border: '1px solid rgba(0,255,136,0.3)', background: 'transparent', color: '#00ff88', cursor: 'pointer', fontSize: '0.8rem' }}>
+                          {expanded === id ? 'Close' : 'View'}
+                        </button>
+                      </td>
+                    </tr>
+                    {expanded === id && (
+                      <tr>
+                        <td colSpan={9} style={{ padding: '16px 20px', background: 'rgba(0,255,136,0.04)', borderBottom: '1px solid rgba(0,255,136,0.1)' }}>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginBottom: 12 }}>
+                            {[
+                              ['Address', q.address],
+                              ['Event Time', q.eventTime],
+                            ].map(([label, val]) => val && (
+                              <div key={label}>
+                                <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', marginBottom: 3 }}>{label}</div>
+                                <div style={{ color: '#fff', fontSize: '0.9rem' }}>{val}</div>
+                              </div>
+                            ))}
+                          </div>
+                          {q.description && (
+                            <div style={{ marginBottom: 16, padding: '12px 14px', background: 'rgba(255,255,255,0.04)', borderRadius: 8, border: '1px solid rgba(0,255,136,0.1)' }}>
+                              <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', marginBottom: 6 }}>Description</div>
+                              <div style={{ color: '#fff', fontSize: '0.9rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{q.description}</div>
+                            </div>
+                          )}
+                          <div style={{ display: 'flex', gap: 10 }}>
+                            {['confirmed', 'pending', 'rejected'].map(s => (
+                              <button key={s} onClick={() => updateStatus(id, s)}
+                                style={{ padding: '7px 18px', borderRadius: 8, border: `1px solid ${statusColor[s]}`, background: q.status === s ? `${statusColor[s]}22` : 'transparent', color: statusColor[s], cursor: 'pointer', fontWeight: 600, fontSize: '0.85rem', textTransform: 'capitalize' }}>
+                                {s}
+                              </button>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

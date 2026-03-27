@@ -6,1111 +6,433 @@ import 'react-toastify/dist/ReactToastify.css';
 import config from '../../config';
 import tkLogo from '../../assets/images/tk26.png';
 
-const BASE_URL = `${config.BASE_URL}/api/users`;
+const BASE_URL = `${config.BASE_URL}/api/users/register-quotation`;
 
-const IndividualRegistration = () => {
+const priceRanges = [
+  '₹10,000 - ₹25,000',
+  '₹25,000 - ₹50,000',
+  '₹50,000 - ₹1,00,000',
+  '₹1,00,000 - ₹2,50,000',
+  '₹2,50,000 - ₹5,00,000',
+  '₹5,00,000+',
+  'Not Sure Yet'
+];
+
+const EventQuotation = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const eventId = searchParams.get('event');
   const eventNameFromUrl = searchParams.get('name');
-  
-  const [step, setStep] = useState(1);
-  const [participant, setParticipant] = useState({
+
+  const [form, setForm] = useState({
     name: '',
-    rollNo: '',
-    mobile: '',
-    year: '',
-    branch: '',
     email: '',
-    college: '',
+    mobile: '',
+    address: '',
+    eventName: eventNameFromUrl || '',
+    eventDate: '',
+    eventTime: '',
+    priceRange: '',
+    description: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
-  const [emailVerified, setEmailVerified] = useState(false);
+
   const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
   const [verifyingOtp, setVerifyingOtp] = useState(false);
-  const [screenshotLink, setScreenshotLink] = useState('');
-  const [eventName, setEventName] = useState('');
-  const [isExistingUser, setIsExistingUser] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('');
-  const [selectedCoordinator, setSelectedCoordinator] = useState('');
-  const [submittingPayment, setSubmittingPayment] = useState(false);
-  const [transactionId, setTransactionId] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const qrCodeUrl = 'https://res.cloudinary.com/dwmjz9csc/image/upload/v1772714774/imgtourl/f04d05dc37d246fb85cb2511677804d6.png';
-
-  const coordinators = [
-    { id: 1, name: "B GURU GANGADHAR REDDY" },
-    { id: 2, name: "K HEMANTH" },
-    { id: 3, name: "O JAGADEESH" },
-    { id: 4, name: "K EEKSHITHA" },
-    { id: 5, name: "B GEETHIKA" },
-    { id: 6, name: "ANKITHA" },
-    { id: 7, name: "HEMA" },
-    { id: 8, name: "ANIL" },
-    { id: 9, name: "HANEESH" },
-    { id: 10, name: "SUSMITHA" },
-    { id: 11, name: "VEENA" },
-    { id: 12, name: "MOHAN" },
-    { id: 13, name: "CHARAN" },
-    { id: 14, name: "CHANDRIKA" },
-    { id: 15, name: "KUMARI" },
-    { id: 16, name: "SANJANA" },
-    { id: 17, name: "RAKESH REDDY" },
-    { id: 18, name: "AKASH" },
-    { id: 19, name: "BHARATH" },
-    { id: 20, name: "VARUN" },
-    { id: 21, name: "TILAK" }
-  ];
-
-  const eventsList = [
-    { id: 'project-expo', name: 'Project Expo' },
-    { id: 'web-design', name: 'Web Design' },
-    { id: 'hackathon', name: 'Hackathon' },
-    { id: 'nextcode', name: 'NextCode' },
-    { id: 'rube-cube', name: 'Rube a Cube' },
-    { id: 'poster-design', name: 'Poster Design' },
-    { id: 'cook-without-food', name: 'Cook Without Food' },
-    { id: 'robo-race', name: 'Robo Race' },
-    { id: 'over-drive', name: 'Over Drive' },
-    { id: 'full-stack', name: 'Full Stack' },
-    { id: 'gen-ai', name: 'Gen AI' },
-    { id: 'gitt-github', name: 'Gitt & Github' },
-    { id: 'iot', name: 'IOT' },
-  ];
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [isExistingUser, setIsExistingUser] = useState(false);
 
   useEffect(() => {
-    if (eventNameFromUrl) {
-      setEventName(eventNameFromUrl);
-    } else if (eventId) {
-      const selectedEvent = eventsList.find(e => e.id === eventId);
-      setEventName(selectedEvent?.name || '');
-    }
-  }, [eventId, eventNameFromUrl]);
+    if (eventNameFromUrl) setForm(f => ({ ...f, eventName: eventNameFromUrl }));
+  }, [eventNameFromUrl]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setParticipant((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!emailVerified) {
-      toast.error('Please verify your email before continuing.');
-      return;
-    }
-    if (!isExistingUser && participant.password !== participant.confirmPassword) {
-      toast.error('Passwords do not match!');
-      return;
-    }
-    setStep(2);
+    setForm(f => ({ ...f, [name]: value }));
   };
 
   const sendOtp = async () => {
-    if (!participant.email) {
-      toast.warning('Please enter your email first.');
-      return;
-    }
+    if (!form.email) { toast.warning('Please enter your email first.'); return; }
     setSendingOtp(true);
     try {
-      const response = await fetch(`${BASE_URL}/send-otp`, {
+      const res = await fetch(`${config.BASE_URL}/api/users/send-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: participant.email })
+        body: JSON.stringify({ email: form.email }),
       });
-      const data = await response.json();
-      if (response.ok) {
-        setOtpSent(true);
-        if (data.isExistingUser) {
-          setIsExistingUser(true);
-        }
-        toast.success(`Verification code sent to ${participant.email}`);
-      } else {
-        toast.error(data.message || 'Please try again.');
-      }
-    } catch (error) {
-      toast.error('Failed to connect to server.');
-    } finally {
-      setSendingOtp(false);
-    }
+      const data = await res.json();
+      if (res.ok) { setOtpSent(true); if (data.isExistingUser) setIsExistingUser(true); toast.success(`OTP sent to ${form.email}`); }
+      else toast.error(data.message || 'Failed to send OTP.');
+    } catch { toast.error('Failed to connect to server.'); }
+    finally { setSendingOtp(false); }
   };
 
   const verifyOtp = async () => {
     setVerifyingOtp(true);
     try {
-      const response = await fetch(`${BASE_URL}/verify-otp`, {
+      const res = await fetch(`${config.BASE_URL}/api/users/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: participant.email, 
-          otp: otp 
-        })
+        body: JSON.stringify({ email: form.email, otp }),
       });
-      const data = await response.json();
-      if (response.ok) {
-        setEmailVerified(true);
-        toast.success('Your email has been verified successfully.');
-      } else {
-        toast.error(data.message || 'Please enter the correct verification code.');
-      }
-    } catch (error) {
-      toast.error('Failed to verify OTP.');
-    } finally {
-      setVerifyingOtp(false);
-    }
+      const data = await res.json();
+      if (res.ok) { setEmailVerified(true); toast.success('Email verified!'); }
+      else toast.error(data.message || 'Invalid OTP.');
+    } catch { toast.error('Failed to verify OTP.'); }
+    finally { setVerifyingOtp(false); }
   };
 
-  const handlePayment = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!screenshotLink) {
-      toast.warning('Please provide Google Drive link for payment screenshot.');
-      return;
-    }
-    
-    if (paymentMethod === 'upi' && !transactionId) {
-      toast.warning('Please enter transaction ID.');
-      return;
-    }
-    
-    setSubmittingPayment(true);
+    if (!emailVerified) { toast.error('Please verify your email first.'); return; }
+    if (!isExistingUser && form.password !== form.confirmPassword) { toast.error('Passwords do not match!'); return; }
+    setSubmitting(true);
     try {
-      const response = await fetch(`${BASE_URL}/register`, {
+      const res = await fetch(`${BASE_URL}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${localStorage.getItem('token')}` },
         body: JSON.stringify({
-          name: participant.name,
-          rollNo: participant.rollNo,
-          mobile: participant.mobile,
-          year: participant.year,
-          branch: participant.branch,
-          email: participant.email,
-          college: participant.college,
-          password: participant.password || '',
-          eventId: eventId || '',
-          eventName: eventName || '',
-          transactionId: paymentMethod === 'upi' ? transactionId : '',
-          screenshotUrl: screenshotLink,
-          paymentMethod: paymentMethod,
-          coordinator: paymentMethod === 'cash' ? selectedCoordinator : '',
-          isExistingUser: isExistingUser,
-          amount: 50
-        })
+          name: form.name,
+          email: form.email,
+          mobile: form.mobile,
+          address: form.address,
+          description: form.description,
+          eventName: form.eventName,
+          eventDate: form.eventDate,
+          eventTime: form.eventTime,
+          priceRange: form.priceRange,
+          password: form.password,
+          isExistingUser,
+        }),
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast.success('Registration Complete!');
-        setSubmittingPayment(false);
-        navigate('/');
-      } else {
-        toast.error(data.error || 'Something went wrong!');
-      }
-    } catch (error) {
-      toast.error('Failed to connect to server. Please try again.');
-    } finally {
-      setSubmittingPayment(false);
-    }
+      const data = await res.json();
+      if (res.ok) { setShowPopup(true); }
+      else toast.error(data.error || 'Something went wrong.');
+    } catch { toast.error('Failed to connect to server.'); }
+    finally { setSubmitting(false); }
   };
 
-  // Step 1: Participant Details
-  if (step === 1) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -50 }}
-        transition={{ duration: 0.6 }}
-        style={{
-          padding: '50px 20px',
-          textAlign: 'center',
-          background: 'linear-gradient(135deg, #000 0%, #1a1a2e 50%, #16213e 100%)',
-          minHeight: '100vh',
-          color: '#fff',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
-        {/* TK Logo */}
-        <div style={{
-          position: 'absolute',
-          top: '20px',
-          left: '20px',
-          zIndex: 10
-        }}>
-          <img 
-            src={tkLogo} 
-            alt="TK26 Logo" 
-            style={{ 
-              height: '35px', 
-              width: 'auto', 
-              objectFit: 'contain',
-              filter: 'drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2)',
-              animation: 'glow 2s ease-in-out infinite alternate'
-            }} 
-          />
-        </div>
-        {/* Animated background dots */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-          zIndex: 0
-        }}>
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              style={{
-                position: 'absolute',
-                width: '2px',
-                height: '2px',
-                background: 'rgba(0,220,255,0.6)',
-                borderRadius: '50%',
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 2}s`
-              }}
-            />
-          ))}
-        </div>
-        
-        <style>
-          {`
-            @keyframes twinkle {
-              0%, 100% { opacity: 0.3; transform: scale(1); }
-              50% { opacity: 1; transform: scale(1.5); }
-            }
-            @keyframes glow {
-              0%, 100% { filter: drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2); }
-              50% { filter: drop-shadow(0 0 12px rgba(255,255,0,1)) brightness(1.4); }
-            }
-          `}
-        </style>
-        <motion.h2
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          style={{ fontSize: '2.5rem', marginBottom: '10px', textShadow: '2px 2px 8px rgba(0,0,0,0.3)' }}
-        >
-          👤 Individual Registration
-        </motion.h2>
-        <p style={{ fontSize: '1.1rem', color: '#e0e0e0', marginBottom: '30px' }}>{eventName}</p>
+  const inputStyle = {
+    padding: '14px 16px',
+    borderRadius: '12px',
+    border: '1px solid rgba(0,255,136,0.3)',
+    outline: 'none',
+    fontSize: '1rem',
+    background: 'rgba(255,255,255,0.05)',
+    color: '#fff',
+    width: '100%',
+    transition: 'border 0.2s',
+    boxSizing: 'border-box',
+  };
 
-        <motion.form
-          className="form-grid"
-          style={{
-            maxWidth: '700px',
-            width: '100%',
-            background: 'rgba(255,255,255,0.08)',
-            backdropFilter: 'blur(20px)',
-            padding: '40px',
-            borderRadius: '20px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
-            display: 'grid',
-            gap: '20px',
-            border: '1px solid rgba(255,255,255,0.1)',
-            position: 'relative',
-            zIndex: 1
-          }}
-          onSubmit={handleSubmit}
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <style>
-            {`
-              @media (min-width: 768px) {
-                .form-grid {
-                  grid-template-columns: 1fr 1fr;
-                }
-                .form-full-width {
-                  grid-column: 1 / -1;
-                }
-                .form-half-width {
-                  grid-column: span 1;
-                }
-              }
-              @media (min-width: 1024px) {
-                .form-grid {
-                  grid-template-columns: 1fr 1fr 1fr;
-                }
-                .form-two-thirds {
-                  grid-column: span 2;
-                }
-              }
-            `}
-          </style>
-          {['name', 'rollNo', 'mobile'].map((field) => (
-            <motion.input
-              key={field}
-              placeholder={field === 'name' ? 'Full name' :
-                          field === 'rollNo' ? 'Roll number' :
-                          'Mobile number'}
-              name={field}
-              type={field === 'mobile' ? 'tel' : 'text'}
-              value={participant[field]}
-              onChange={handleChange}
-              required
-              className={field === 'name' ? 'form-two-thirds' : 'form-half-width'}
-              whileFocus={{ scale: 1.02 }}
-              style={{
-                padding: '15px',
-                borderRadius: '12px',
-                border: '1px solid rgba(0,220,255,0.3)',
-                outline: 'none',
-                fontSize: '1rem',
-                background: 'rgba(255,255,255,0.05)',
-                backdropFilter: 'blur(10px)',
-                color: '#fff',
-                transition: 'all 0.3s ease'
-              }}
-            />
-          ))}
-
-          <motion.select
-            name="year"
-            value={participant.year}
-            onChange={handleChange}
-            required
-            className="form-half-width"
-            whileFocus={{ scale: 1.02 }}
-            style={{
-              padding: '15px',
-              borderRadius: '12px',
-              border: '1px solid rgba(0,220,255,0.3)',
-              outline: 'none',
-              fontSize: '1rem',
-              background: 'rgba(255,255,255,0.05)',
-              backdropFilter: 'blur(10px)',
-              color: '#fff',
-              transition: 'all 0.3s ease'
-            }}
-          >
-            <option value="" disabled>Select Year</option>
-            <option value="I">I</option>
-            <option value="II">II</option>
-            <option value="III">III</option>
-            <option value="IV">IV</option>
-          </motion.select>
-
-          <motion.select
-            name="branch"
-            value={participant.branch}
-            onChange={handleChange}
-            required
-            className="form-half-width"
-            whileFocus={{ scale: 1.02 }}
-            style={{
-              padding: '15px',
-              borderRadius: '12px',
-              border: '1px solid rgba(0,220,255,0.3)',
-              outline: 'none',
-              fontSize: '1rem',
-              background: 'rgba(255,255,255,0.05)',
-              backdropFilter: 'blur(10px)',
-              color: '#fff',
-              transition: 'all 0.3s ease'
-            }}
-          >
-            <option value="" disabled>Select Branch</option>
-            <optgroup label="Computer Science">
-              <option value="CSE">CSE</option>
-              <option value="IT">IT</option>
-              <option value="AIDS">AIDS</option>
-              <option value="AI&ML">AI & ML</option>
-              <option value="Data Science">Data Science</option>
-              <option value="Cyber Security">Cyber Security</option>
-            </optgroup>
-            <optgroup label="Electronics">
-              <option value="ECE">ECE</option>
-              <option value="EEE">EEE</option>
-              <option value="EIE">EIE</option>
-            </optgroup>
-            <optgroup label="Mechanical">
-              <option value="MECH">MECH</option>
-              <option value="Automobile">Automobile</option>
-              <option value="Mechatronics">Mechatronics</option>
-            </optgroup>
-            <optgroup label="Civil & Others">
-              <option value="CIVIL">CIVIL</option>
-              <option value="Chemical">Chemical</option>
-              <option value="Biotechnology">Biotechnology</option>
-            </optgroup>
-            <optgroup label="PG Programs">
-              <option value="M.Tech">M.Tech</option>
-              <option value="MCA">MCA</option>
-              <option value="MBA">MBA</option>
-            </optgroup>
-            <option value="OTHERS">OTHERS</option>
-          </motion.select>
-
-          <motion.input
-            placeholder="College name"
-            name="college"
-            type="text"
-            value={participant.college}
-            onChange={handleChange}
-            required
-            className="form-full-width"
-            whileFocus={{ scale: 1.02 }}
-            style={{
-              padding: '12px',
-              borderRadius: '12px',
-              border: '2px solid transparent',
-              outline: 'none',
-              fontSize: '1rem',
-              background: 'rgba(255,255,255,0.95)',
-              color: '#333'
-            }}
-          />
-
-          {/* Email with verification */}
-          <div className="form-full-width" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <motion.input
-              placeholder="Email"
-              name="email"
-              type="email"
-              value={participant.email}
-              onChange={handleChange}
-              required
-              disabled={emailVerified}
-              whileFocus={{ scale: 1.02 }}
-              style={{
-                flex: 1,
-                padding: '12px',
-                borderRadius: '12px',
-                border: emailVerified ? '2px solid #4CAF50' : '2px solid transparent',
-                outline: 'none',
-                fontSize: '1rem',
-                background: emailVerified ? 'rgba(76, 175, 80, 0.2)' : 'rgba(255,255,255,0.95)',
-                color: '#333'
-              }}
-            />
-            {!emailVerified && (
-              <motion.button
-                type="button"
-                onClick={sendOtp}
-                disabled={sendingOtp || otpSent}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  padding: '12px 20px',
-                  borderRadius: '12px',
-                  background: otpSent ? '#4CAF50' : sendingOtp ? '#999' : '#667eea',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  border: 'none',
-                  cursor: sendingOtp || otpSent ? 'not-allowed' : 'pointer',
-                  fontSize: '0.9rem'
-                }}
-              >
-                {sendingOtp ? 'Sending...' : otpSent ? 'Sent ✓' : 'Send OTP'}
-              </motion.button>
-            )}
-            {emailVerified && <span style={{ color: '#4CAF50', fontSize: '1.5rem' }}>✓</span>}
-          </div>
-
-          {/* OTP verification */}
-          {!emailVerified && participant.email && (
-            <div className="form-full-width" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <motion.input
-                placeholder="Enter OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                whileFocus={{ scale: 1.02 }}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  borderRadius: '12px',
-                  border: '2px solid transparent',
-                  outline: 'none',
-                  fontSize: '1rem',
-                  background: 'rgba(255,255,255,0.95)',
-                  color: '#333'
-                }}
-              />
-              <motion.button
-                type="button"
-                onClick={verifyOtp}
-                disabled={verifyingOtp}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  padding: '12px 20px',
-                  borderRadius: '12px',
-                  background: verifyingOtp ? '#999' : '#4CAF50',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  border: 'none',
-                  cursor: verifyingOtp ? 'not-allowed' : 'pointer',
-                  fontSize: '0.9rem'
-                }}
-              >
-                {verifyingOtp ? 'Verifying...' : 'Verify'}
-              </motion.button>
-            </div>
-          )}
-
-          {/* Password fields */}
-          {!isExistingUser && (
-            <>
-              <div style={{ position: 'relative' }}>
-                <input
-                  placeholder="Password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={participant.password}
-                  onChange={handleChange}
-                  required
-                  className="form-half-width"
-                  style={{
-                    padding: '15px',
-                    borderRadius: '12px',
-                    border: '1px solid rgba(0,220,255,0.3)',
-                    outline: 'none',
-                    fontSize: '1rem',
-                    background: 'rgba(255,255,255,0.05)',
-                    backdropFilter: 'blur(10px)',
-                    color: '#fff',
-                    transition: 'all 0.3s ease'
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{
-                    position: 'absolute',
-                    right: '15px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'none',
-                    border: 'none',
-                    color: '#fff',
-                    cursor: 'pointer',
-                    fontSize: '1.2rem'
-                  }}
-                >
-                  {showPassword ? '👁️' : '👁️🗨️'}
-                </button>
-              </div>
-              <div style={{ position: 'relative' }}>
-                <input
-                  placeholder="Confirm Password"
-                  name="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={participant.confirmPassword}
-                  onChange={handleChange}
-                  required
-                  className="form-half-width"
-                  style={{
-                    padding: '15px',
-                    borderRadius: '12px',
-                    border: '1px solid rgba(0,220,255,0.3)',
-                    outline: 'none',
-                    fontSize: '1rem',
-                    background: 'rgba(255,255,255,0.05)',
-                    backdropFilter: 'blur(10px)',
-                    color: '#fff',
-                    transition: 'all 0.3s ease'
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  style={{
-                    position: 'absolute',
-                    right: '15px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'none',
-                    border: 'none',
-                    color: '#fff',
-                    cursor: 'pointer',
-                    fontSize: '1.2rem'
-                  }}
-                >
-                  {showConfirmPassword ? '👁️' : '👁️🗨️'}
-                </button>
-              </div>
-            </>
-          )}
-
-          <div className="form-full-width" style={{ display: 'flex', gap: '15px', justifyContent: 'center', marginTop: '10px' }}>
-            <motion.button
-              type="submit"
-              whileHover={{ scale: 1.05, boxShadow: '0 8px 25px rgba(0,0,0,0.3)' }}
-              whileTap={{ scale: 0.95 }}
-              style={{
-                padding: '14px 32px',
-                borderRadius: '14px',
-                background: '#fff',
-                color: '#667eea',
-                fontWeight: 'bold',
-                border: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
-                fontSize: '1rem'
-              }}
-            >
-              Continue to Payment →
-            </motion.button>
-            <motion.button
-              type="button"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              style={{
-                padding: '14px 28px',
-                borderRadius: '14px',
-                background: 'rgba(255,255,255,0.2)',
-                color: '#fff',
-                fontWeight: 'bold',
-                border: '1px solid rgba(255,255,255,0.3)',
-                cursor: 'pointer',
-                boxShadow: '0 5px 15px rgba(0,0,0,0.2)'
-              }}
-              onClick={() => navigate('/')}
-            >
-              Cancel
-            </motion.button>
-          </div>
-        </motion.form>
-        
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
-      </motion.div>
-    );
-  }
-
-  // Step 2: Payment
   return (
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -50 }}
-        transition={{ duration: 0.6 }}
-        style={{
-          padding: '50px 20px',
-          textAlign: 'center',
-          background: 'linear-gradient(135deg, #000 0%, #1a1a2e 50%, #16213e 100%)',
-          minHeight: '100vh',
-          color: '#fff',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
-        {/* TK Logo */}
-        <div style={{
-          position: 'absolute',
-          top: '20px',
-          left: '20px',
-          zIndex: 10
-        }}>
-          <img 
-            src={tkLogo} 
-            alt="TK26 Logo" 
-            style={{ 
-              height: '35px', 
-              width: 'auto', 
-              objectFit: 'contain',
-              filter: 'drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2)',
-              animation: 'glow 2s ease-in-out infinite alternate'
-            }} 
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #000 0%, #0a1a0a 50%, #001a10 100%)',
+        color: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '50px 20px 80px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <style>{`
+        @keyframes glow {
+          0%, 100% { filter: drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2); }
+          50% { filter: drop-shadow(0 0 12px rgba(255,255,0,1)) brightness(1.4); }
+        }
+        input::placeholder, textarea::placeholder, select option[value=""] { color: rgba(255,255,255,0.4); }
+        select option { background: #0a1a0a; color: #fff; }
+      `}</style>
+
+      <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 10 }}>
+        <img src={tkLogo} alt="Logo" style={{ height: 35, width: 'auto', animation: 'glow 2s ease-in-out infinite alternate' }} />
+      </div>
+
+      <h2 style={{ fontFamily: 'Orbitron, monospace', color: '#00ff88', fontSize: '2rem', marginBottom: 6, marginTop: 20, textAlign: 'center' }}>
+        Event Quotation
+      </h2>
+      {form.eventName && (
+        <p style={{ color: 'rgba(255,255,255,0.6)', marginBottom: 30, fontSize: '1rem' }}>{form.eventName}</p>
+      )}
+
+      <form onSubmit={handleSubmit} style={{
+        maxWidth: 600,
+        width: '100%',
+        background: 'rgba(0,255,136,0.04)',
+        border: '1px solid rgba(0,255,136,0.2)',
+        borderRadius: 20,
+        padding: '36px 32px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 18,
+      }}>
+        {/* Name */}
+        <input
+          name="name"
+          placeholder="Full Name"
+          value={form.name}
+          onChange={handleChange}
+          required
+          style={inputStyle}
+        />
+
+        {/* Email + OTP send */}
+        <div style={{ display: 'flex', gap: 10 }}>
+          <input
+            name="email"
+            type="email"
+            placeholder="Email ID"
+            value={form.email}
+            onChange={handleChange}
+            required
+            disabled={emailVerified}
+            style={{
+              ...inputStyle,
+              flex: 1,
+              border: emailVerified ? '1px solid #00ff88' : inputStyle.border,
+              background: emailVerified ? 'rgba(0,255,136,0.08)' : inputStyle.background,
+            }}
           />
-        </div>
-        {/* Animated background dots */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-          zIndex: 0
-        }}>
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
+          {!emailVerified && (
+            <button
+              type="button"
+              onClick={sendOtp}
+              disabled={sendingOtp || otpSent}
               style={{
-                position: 'absolute',
-                width: '2px',
-                height: '2px',
-                background: 'rgba(0,220,255,0.6)',
-                borderRadius: '50%',
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animation: `twinkle ${2 + Math.random() * 3}s ease-in-out infinite`,
-                animationDelay: `${Math.random() * 2}s`
+                padding: '0 18px',
+                borderRadius: 12,
+                background: otpSent ? '#00cc66' : '#00ff88',
+                color: '#000',
+                fontWeight: 700,
+                border: 'none',
+                cursor: sendingOtp || otpSent ? 'not-allowed' : 'pointer',
+                whiteSpace: 'nowrap',
+                fontSize: '0.9rem',
               }}
-            />
-          ))}
+            >
+              {sendingOtp ? 'Sending...' : otpSent ? 'Sent ✓' : 'Send OTP'}
+            </button>
+          )}
+          {emailVerified && <span style={{ color: '#00ff88', fontSize: '1.5rem', alignSelf: 'center' }}>✓</span>}
         </div>
-      <motion.h2
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        style={{ fontSize: '2.5rem', marginBottom: '10px', textShadow: '2px 2px 8px rgba(0,0,0,0.3)' }}
-      >
-        💳 Payment
-      </motion.h2>
-      <p style={{ fontSize: '1.1rem', color: '#e0e0e0', marginBottom: '30px' }}>{eventName}</p>
 
-      <motion.div
-        style={{
-          maxWidth: '700px',
-          width: '100%',
-          background: 'rgba(255,255,255,0.08)',
-          backdropFilter: 'blur(20px)',
-          padding: '40px',
-          borderRadius: '20px',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          position: 'relative',
-          zIndex: 1
-        }}
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h3 style={{ marginBottom: '20px', fontSize: '1.5rem' }}>📋 Registration Summary</h3>
-        
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          style={{ 
-            textAlign: 'left', 
-            marginBottom: '25px', 
-            background: 'rgba(255,255,255,0.2)', 
-            padding: '25px', 
-            borderRadius: '15px',
-            border: '1px solid rgba(255,255,255,0.3)'
-          }}
+        {/* OTP input */}
+        {!emailVerified && otpSent && (
+          <div style={{ display: 'flex', gap: 10 }}>
+            <input
+              placeholder="Enter OTP"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              style={{ ...inputStyle, flex: 1 }}
+            />
+            <button
+              type="button"
+              onClick={verifyOtp}
+              disabled={verifyingOtp}
+              style={{
+                padding: '0 18px',
+                borderRadius: 12,
+                background: '#00ff88',
+                color: '#000',
+                fontWeight: 700,
+                border: 'none',
+                cursor: verifyingOtp ? 'not-allowed' : 'pointer',
+                fontSize: '0.9rem',
+              }}
+            >
+              {verifyingOtp ? 'Verifying...' : 'Verify'}
+            </button>
+          </div>
+        )}
+
+        {/* Mobile */}
+        <input
+          name="mobile"
+          type="tel"
+          placeholder="Mobile Number"
+          value={form.mobile}
+          onChange={handleChange}
+          required
+          style={inputStyle}
+        />
+
+        {/* Address */}
+        <textarea
+          name="address"
+          placeholder="Address"
+          value={form.address}
+          onChange={handleChange}
+          required
+          rows={3}
+          style={{ ...inputStyle, resize: 'vertical' }}
+        />
+
+        {/* Event Name */}
+        <input
+          name="eventName"
+          placeholder="Event Name"
+          value={form.eventName}
+          onChange={handleChange}
+          required
+          style={inputStyle}
+        />
+
+        {/* Event Date & Time */}
+        <div style={{ display: 'flex', gap: 12 }}>
+          <div style={{ flex: 1 }}>
+            <label style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', marginBottom: 4, display: 'block' }}>Event Date</label>
+            <input
+              name="eventDate"
+              type="date"
+              value={form.eventDate}
+              onChange={handleChange}
+              required
+              style={{ ...inputStyle, colorScheme: 'dark' }}
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', marginBottom: 4, display: 'block' }}>Event Time</label>
+            <input
+              name="eventTime"
+              type="time"
+              value={form.eventTime}
+              onChange={handleChange}
+              required
+              style={{ ...inputStyle, colorScheme: 'dark' }}
+            />
+          </div>
+        </div>
+
+        {/* Price Range */}
+        <select
+          name="priceRange"
+          value={form.priceRange}
+          onChange={handleChange}
+          required
+          style={{ ...inputStyle, color: form.priceRange ? '#fff' : 'rgba(255,255,255,0.4)' }}
         >
-          <div style={{ marginBottom: '12px', fontSize: '1.05rem' }}>
-            <strong>👤 Name:</strong> {participant.name}
-          </div>
-          <div style={{ marginBottom: '12px', fontSize: '1.05rem' }}>
-            <strong>📧 Email:</strong> {participant.email}
-          </div>
-          <div style={{ marginBottom: '12px', fontSize: '1.05rem' }}>
-            <strong>📱 Mobile:</strong> {participant.mobile}
-          </div>
-          <div style={{ 
-            fontSize: '1.3rem', 
-            fontWeight: 'bold', 
-            marginTop: '15px', 
-            padding: '15px', 
-            background: 'rgba(76, 175, 80, 0.3)', 
-            borderRadius: '10px',
-            border: '2px solid #4CAF50'
-          }}>
-            💰 Amount: ₹50
-          </div>
-        </motion.div>
+          <option value="" disabled>Select Price Range</option>
+          {priceRanges.map(r => <option key={r} value={r}>{r}</option>)}
+        </select>
 
-        <div style={{
-          background: '#fff', padding: '20px', borderRadius: '15px', marginBottom: '20px', display: 'inline-block'
-        }}>
+        {/* Description */}
+        <textarea
+          name="description"
+          placeholder="Describe your event in detail (theme, requirements, expected guests, etc.)"
+          value={form.description}
+          onChange={handleChange}
+          required
+          rows={4}
+          style={{ ...inputStyle, resize: 'vertical' }}
+        />
+
+        {/* Password - only for new users */}
+        {!isExistingUser && (<div style={{ position: 'relative' }}>
+          <input
+            name="password"
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required={!isExistingUser}
+            style={inputStyle}
+          />
+          <button type="button" onClick={() => setShowPassword(p => !p)}
+            style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '1.1rem' }}>
+            {showPassword ? '👁️' : '👁️‍🗨️'}
+          </button>
+        </div>)}
+
+        {/* Confirm Password - only for new users */}
+        {!isExistingUser && (<div style={{ position: 'relative' }}>
+          <input
+            name="confirmPassword"
+            type={showConfirm ? 'text' : 'password'}
+            placeholder="Confirm Password"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            required={!isExistingUser}
+            style={inputStyle}
+          />
+          <button type="button" onClick={() => setShowConfirm(p => !p)}
+            style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '1.1rem' }}>
+            {showConfirm ? '👁️' : '👁️‍🗨️'}
+          </button>
+        </div>)}
+
+        {/* Buttons */}
+        <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+          <button
+            type="submit"
+            disabled={submitting}
+            style={{
+              flex: 1,
+              padding: '14px',
+              borderRadius: 12,
+              background: submitting ? '#555' : 'linear-gradient(90deg, #00ff88, #00cc66)',
+              color: '#000',
+              fontWeight: 700,
+              border: 'none',
+              cursor: submitting ? 'not-allowed' : 'pointer',
+              fontSize: '1rem',
+              fontFamily: 'Orbitron, monospace',
+            }}
+          >
+            {submitting ? 'Submitting...' : 'Submit Quotation'}
+          </button>
           <button
             type="button"
-            onClick={() => window.open('https://imgbb.com/', '_blank')}
+            onClick={() => navigate(-1)}
             style={{
-              marginBottom: '15px',
-              background: '#667eea',
+              padding: '14px 20px',
+              borderRadius: 12,
+              background: 'rgba(255,255,255,0.08)',
               color: '#fff',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '10px 20px',
+              fontWeight: 700,
+              border: '1px solid rgba(255,255,255,0.2)',
               cursor: 'pointer',
-              fontSize: '0.95rem',
-              fontWeight: 'bold',
-              display: 'block',
-              width: '100%'
+              fontSize: '1rem',
             }}
           >
-            Generate image to url
+            Cancel
           </button>
-          <img src={qrCodeUrl} alt="QR Code" style={{
-            width: '200px', height: '200px', borderRadius: '10px', objectFit: 'cover'
-          }} />
-          <p style={{ color: '#333', marginTop: '10px', fontSize: '0.9rem' }}>Use these  to Pay</p>
         </div>
+      </form>
 
-        <form onSubmit={handlePayment}>
-          {/* Payment Method Selection */}
-          <div style={{ marginBottom: '25px', textAlign: 'left' }}>
-            <label style={{ display: 'block', marginBottom: '15px', fontSize: '1.1rem', fontWeight: 'bold' }}>
-              💳 Select Payment Method *
-            </label>
-            <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
-              <motion.button
-                type="button"
-                onClick={() => setPaymentMethod('upi')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  padding: '15px 30px',
-                  borderRadius: '12px',
-                  background: paymentMethod === 'upi' ? '#4CAF50' : 'rgba(255,255,255,0.1)',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  border: paymentMethod === 'upi' ? '2px solid #4CAF50' : '2px solid rgba(255,255,255,0.3)',
-                  cursor: 'pointer',
-                  fontSize: '1rem'
-                }}
-              >
-                📱 UPI Payment
-              </motion.button>
-              <motion.button
-                type="button"
-                onClick={() => setPaymentMethod('cash')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                style={{
-                  padding: '15px 30px',
-                  borderRadius: '12px',
-                  background: paymentMethod === 'cash' ? '#4CAF50' : 'rgba(255,255,255,0.1)',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  border: paymentMethod === 'cash' ? '2px solid #4CAF50' : '2px solid rgba(255,255,255,0.3)',
-                  cursor: 'pointer',
-                  fontSize: '1rem'
-                }}
-              >
-                💵 Hand Cash
-              </motion.button>
-            </div>
-          </div>
-
-          {/* UPI Payment Section */}
-          {paymentMethod === 'upi' && (
-            <>
-              <motion.input
-                placeholder="Enter Transaction ID / UPI Reference"
-                value={transactionId}
-                onChange={(e) => setTransactionId(e.target.value)}
-                required
-                whileFocus={{ scale: 1.02 }}
-                style={{
-                  padding: '14px',
-                  borderRadius: '12px',
-                  border: '2px solid transparent',
-                  outline: 'none',
-                  fontSize: '1rem',
-                  background: 'rgba(255,255,255,0.95)',
-                  color: '#333',
-                  width: '100%',
-                  marginBottom: '15px'
-                }}
-              />
-
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '10px',
-                  fontSize: '1rem',
-                  fontWeight: 'bold',
-                  textAlign: 'left'
-                }}>
-                  🔗 Google Drive Link for Payment Screenshot *
-                </label>
-                <motion.input
-                  type="url"
-                  placeholder="https://drive.google.com/..."
-                  value={screenshotLink}
-                  onChange={(e) => setScreenshotLink(e.target.value)}
-                  required
-                  whileFocus={{ scale: 1.02 }}
-                  style={{
-                    padding: '14px',
-                    borderRadius: '12px',
-                    border: '2px solid transparent',
-                    outline: 'none',
-                    fontSize: '1rem',
-                    background: 'rgba(255,255,255,0.95)',
-                    color: '#333',
-                    width: '100%',
-                    marginBottom: '15px'
-                  }}
-                />
-                <p style={{ fontSize: '0.85rem', color: '#e0e0e0', textAlign: 'left', marginTop: '5px' }}>
-                  Please ensure the link has view access enabled
-                </p>
-              </div>
-            </>
-          )}
-
-          {/* Hand Cash Section */}
-          {paymentMethod === 'cash' && (
-            <>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '10px',
-                  fontSize: '1rem',
-                  fontWeight: 'bold',
-                  textAlign: 'left'
-                }}>
-                  👤 Select Coordinator *
-                </label>
-                <motion.select
-                  value={selectedCoordinator}
-                  onChange={(e) => setSelectedCoordinator(e.target.value)}
-                  required
-                  whileFocus={{ scale: 1.02 }}
-                  style={{
-                    padding: '14px',
-                    borderRadius: '12px',
-                    border: '2px solid transparent',
-                    outline: 'none',
-                    fontSize: '1rem',
-                    background: 'rgba(255,255,255,0.95)',
-                    color: '#333',
-                    width: '100%',
-                    marginBottom: '15px'
-                  }}
-                >
-                  <option value="">Select a coordinator</option>
-                  {coordinators.map((coord) => (
-                    <option key={coord.id} value={coord.name}>{coord.name}</option>
-                  ))}
-                </motion.select>
-              </div>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '10px',
-                  fontSize: '1rem',
-                  fontWeight: 'bold',
-                  textAlign: 'left'
-                }}>
-                  🆔 Image to Url  Link for ID Card *
-                </label>
-                <motion.input
-                  type="url"
-                  placeholder="https://drive.google.com/..."
-                  value={screenshotLink}
-                  onChange={(e) => setScreenshotLink(e.target.value)}
-                  required
-                  whileFocus={{ scale: 1.02 }}
-                  style={{
-                    padding: '14px',
-                    borderRadius: '12px',
-                    border: '2px solid transparent',
-                    outline: 'none',
-                    fontSize: '1rem',
-                    background: 'rgba(255,255,255,0.95)',
-                    color: '#333',
-                    width: '100%',
-                    marginBottom: '15px'
-                  }}
-                />
-                <p style={{ fontSize: '0.85rem', color: '#e0e0e0', textAlign: 'left', marginTop: '5px' }}>
-                  Upload your college ID card. Ensure the link has view access enabled
-                </p>
-              </div>
-            </>
-          )}
-
-          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <motion.button
-              type="submit"
-              disabled={submittingPayment}
-              whileHover={{ scale: submittingPayment ? 1 : 1.05, boxShadow: submittingPayment ? 'none' : '0 8px 25px rgba(0,0,0,0.3)' }}
-              whileTap={{ scale: submittingPayment ? 1 : 0.95 }}
-              style={{
-                padding: '14px 32px',
-                borderRadius: '14px',
-                background: submittingPayment ? '#999' : '#4CAF50',
-                color: '#fff',
-                fontWeight: 'bold',
-                border: 'none',
-                cursor: submittingPayment ? 'not-allowed' : 'pointer',
-                boxShadow: '0 5px 15px rgba(0,0,0,0.2)',
-                fontSize: '1.05rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                justifyContent: 'center',
-                minWidth: '150px'
-              }}
+      {showPopup && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+          <div style={{ background: 'linear-gradient(135deg, #0a1a0a, #001a10)', border: '1px solid rgba(0,255,136,0.4)', borderRadius: 20, padding: '48px 40px', maxWidth: 420, width: '90%', textAlign: 'center', boxShadow: '0 0 40px rgba(0,255,136,0.15)' }}>
+            <div style={{ fontSize: '3rem', marginBottom: 16 }}>🎉</div>
+            <h3 style={{ color: '#00ff88', fontFamily: 'Orbitron, monospace', fontSize: '1.3rem', marginBottom: 14 }}>Quotation Submitted!</h3>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '1rem', lineHeight: 1.7, marginBottom: 28 }}>
+              Our team will contact you as soon as possible.<br />
+              <span style={{ color: '#00ff88', fontWeight: 600 }}>Thanks for choosing us! 🙏</span>
+            </p>
+            <button
+              onClick={() => { setShowPopup(false); navigate('/'); }}
+              style={{ padding: '12px 36px', background: 'linear-gradient(90deg, #00ff88, #00cc66)', color: '#000', border: 'none', borderRadius: 10, fontWeight: 700, fontSize: '1rem', cursor: 'pointer', fontFamily: 'Orbitron, monospace' }}
             >
-              {submittingPayment ? (
-                <>
-                  <div style={{
-                    width: '16px',
-                    height: '16px',
-                    border: '2px solid rgba(255,255,255,0.3)',
-                    borderTop: '2px solid #fff',
-                    borderRadius: '50%',
-                    animation: 'spin 1s linear infinite'
-                  }} />
-                  Submitting...
-                </>
-              ) : (
-                '✓ Submit Payment'
-              )}
-            </motion.button>
-            <motion.button
-              type="button"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              style={{
-                padding: '14px 28px',
-                borderRadius: '14px',
-                background: 'rgba(255,255,255,0.2)',
-                color: '#fff',
-                fontWeight: 'bold',
-                border: '1px solid rgba(255,255,255,0.3)',
-                cursor: 'pointer',
-                boxShadow: '0 5px 15px rgba(0,0,0,0.2)'
-              }}
-              onClick={() => setStep(1)}
-            >
-              ← Back
-            </motion.button>
+              OK
+            </button>
           </div>
-        </form>
-        
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
-      </motion.div>
+        </div>
+      )}
+      <ToastContainer position="top-right" autoClose={3000} theme="dark" />
     </motion.div>
   );
 };
 
-export default IndividualRegistration;
+export default EventQuotation;

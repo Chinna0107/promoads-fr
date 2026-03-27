@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BottomNavBar from './BottomNavBar';
 
 const Gallery = () => {
-  const [activeTab, setActiveTab] = useState('Inauguration');
+  const [activeTab, setActiveTab] = useState('Weddings');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -14,25 +14,32 @@ const Gallery = () => {
   }, []);
 
   const galleryData = {
-    Inauguration: [
-      { id: 1, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056043/t1_bdrc1k.jpg', title: 'Opening Ceremony', date: 'APRIL 9 & 10 , 2025' },
-      { id: 2, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056041/i1_vieswo.jpg', title: 'Event Launch', date: 'APRIL 9 & 10, 2025' },
-      { id: 3, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056041/i2_qzdnc5.jpg', title: 'Inauguration', date: 'APRIL 9 & 10, 2025' },
-      { id : 10, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056041/i5_e7joea.jpg', title: 'Inauguration 2', date: 'APRIL 9 & 10, 2025' },
-      { id : 11, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056041/14_hkyhge.jpg', title: 'Inauguration 2', date: 'APRIL 9 & 10, 2025' },
-      {id : 12, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056041/i3_x5lirn.jpg', title: 'Inauguration 3', date: 'APRIL 9 & 10, 2025' },
+    Weddings: [
+      { id: 1, image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80', title: 'Wedding Ceremony', date: 'Social Events' },
+      { id: 2, image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80', title: 'Wedding Reception', date: 'Social Events' },
+      { id: 3, image: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80', title: 'Bridal Decor', date: 'Social Events' },
+      { id: 4, image: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&q=80', title: 'Wedding Stage', date: 'Social Events' },
+      { id: 5, image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&q=80', title: 'Couple Portrait', date: 'Social Events' },
+    ],
+    Corporate: [
+      { id: 6, image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80', title: 'Corporate Conference', date: 'Commercial Events' },
+      { id: 7, image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80', title: 'Product Launch', date: 'Commercial Events' },
+      { id: 8, image: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&q=80', title: 'Business Meet', date: 'Commercial Events' },
+      { id: 9, image: 'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=800&q=80', title: 'Award Ceremony', date: 'Commercial Events' },
+      { id: 10, image: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&q=80', title: 'Team Event', date: 'Commercial Events' },
     ],
     Promotions: [
-      { id: 4, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056042/p3_whtdz1.jpg', title: 'Promotion 1', date: 'APRIL 9 & 10, 2025' },
-      { id: 5, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056042/p2_xjvb8q.jpg', title: 'Promotion 2', date: 'APRIL 9 & 10, 2025' },
-      { id: 6, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056042/p1_pnbked.jpg', title: 'Promotion 3', date: 'APRIL 9 & 10, 2025' },
-      {id : 13, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056042/p4_mir8cj.jpg', title: 'Promotion 4', date: 'APRIL 9 & 10, 2025' }, 
+      { id: 11, image: 'https://images.unsplash.com/photo-1493612276216-ee3925520721?w=800&q=80', title: 'Brand Campaign', date: 'Advertising' },
+      { id: 12, image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80', title: 'Outdoor Promotion', date: 'Advertising' },
+      { id: 13, image: 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=800&q=80', title: 'Social Media Shoot', date: 'Advertising' },
+      { id: 14, image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80', title: 'Ad Campaign', date: 'Advertising' },
     ],
-    Team: [
-      { id: 7, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056043/t3_pnq7dt.jpg', title: 'Team Photo 1', date: 'APRIL 9 & 10, 2025' },
-      { id: 8, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056043/t4_ftpice.jpg', title: 'Team Photo 2', date: 'APRIL 9 & 10, 2025' },
-      { id: 9, image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1773056043/t4_ftpice.jpg', title: 'Team Photo 3', date: 'APRIL 9 & 10, 2025' },
-    ]
+    Celebrations: [
+      { id: 15, image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&q=80', title: 'Birthday Party', date: 'Social Events' },
+      { id: 16, image: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=800&q=80', title: 'Anniversary Celebration', date: 'Social Events' },
+      { id: 17, image: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=80', title: 'Engagement Party', date: 'Social Events' },
+      { id: 18, image: 'https://images.unsplash.com/photo-1496843916299-590492c751f4?w=800&q=80', title: 'Surprise Event', date: 'Social Events' },
+    ],
   };
 
   const photos = galleryData[activeTab];
@@ -61,8 +68,8 @@ const Gallery = () => {
       <div style={{ height: isMobile ? '35vh' : '60vh', backgroundImage: `url(${photos[currentIndex].image})`, backgroundSize: 'cover', backgroundPosition: 'center', position: 'relative', display: 'flex', alignItems: 'flex-end', padding: isMobile ? '30px 20px' : '60px 40px' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8))' }} />
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <h1 style={{ fontSize: isMobile ? '1.8rem' : '3.5rem', fontWeight: 'bold', margin: '0 0 8px 0', letterSpacing: '2px', fontFamily: 'Orbitron, monospace' }}>CODEATHON 2K25</h1>
-          <p style={{ fontSize: isMobile ? '0.85rem' : '1.3rem', margin: '0 0 12px 0', color: '#00ff88', fontWeight: '600' }}>Event Gallery & Memories</p>
+          <h1 style={{ fontSize: isMobile ? '1.8rem' : '3.5rem', fontWeight: 'bold', margin: '0 0 8px 0', letterSpacing: '2px', fontFamily: 'Orbitron, monospace' }}>PROMO ADS</h1>
+          <p style={{ fontSize: isMobile ? '0.85rem' : '1.3rem', margin: '0 0 12px 0', color: '#00ff88', fontWeight: '600' }}>Our Work & Event Highlights</p>
           <div style={{ width: '50px', height: '3px', background: '#00ff88', borderRadius: '2px' }} />
         </div>
       </div>
@@ -72,7 +79,7 @@ const Gallery = () => {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: isMobile ? '30px' : '50px' }}>
           <h2 style={{ fontSize: isMobile ? '1.6rem' : '2.5rem', fontWeight: 'bold', color: '#00ff88', marginBottom: '10px', letterSpacing: '2px', fontFamily: 'Orbitron, monospace' }}>Gallery</h2>
-          <p style={{ fontSize: isMobile ? '0.8rem' : '1rem', color: 'rgba(255,255,255,0.8)', fontFamily: 'Orbitron, monospace' }}>Explore moments from Codeathon 2K25</p>
+          <p style={{ fontSize: isMobile ? '0.8rem' : '1rem', color: 'rgba(255,255,255,0.8)', fontFamily: 'Orbitron, monospace' }}>Explore our work across events & campaigns</p>
         </div>
 
         {/* Tab Navigation */}

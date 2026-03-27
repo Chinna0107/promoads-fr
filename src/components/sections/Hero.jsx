@@ -29,10 +29,12 @@ import instagramIcon from '../../assets/images/instagram.svg';
 //about logins and games
 import games from '../../assets/images/gameicon.png';
 import loginIcon from '../../assets/images/userbg.png'; 
+import whatsapp from '../../assets/images/whatsapp.svg';
 
 const SOCIAL_ICONS = [
   { key: 'linkedin', icon: linkedinIcon, url: 'https://www.linkedin.com/in/aits-tirupati-41142927b/', alt: 'LinkedIn' },
   { key: 'instagram', icon: instagramIcon, url: 'https://www.instagram.com/codeathon_aitt/', alt: 'Instagram' },
+  { key: 'whatsapp', icon: whatsapp, url: 'https://wa.me/918179860935', alt: 'WhatsApp' },
 ];
 
 const Hero = () => {
@@ -152,7 +154,7 @@ const Hero = () => {
         {/* Top-right section with logos - Desktop/Tablet only */}
         <div className="absolute top-4 right-5 md:top-9 md:right-6 hidden md:flex items-center gap-2 z-30">
           {/* Three logos with links */}
-          <a href="https://aits-tpt.edu.in/" target="_blank" rel="noopener noreferrer" title="AITT College">
+          {/* <a href="https://aits-tpt.edu.in/" target="_blank" rel="noopener noreferrer" title="AITT College">
             <img src={aittMascot} alt="AITT Logo" className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover hover:scale-110 transition-transform duration-200" />
           </a>
           <a href="https://aits-tpt.edu.in/electronics-and-communication-engineering-2/" target="_blank" rel="noopener noreferrer" title="ECE Department">
@@ -160,7 +162,7 @@ const Hero = () => {
           </a>
           <a href="https://www.iete.org/" target="_blank" rel="noopener noreferrer" title="IETE">
             <img src={ieteMascot} alt="IETE Logo" className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover hover:scale-110 transition-transform duration-200" />
-          </a>
+          </a> */}
         </div>
 
       
@@ -196,13 +198,13 @@ const Hero = () => {
           >
             <img src={loginIcon} alt="User Login" className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-hover:rotate-12" style={{ filter: 'brightness(0) invert(1)' }} />
           </Link>
-          <Link
+          {/* <Link
             to="#" // Assuming /games is the route for games page
             className="group w-10 h-10 md:w-12 md:h-12 border border-sky-500/30 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 transform hover:scale-110 hover:rotate-360 hover:bg-purple-600/80 hover:border-purple-600"
             title="Games"
           >
             <img src={games} alt="Games" className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-300 group-hover:rotate-12" style={{ filter: 'brightness(0) invert(1)' }} />
-          </Link>
+          </Link> */}
         </div>
         
         {/* Main Hero Content Container - Updated Structure */}
@@ -247,7 +249,7 @@ focus:ring-green-300
 focus:ring-opacity-75 
 border-2 
 border-green-400">
-                <span className="menu-btn-text">Register Now</span>
+                <span className="menu-btn-text">Explore Us</span>
               </button>
             </div>
           </div>

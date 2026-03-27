@@ -139,10 +139,10 @@ const Countdown = () => {
 
       {eventStatus === 'past' && (
         <div className="past-event">
-          <p>CODEATHON 2K25 WAS A GRAND SUCCESS!</p>
-          <p>Thank you to all 500+ participants!</p>
+          <p>PROMO ADS — MAKING EVERY EVENT UNFORGETTABLE!</p>
+          <p>Trusted by 500+ happy clients across India!</p>
           <div className="highlights-link">
-            <a href="/gallery">View Event Highlights →</a>
+            <a href="/gallery">View Our Work →</a>
           </div>
         </div>
       )}

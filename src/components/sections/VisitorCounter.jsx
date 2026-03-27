@@ -9,7 +9,7 @@ const VisitorCounter = () => {
   return (
     <div className="visitor-counter" style={{ padding: '10px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '10px', width: 'auto' }}>
       <div className="counter-icon" style={{ width: '40px', height: '40px' }}>
-        <img src={codeathonlogo} alt="Trishna Logo" style={{ width: '100%', height: '100%' }} />
+        <img src='https://pngfile.net/files/preview/960x960/11611694835fmpuaemaqrgpinnex23elweljupgmxfr1rrjzaa9xekwahpublhqfq4jbhrwkw7ggbps1is7dnacpyfyuguyc8adk6us7jlfikhb.png' alt="Trishna Logo" style={{ width: '100%', height: '100%' }} />
       </div>
       <div className="counter-content" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
         <div className="counter-value" style={{ fontSize: '1.5rem', color: '#3ecc94' }}>

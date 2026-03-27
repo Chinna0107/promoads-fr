@@ -20,7 +20,7 @@ const Contact = () => {
     
     const whatsappMessage = `Hello! I'm ${formData.name}\n\nEmail: ${formData.email}\nPhone: ${formData.phone || 'Not provided'}\nSubject: ${formData.subject}\n\nMessage: ${formData.message}`
     const encodedMessage = encodeURIComponent(whatsappMessage)
-    const whatsappUrl = `https://wa.me/918179860935?text=${encodedMessage}`
+    const whatsappUrl = `https://wa.me/919652945626?text=${encodedMessage}`
     
     setSubmitted(true)
     setTimeout(() => {
@@ -32,13 +32,13 @@ const Contact = () => {
   }
 
   const contacts = [
-    { name: 'Hemanth', phone: '8179860935', ws: 'https://wa.me/918179860935' },
-    { name: 'Jagadeesh', phone: '9177067341', ws: 'https://wa.me/919177067341' }
+    { name: 'PromoAds', phone: '9652945626', ws: 'https://wa.me/919652945626' },
   ]
 
   const allCards = [
     ...contacts,
-    { Icon: FaEnvelope, title: 'Email', text: 'codeathon2k26@gmail.com', link: 'mailto:codeathon2k26@gmail.com', isContact: false }
+    { Icon: FaEnvelope, title: 'Email', text: 'info@promoads.com', link: 'mailto:info@promoads.com', isContact: false },
+    { Icon: FaMapMarkerAlt, title: 'Address', text: '19-22-10, STV Nagar, Tirupathi', link: 'https://maps.google.com/?q=STV+Nagar+Tirupathi', isContact: false }
   ]
 
   return (
@@ -111,7 +111,7 @@ const Contact = () => {
             margin: '0 auto',
             lineHeight: '1.6'
           }}>
-            Have questions about Codeathon 2K26? We're here to help!
+            Have questions? We're here to help!
           </p>
         </div>
 

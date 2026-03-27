@@ -1,8 +1,8 @@
 // src/components/sections/Events.jsx
 // src/components/sections/Events.jsx
 import { useInView } from 'react-intersection-observer';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaCode, FaGamepad, FaChalkboardTeacher, FaMicrophone, FaLaptopCode, FaPalette, FaLightbulb, FaCube, FaUtensils, FaBrain, FaGithub, FaNetworkWired } from 'react-icons/fa';
 import tkLogo from '../../assets/images/tk26.png';
 import '../../styles/Home.css';
@@ -15,14 +15,13 @@ import Presentation from '../../assets/Rules/Pppt.pdf';
 import CracktheCode from '../../assets/Rules/Crack.pdf';
 
 const Events = () => {
-  const [ref, inView] = useInView({
-    threshold: 0.1,
-    triggerOnce: true
-  });
+  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [category, setCategory] = useState('');
+  const navigate = useNavigate();
   const categories = [
-    { key: 'development', label: 'Development Events', icon: <FaCode size={20} /> },
-    { key: 'competetive', label: 'Competitive Events', icon: <FaGamepad size={20} /> },
+    { key: 'Social', label: 'Social Events', icon: <FaMicrophone size={20} /> },
+    { key: 'Commercial', label: 'Commercial', icon: <FaLaptopCode size={20} /> },
+    { key: 'Promotions', label: 'Advertising', icon: <FaBrain size={20} /> },
   ];
 
   const sciFiBtnStyle = {
@@ -104,8 +103,9 @@ const Events = () => {
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', marginBottom: '2.5rem', marginTop: '5rem', padding: '0 2rem', paddingBottom: '120px', minHeight: '60vh', flexDirection: window.innerWidth < 768 ? 'column' : 'row' }}>
             {categories.map((cat) => {
               const categoryImages = {
-                development: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772685897/co2_gr2len.jpg',
-                competetive: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772685892/co1_o7auwb.jpg'
+                'Social': 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772685897/co2_gr2len.jpg',
+                'Commercial': 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772685892/co1_o7auwb.jpg',
+                'Promotions': 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647792/5_i0dcqp.png'
               };
               
               return (
@@ -229,35 +229,26 @@ const Events = () => {
                     </div>
                     <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', lineHeight: '1.4', marginBottom: '1rem', flex: 1 }}>{event.description}</p>
                     
-                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-                      {event.tags && event.tags.filter(tag => tag === 'Team' || tag === 'Individual').map((tag) => (
-                        <Link
-                          key={tag}
-                          to={tag === 'Team' ? `/team-registration?event=${event.eventId}&name=${encodeURIComponent(event.title)}` : `/individual-registration?event=${event.eventId}&name=${encodeURIComponent(event.title)}`}
-                          style={{
-                            background: 'linear-gradient(90deg, #00ff88 0%, #00cc66 100%)',
-                            color: '#fff',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '8px',
-                            fontSize: '0.85rem',
-                            fontWeight: 600,
-                            textDecoration: 'none',
-                            transition: 'all 0.3s ease',
-                            border: 'none'
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                            e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,255,136,0.4)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                            e.currentTarget.style.boxShadow = 'none';
-                          }}
-                        >
-                          Register as {tag}
-                        </Link>
-                      ))}
-                    </div>
+                    <button
+                      onClick={() => navigate(`/quotation?name=${encodeURIComponent(event.title)}`)}
+                      style={{
+                        background: 'linear-gradient(90deg, #00ff88 0%, #00cc66 100%)',
+                        color: '#000',
+                        padding: '0.6rem 1.2rem',
+                        borderRadius: '8px',
+                        fontSize: '0.9rem',
+                        fontWeight: 700,
+                        border: 'none',
+                        cursor: 'pointer',
+                        marginBottom: '1rem',
+                        transition: 'all 0.2s',
+                        width: '100%',
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.03)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,255,136,0.4)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none'; }}
+                    >
+                      Get Quote
+                    </button>
                     
                     <a 
                       href={event.pdf} 
@@ -296,18 +287,22 @@ const Events = () => {
 
 function filteredEvents(category) {
   const allEvents = {
-    
-    
-    development: [
-      // { id: '6', eventId: 'web-design', title: 'Web Development', description: 'Design and build creative websites in a time-bound challenge.', tags: ['Individual', 'UI/UX'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647792/5_i0dcqp.png', pdf: Webdev, icon: <FaPalette /> },
-      // { id: '7', eventId: 'codeathon-2k25', title: 'Crack the Code', description: 'Solve challenging coding problems and algorithms.', tags: ['Individual', 'Coding'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647786/4_p9eplw.png', pdf: CracktheCode, icon: <FaCode /> },
-      // { id: '9', eventId: 'hackathon', title: 'Hackathon', description: 'Solve real-world problems in a 24-hour coding marathon.', tags: ['Team', 'Coding'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647798/6_pbrkg5.png', pdf: Hackathon, icon: <FaLaptopCode /> },
+    Social: [
+      { id: '1', eventId: 'weddings', title: 'Weddings', description: 'Capture and celebrate the most special day with elegant event coverage.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647792/5_i0dcqp.png', pdf: Webdev, icon: <FaPalette /> },
+      { id: '2', eventId: 'anniversaries', title: 'Anniversaries', description: 'Celebrate milestones of love and togetherness with memorable events.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647786/4_p9eplw.png', pdf: CracktheCode, icon: <FaCode /> },
+      { id: '3', eventId: 'engagement-parties', title: 'Engagement Parties', description: 'Mark the beginning of a lifelong journey with a beautiful engagement event.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647798/6_pbrkg5.png', pdf: Hackathon, icon: <FaLaptopCode /> },
+      { id: '4', eventId: 'surprise-gifts', title: 'Surprise Gifts', description: 'Plan and execute the perfect surprise gift experience for your loved ones.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647786/4_p9eplw.png', pdf: CracktheCode, icon: <FaLightbulb /> },
+      { id: '5', eventId: 'birthday-celebrations', title: 'Birthday Celebrations', description: 'Make every birthday unforgettable with custom-themed celebrations.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647798/6_pbrkg5.png', pdf: Hackathon, icon: <FaGamepad /> },
+      { id: '6', eventId: 'personal-events', title: 'Personal Events', description: 'Tailored event management for any personal milestone or gathering.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647772/2_fdomhf.png', pdf: Presentation, icon: <FaMicrophone /> },
     ],
-    competetive: [
-      // { id: '2', eventId: 'circuitron', title: 'Circuitron', description: 'Design and build electronic circuits to solve challenges.', tags: ['Team', 'Electronics'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647765/1_vcbzgr.png', pdf: Circuitron, icon: <FaNetworkWired /> },
-      // { id: '3', eventId: 'presentation', title: 'Presentation', description: 'Present your ideas and innovations to a panel of judges.', tags: ['Team', 'Communication'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647772/2_fdomhf.png', pdf: Presentation, icon: <FaChalkboardTeacher /> },
-      // { id: '4', eventId: 'tech-quiz', title: 'Tech Quiz', description: 'Test your technical knowledge in this exciting quiz competition.', tags: ['Individual', 'Quiz'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647779/3_ci7xts.png', pdf: TechQuiz, icon: <FaBrain /> },
+    Commercial: [
+      { id: '7', eventId: 'political-events', title: 'Political Events', description: 'Professional management for rallies, campaigns, and political gatherings.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647765/1_vcbzgr.png', pdf: Circuitron, icon: <FaNetworkWired /> },
+      { id: '8', eventId: 'launching-events', title: 'Launching Events', description: 'Grand launch events for colleges, shops, restaurants, and more.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647772/2_fdomhf.png', pdf: Presentation, icon: <FaChalkboardTeacher /> },
+      { id: '9', eventId: 'corporate-events', title: 'Corporate Events', description: 'End-to-end management for corporate meets, conferences, and team events.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647779/3_ci7xts.png', pdf: TechQuiz, icon: <FaBrain /> },
     ],
+    Promotions: [
+      { id: '10', eventId: 'advertising-promoting', title: 'Advertising / Promoting', description: 'Strategic advertising and promotional campaigns to boost your brand visibility.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647792/5_i0dcqp.png', pdf: Webdev, icon: <FaPalette /> },
+    ]
   };
   return allEvents[category] || [];
 }

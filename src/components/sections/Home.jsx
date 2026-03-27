@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { QRCodeSVG } from 'qrcode.react';
 import UserMenu from '../user/UserMenu';
 import useHomeStats from '../../hooks/useHomeStats';
 
@@ -12,213 +11,100 @@ const Home = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
-    
-    if (!token || !userData) {
-      navigate('/login');
-      return;
-    }
-    
+    if (!token || !userData) { navigate('/login'); return; }
     setUser(JSON.parse(userData));
   }, [navigate]);
 
-  const handleProfileClick = () => navigate('/profile');
-  const handleProfileHover = (e) => {
-    e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)';
-  };
-  const handleProfileLeave = (e) => {
-    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-  };
-  const handleEventsClick = () => navigate('/events');
-  const handleButtonHover = (e) => {
-    e.target.style.background = 'rgba(255,255,255,0.3)';
-    e.target.style.borderColor = 'rgba(255,255,255,0.5)';
-  };
-  const handleButtonLeave = (e) => {
-    e.target.style.background = 'rgba(255,255,255,0.2)';
-    e.target.style.borderColor = 'rgba(255,255,255,0.3)';
-  };
-
   if (!user) return null;
 
-  const qrData = JSON.stringify({
-    id: user.id || user._id,
-    email: user.email,
-    name: user.name,
-    timestamp: Date.now()
-  });
+  const statCards = [
+    { label: 'Total Quotations', value: loading ? '...' : (stats.myRegistrations ?? 0), icon: '📋', color: '#00ff88' },
+    { label: 'Pending Review', value: loading ? '...' : (stats.pending ?? 0), icon: '⏳', color: '#ffd700' },
+    { label: 'Confirmed Events', value: loading ? '...' : (stats.confirmed ?? 0), icon: '✅', color: '#00eaff' },
+  ];
+
+  const quickActions = [
+    { label: 'Request a Quotation', icon: '📝', path: '/events', color: '#00ff88' },
+    { label: 'My Quotations', icon: '📋', path: '/my-events', color: '#00eaff' },
+    { label: 'My Profile', icon: '👤', path: '/profile', color: '#ffd700' },
+  ];
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <UserMenu />
-      <div style={{ marginLeft: '280px', flex: 1, padding: '40px', background: '#000', minHeight: '100vh', position: 'relative' }} className="dashboard-wrapper">
-        <style>
-          {`
-            @keyframes glow {
-              0%, 100% { filter: drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2); }
-              50% { filter: drop-shadow(0 0 12px rgba(255,255,0,1)) brightness(1.4); }
-            }
-            @media (max-width: 768px) {
-              .dashboard-wrapper { margin-left: 0 !important; padding: 20px !important; padding-top: 80px !important; }
-            }
-          `}
-        </style>
-        
-        <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 10 }}>
-          <img 
-            src='https://res.cloudinary.com/dbkhniuzt/image/upload/v1772559590/co1_mlx7ok.jpg'
-            alt="TK26 Logo" 
-            style={{ 
-              height: '35px', 
-              width: 'auto', 
-              objectFit: 'contain',
-              filter: 'drop-shadow(0 0 8px rgba(255,255,0,0.8)) brightness(1.2)',
-              animation: 'glow 2s ease-in-out infinite alternate'
-            }} 
-          />
+      <div className="dashboard-wrapper" style={{ marginLeft: 260, flex: 1, padding: '40px 36px', background: '#050f05', minHeight: '100vh', position: 'relative' }}>
+        <style>{`
+          @media (max-width: 768px) {
+            .dashboard-wrapper { margin-left: 0 !important; padding: 20px !important; padding-top: 80px !important; }
+          }
+          @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        `}</style>
+
+        {/* Header */}
+        <div style={{ marginBottom: 36 }}>
+          <h2 style={{ fontSize: '2rem', color: '#00ff88', fontFamily: 'Orbitron, monospace', margin: 0 }}>
+            Welcome back, {user.name?.split(' ')[0]} 👋
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.5)', marginTop: 6, fontSize: '1rem' }}>
+            Manage your event quotations and bookings from here.
+          </p>
         </div>
-        <h2 style={{ fontSize: '2.5rem', color: '#00eaff', marginBottom: '10px', fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>Welcome Back! 👋</h2>
-        <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1.1rem', marginBottom: '30px' }}>Hello {user?.name}, ready to explore amazing events?</p>
-        
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '15px', marginBottom: '30px' }}>
-          <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', padding: '15px', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.2)', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '8px', left: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 6px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', top: '8px', right: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 6px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '8px', left: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 6px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '8px', right: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 6px rgba(0,234,255,0.6)' }} />
-            <h3 style={{ fontSize: '1rem', color: '#fff', marginBottom: '12px', fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>🎯 Available Events</h3>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#00eaff', marginBottom: '5px' }}>{loading ? '...' : stats.totalEvents}</div>
-            <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)', margin: 0 }}>Total events to explore</p>
-          </div>
 
-          <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', padding: '15px', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.2)', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '8px', left: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #ff4444, #cc0000)', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,68,68,0.6)' }} />
-            <div style={{ position: 'absolute', top: '8px', right: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #ff4444, #cc0000)', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,68,68,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '8px', left: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #ff4444, #cc0000)', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,68,68,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '8px', right: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #ff4444, #cc0000)', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,68,68,0.6)' }} />
-            <h3 style={{ fontSize: '1rem', color: '#fff', marginBottom: '12px', fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>✅ My Registrations</h3>
-            <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#00eaff', marginBottom: '5px' }}>{loading ? '...' : stats.myRegistrations}</div>
-            <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)', margin: 0 }}>Events registered</p>
-          </div>
+        {/* Stat Cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 16, marginBottom: 36 }}>
+          {statCards.map((card, i) => (
+            <div key={i} style={{ background: 'rgba(0,255,136,0.04)', border: '1px solid rgba(0,255,136,0.15)', borderRadius: 14, padding: '20px 22px', animation: `fadeUp 0.4s ease ${i * 0.1}s both` }}>
+              <div style={{ fontSize: '1.8rem', marginBottom: 8 }}>{card.icon}</div>
+              <div style={{ fontSize: '2rem', fontWeight: 700, color: card.color, lineHeight: 1 }}>{card.value}</div>
+              <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)', marginTop: 6 }}>{card.label}</div>
+            </div>
+          ))}
+        </div>
 
-          <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', padding: '15px', borderRadius: '10px', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.2)', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '8px', left: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #ff4444, #cc0000)', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,68,68,0.6)' }} />
-            <div style={{ position: 'absolute', top: '8px', right: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #ff4444, #cc0000)', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,68,68,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '8px', left: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #ff4444, #cc0000)', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,68,68,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '8px', right: '8px', width: '8px', height: '8px', background: 'linear-gradient(45deg, #ff4444, #cc0000)', borderRadius: '50%', boxShadow: '0 0 6px rgba(255,68,68,0.6)' }} />
-            <h3 style={{ fontSize: '1rem', color: '#fff', marginBottom: '12px', fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>🏫 College</h3>
-            <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: '#00eaff', marginBottom: '5px' }}>{user.college ? '🎓' : '👤'}</div>
-            <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)', margin: 0 }}>{user.college || 'Participant'}</p>
+        {/* Quick Actions */}
+        <div style={{ marginBottom: 36 }}>
+          <h3 style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 16 }}>Quick Actions</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
+            {quickActions.map((action, i) => (
+              <button key={i} onClick={() => navigate(action.path)}
+                style={{ padding: '18px 20px', background: 'rgba(0,255,136,0.04)', border: `1px solid rgba(0,255,136,0.2)`, borderRadius: 12, color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 14, fontSize: '1rem', fontWeight: 600, transition: 'all 0.2s', textAlign: 'left' }}
+                onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(0,255,136,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(0,255,136,0.04)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+              >
+                <span style={{ fontSize: '1.5rem' }}>{action.icon}</span>
+                <span style={{ color: action.color }}>{action.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', padding: '25px', borderRadius: '20px', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.2)', cursor: 'pointer', transition: 'all 0.3s', color: '#fff', position: 'relative', overflow: 'hidden' }} onClick={handleProfileClick} onMouseOver={handleProfileHover} onMouseOut={handleProfileLeave}>
-            <div style={{ position: 'absolute', top: '12px', left: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', top: '12px', right: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '12px', left: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '12px', right: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-              <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', border: '3px solid rgba(255,255,255,0.3)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', fontWeight: 'bold', marginRight: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
-                {user.name?.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <h3 style={{ fontSize: '1.6rem', margin: '0 0 8px 0', fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>My Profile</h3>
-                <p style={{ margin: 0, fontSize: '1rem', opacity: 0.9 }}>Personal details & settings</p>
-              </div>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.1)', padding: '15px', borderRadius: '12px', marginBottom: '20px', backdropFilter: 'blur(10px)' }}>
-              <div style={{ display: 'grid', gap: '8px' }}>
-                <p style={{ margin: 0, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '1.2rem' }}>📧</span> {user.email}
-                </p>
-                <p style={{ margin: 0, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '1.2rem' }}>📱</span> {user.mobile || 'Not provided'}
-                </p>
-                {user.college && (
-                  <p style={{ margin: 0, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span style={{ fontSize: '1.2rem' }}>🏫</span> {user.college}
-                  </p>
-                )}
-                <p style={{ margin: 0, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '1.2rem' }}>🎯</span> {stats.myRegistrations} Events Registered
-                </p>
-              </div>
-            </div>
-            <button style={{ background: 'rgba(255,255,255,0.2)', color: '#fff', border: '2px solid rgba(255,255,255,0.3)', padding: '12px 24px', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer', width: '100%', fontSize: '1rem', transition: 'all 0.3s', backdropFilter: 'blur(10px)' }} onMouseOver={handleButtonHover} onMouseOut={handleButtonLeave}>
-              View Full Profile →
-            </button>
-          </div>
-
-          <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', padding: '25px', borderRadius: '20px', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '12px', left: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', top: '12px', right: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '12px', left: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '12px', right: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <div>
-                <h3 style={{ fontSize: '1.4rem', margin: '0 0 5px 0', fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>📅 My Events</h3>
-                <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.9 }}>{loading ? 'Loading...' : `${stats.myRegistrations} events registered`}</p>
-              </div>
-              <div style={{ background: 'rgba(255,255,255,0.2)', padding: '10px 15px', borderRadius: '12px', textAlign: 'center', backdropFilter: 'blur(10px)' }}>
-                <div style={{ fontSize: '1.8rem', fontWeight: 'bold', lineHeight: 1 }}>{loading ? '...' : stats.myRegistrations}</div>
-                <div style={{ fontSize: '0.7rem', opacity: 0.8 }}>TOTAL</div>
-              </div>
-            </div>
-            
-            {loading ? (
-              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '25px', borderRadius: '15px', backdropFilter: 'blur(10px)', textAlign: 'center' }}>
-                <div style={{ width: '40px', height: '40px', border: '3px solid rgba(255,255,255,0.3)', borderTop: '3px solid #fff', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 15px' }}></div>
-                <p style={{ margin: 0, fontSize: '0.9rem', opacity: 0.8 }}>Loading your events...</p>
-                <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
-              </div>
-            ) : registeredEvents.length > 0 ? (
-              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '15px', borderRadius: '15px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
-                  {registeredEvents.map((event, idx) => (
-                    <div key={idx} style={{ background: 'rgba(255,255,255,0.9)', padding: '12px', borderRadius: '10px', textAlign: 'center', color: '#2d3748', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', border: '2px solid #FFD700', position: 'relative' }}>
-                      <div style={{ position: 'absolute', top: '-8px', left: '8px', background: '#FFD700', color: '#2d3748', width: '24px', height: '24px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 'bold' }}>
-                        {idx + 1}
-                      </div>
-                      <h4 style={{ fontSize: '0.9rem', margin: '8px 0 5px 0', fontWeight: 'bold', lineHeight: 1.2 }}>
-                        {event.eventName || event.event_name || 'Event'}
-                      </h4>
-                      <div style={{ marginTop: '8px', fontSize: '0.7rem', color: '#718096' }}>
-                        ✓ Registered
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                {registeredEvents.length < stats.myRegistrations && (
-                  <div style={{ textAlign: 'center', marginTop: '15px', padding: '10px', background: 'rgba(255,255,255,0.1)', borderRadius: '8px', fontSize: '0.8rem' }}>
-                    +{stats.myRegistrations - registeredEvents.length} more events
+        {/* Recent Quotations */}
+        <div>
+          <h3 style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 16 }}>Recent Quotations</h3>
+          {loading ? (
+            <div style={{ color: 'rgba(255,255,255,0.4)', padding: 30, textAlign: 'center' }}>Loading...</div>
+          ) : registeredEvents.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {registeredEvents.slice(0, 5).map((event, idx) => (
+                <div key={idx} style={{ background: 'rgba(0,255,136,0.04)', border: '1px solid rgba(0,255,136,0.12)', borderRadius: 12, padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ color: '#00ff88', fontWeight: 600, fontSize: '1rem' }}>{event.eventName || event.event_name || 'Event'}</div>
+                    {event.registrationDate && <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem', marginTop: 3 }}>{new Date(event.registrationDate).toLocaleDateString()}</div>}
                   </div>
-                )}
-              </div>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '25px', background: 'rgba(255,255,255,0.1)', borderRadius: '15px', backdropFilter: 'blur(10px)' }}>
-                <div style={{ fontSize: '3rem', marginBottom: '15px', opacity: 0.7 }}>🎯</div>
-                <p style={{ margin: '0 0 15px 0', fontSize: '1rem', fontWeight: '500' }}>No events registered yet</p>
-                <p style={{ margin: '0 0 20px 0', fontSize: '0.85rem', opacity: 0.8 }}>Start your journey by registering for exciting events!</p>
-                <button onClick={handleEventsClick} style={{ padding: '12px 24px', background: 'rgba(255,255,255,0.2)', color: '#fff', border: '2px solid rgba(255,255,255,0.3)', borderRadius: '12px', fontSize: '0.9rem', fontWeight: 'bold', cursor: 'pointer', backdropFilter: 'blur(10px)', transition: 'all 0.3s' }} onMouseOver={handleButtonHover} onMouseOut={handleButtonLeave}>
-                  🚀 Browse Events
-                </button>
-              </div>
-            )}
-          </div>
-
-          <div style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)', padding: '25px', borderRadius: '20px', boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '12px', left: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', top: '12px', right: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '12px', left: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: '12px', right: '12px', width: '10px', height: '10px', background: 'linear-gradient(45deg, #00eaff, #667eea)', borderRadius: '50%', boxShadow: '0 0 8px rgba(0,234,255,0.6)' }} />
-            <h3 style={{ fontSize: '1.4rem', margin: '0 0 10px 0', fontWeight: 'bold', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>Your QR Code</h3>
-            <p style={{ margin: '0 0 20px 0', fontSize: '0.9rem', opacity: 0.9 }}>Show this for attendance</p>
-            <div style={{ background: 'rgba(255,255,255,0.1)', padding: '20px', borderRadius: '15px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.2)', marginBottom: '15px' }}>
-              <div style={{ background: '#fff', padding: '15px', borderRadius: '12px', marginBottom: '15px', display: 'inline-block', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
-                <QRCodeSVG value={qrData} size={140} level="H" includeMargin={true} />
-              </div>
+                  <span style={{ background: 'rgba(0,255,136,0.15)', color: '#00ff88', padding: '4px 12px', borderRadius: 20, fontSize: '0.8rem', fontWeight: 600 }}>Submitted</span>
+                </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <div style={{ background: 'rgba(0,255,136,0.04)', border: '1px solid rgba(0,255,136,0.12)', borderRadius: 14, padding: '40px 20px', textAlign: 'center' }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: 12 }}>📋</div>
+              <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: 20 }}>No quotations submitted yet.</p>
+              <button onClick={() => navigate('/events')}
+                style={{ padding: '12px 28px', background: 'linear-gradient(90deg, #00ff88, #00cc66)', color: '#000', border: 'none', borderRadius: 10, fontWeight: 700, cursor: 'pointer', fontSize: '0.95rem' }}>
+                Request a Quotation
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

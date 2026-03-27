@@ -3,7 +3,7 @@ import { useCache } from '../context/CacheContext';
 import config from '../config';
 
 const useHomeStats = () => {
-  const [stats, setStats] = useState({ totalEvents: 0, myRegistrations: 0 });
+  const [stats, setStats] = useState({ myRegistrations: 0, pending: 0, confirmed: 0 });
   const [registeredEvents, setRegisteredEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const { getCache, setCache } = useCache();
@@ -21,27 +21,23 @@ const useHomeStats = () => {
 
       try {
         const token = localStorage.getItem('token');
-        const userData = JSON.parse(localStorage.getItem('user') || '{}');
-        
-        const [eventsRes, regsRes] = await Promise.all([
-          fetch(`${config.BASE_URL}/api/events`),
-          fetch(`${config.BASE_URL}/api/participants/registrations?email=${userData.email}`, {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-        ]);
-        
-        const events = await eventsRes.json();
-        const regs = await regsRes.json();
-        const eventsData = regs.registrations || regs || [];
-        
+
+        const res = await fetch(`${config.BASE_URL}/api/users/quotation`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const data = await res.json();
+        const quotations = Array.isArray(data) ? data : data && !data.error ? [data] : [];
+
         const newStats = {
-          totalEvents: 6,
-          myRegistrations: eventsData.length || 0
+          myRegistrations: quotations.length,
+          pending: quotations.length,
+          confirmed: 0,
         };
-        
-        setCache(CACHE_KEY, { stats: newStats, events: eventsData.slice(0, 4) });
+
+        setCache(CACHE_KEY, { stats: newStats, events: quotations });
         setStats(newStats);
-        setRegisteredEvents(eventsData.slice(0, 4));
+        setRegisteredEvents(quotations);
       } catch (err) {
         console.error('Error fetching stats:', err);
       } finally {

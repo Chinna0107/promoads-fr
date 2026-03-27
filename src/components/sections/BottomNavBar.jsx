@@ -18,16 +18,17 @@ const MENU_ITEMS_BASE = [
   { label: 'Events', url: '/events', icon: faCalendarAlt, hoverColor: 'hover:text-violet-500' }, // Violet for events/celebration
   // { label: 'Sponsors', url: '/sponsors', icon: faCoins, hoverColor: 'hover:text-yellow-400' }, // Yellow/gold for money/sponsors
   // { label: 'Workshops', url: '/workshops', icon: faLaptop, hoverColor: 'hover:text-orange-500' }, // Orange for learning/workshops
- { label: 'Schedule', url: '/schedule', icon: faCalendarAlt, hoverColor: 'hover:text-rose-500' }, // Green for schedules/checkmarks
+//  { label: 'Schedule', url: '/schedule', icon: faCalendarAlt, hoverColor: 'hover:text-rose-500' }, // Green for schedules/checkmarks
 
 ];
 
 const MORE_SUB_ITEMS_FA = [
   //  { label: 'Contests', url: '/contests', icon: faTrophy, hoverColor: 'hover:text-amber-500' }, // Amber/gold for trophies/contests
-  { label: 'Team', url: '/team', icon: faUsers, hoverColor: 'hover:text-indigo-500' }, // Indigo for teamwork/collaboration
+  // { label: 'Team', url: '/team', icon: faUsers, hoverColor: 'hover:text-indigo-500' }, // Indigo for teamwork/collaboration
   // { label: 'Playground', url: '/playground', icon: faGamepad, hoverColor: 'hover:text-orange-500' }, // Red for gaming/energy
   // { label: 'Stay', url: '/stay', icon: faBed, hoverColor: 'hover:text-pink-500' }, // Rose for comfort/accommodation
- { label: 'Verify', url: '/verify', icon: faCheckCircle, hoverColor: 'hover:text-emerald-500' },{ label: 'Contact Us', url: '/contact', icon: faLaptop, hoverColor: 'hover:text-orange-500' }, // Orange for learning/workshops
+//  { label: 'Verify', url: '/verify', icon: faCheckCircle, hoverColor: 'hover:text-emerald-500' },
+{ label: 'Contact Us', url: '/contact', icon: faLaptop, hoverColor: 'hover:text-orange-500' }, // Orange for learning/workshops
   //gallery
   { label: 'Gallery', url: '/gallery', icon: faInfoCircle, hoverColor: 'hover:text-orange-500' }, // Orange for learning/workshops
 ];

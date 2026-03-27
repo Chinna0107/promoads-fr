@@ -1,91 +1,64 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// Image imports
-// import heroImage from '../../assets/images/Poster.png';
-import collegeImg from '../../assets/images/AITT MASCOT.jpg';
-import departmentImg from '../../assets/images/ECE MASCOT.jpg';
-import ieteImg from '../../assets/images/IETE MASCOT.jpg';
-import trishnaImg from '../../assets/images/TRISHNA MASCOT.jpg';
-import mascotImg from '../../assets/images/describe tk.jpg';
-
-// Styles
+import { FaPalette, FaNetworkWired, FaChalkboardTeacher, FaBrain, FaMicrophone } from 'react-icons/fa';
 import '../../styles/Home.css';
 import '../../styles/about.css';
+import BottomNavBar from './BottomNavBar';
 
-import BottomNavBar from './BottomNavBar'; // Import the new BottomNavBar component
-
-// Animated grid wave component for footer
-const FooterWaveGrid = () => {
-  const canvasRef = useRef(null);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = 220;
-    let t = 0;
-    const gridSize = 32;
-    const cols = Math.floor(width / gridSize) + 2;
-    const rows = Math.floor(height / gridSize) + 2;
-    function draw() {
-      ctx.clearRect(0, 0, width, height);
-      ctx.strokeStyle = '#00eaff';
-      ctx.lineWidth = 1.2;
-      for (let y = 0; y < rows; y++) {
-        ctx.beginPath();
-        for (let x = 0; x < cols; x++) {
-          const px = x * gridSize;
-          const py = y * gridSize + Math.sin((x + t) * 0.6 + y * 0.4) * 16 * Math.sin(t * 0.5 + y * 0.2);
-          if (x === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.stroke();
-      }
-      for (let x = 0; x < cols; x++) {
-        ctx.beginPath();
-        for (let y = 0; y < rows; y++) {
-          const px = x * gridSize + Math.cos((y + t) * 0.6 + x * 0.4) * 8 * Math.cos(t * 0.5 + x * 0.2);
-          const py = y * gridSize;
-          if (y === 0) ctx.moveTo(px, py);
-          else ctx.lineTo(px, py);
-        }
-        ctx.stroke();
-      }
-      t += 0.02;
-      requestAnimationFrame(draw);
-    }
-    draw();
-    const handleResize = () => {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = 220;
-    };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-  return (
-    <div className="footer-wave-grid" style={{ width: '100%', overflow: 'hidden', background: 'linear-gradient(180deg, #0a1428 60%, #001a2e 100%)' }}>
-      <canvas ref={canvasRef} style={{ width: '100%', height: 220, display: 'block' }} />
-    </div>
-  );
-};
+const sections = [
+  {
+    title: 'Social Events',
+    icon: <FaMicrophone />,
+    color: '#00ff88',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=700&q=80',
+    points: ['Weddings & Receptions', 'Anniversary Celebrations', 'Engagement Parties', 'Birthday Bashes', 'Surprise Gift Events', 'Personal Milestones'],
+    desc: 'We turn your most cherished personal moments into lifelong memories. From intimate gatherings to grand celebrations, our team handles every detail — décor, photography, coordination, and more — so you can simply enjoy the moment.',
+  },
+  {
+    title: 'Commercial Events',
+    icon: <FaChalkboardTeacher />,
+    color: '#00cfff',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=80',
+    points: ['Political Rallies & Campaigns', 'College & Shop Launches', 'Restaurant Openings', 'Corporate Conferences', 'Team Building Events', 'Award Ceremonies'],
+    desc: 'From high-energy political rallies to polished corporate conferences, we deliver end-to-end commercial event management. We ensure your brand or cause makes a powerful, lasting impression on every audience.',
+  },
+  {
+    title: 'Brand Promotions',
+    icon: <FaPalette />,
+    color: '#ff9900',
+    image: 'https://images.unsplash.com/photo-1493612276216-ee3925520721?w=700&q=80',
+    points: ['Social Media Campaigns', 'Outdoor Advertising', 'Product Shoots', 'Influencer Events', 'Hoarding & Banner Ads', 'Digital Promotions'],
+    desc: 'Amplify your brand with strategic promotional campaigns that cut through the noise. We craft visually stunning, audience-targeted promotions across digital and physical platforms to maximize your reach and impact.',
+  },
+  {
+    title: 'Pan-India Operations',
+    icon: <FaNetworkWired />,
+    color: '#ff4488',
+    image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=700&q=80',
+    points: ['Metro Cities Coverage', 'Tier-2 & Tier-3 Cities', 'On-ground Execution Teams', 'Local Vendor Network', 'Fast Deployment', '24/7 On-site Support'],
+    desc: 'Wherever your event is, we show up. With active operations across metros and tier-2/3 cities, our on-ground teams ensure seamless execution no matter the location. One call — and we\'re there.',
+  },
+  {
+    title: 'Cinematic Production',
+    icon: <FaBrain />,
+    color: '#aa44ff',
+    image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=700&q=80',
+    points: ['4K Video Coverage', 'Drone Aerial Shots', 'Professional Photography', 'Cinematic Editing', 'Reels & Highlight Videos', 'Same-day Delivery'],
+    desc: 'Every event deserves to look like a blockbuster. Our production team uses professional-grade cameras, drones, and cinematic editing to deliver stunning visuals that you\'ll want to watch over and over again.',
+  },
+];
 
 const AboutPage = () => {
-  const [darkMode] = useState(false);
-  const sectionRefs = useRef([]);
   const navigate = useNavigate();
+  const sectionRefs = useRef([]);
 
-  // Parallax and fade-in effect
   useEffect(() => {
     const handleScroll = () => {
       sectionRefs.current.forEach((ref) => {
-        if (ref) {
-          const rect = ref.getBoundingClientRect();
-          if (rect.top < window.innerHeight - 80) {
-            ref.classList.add('visible');
-          } else {
-            ref.classList.remove('visible');
-          }
-        }
+        if (!ref) return;
+        const rect = ref.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 80) ref.classList.add('visible');
+        else ref.classList.remove('visible');
       });
     };
     window.addEventListener('scroll', handleScroll);
@@ -94,137 +67,91 @@ const AboutPage = () => {
   }, []);
 
   return (
-    <div className={`home-page ${darkMode ? 'dark-mode' : ''}`}>  
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-text">
-            <h1 className="hero-title">
-              <span className="title-gradient">CODEATHON</span> 
-            </h1>
-            <p className="hero-subtitle">Annual Event </p>
-            <p className="hero-description">
-              CODEATHON 2K26, an exciting and vibrant two-day event, is going to host by Department of ECE at Annamacharya Institute of Technology & Sciences (AITS), Tirupati, on 24th and 25th March 2026. The event was meticulously organising to provide a platform for students to demonstrate their technical expertise, creativity, and leadership abilities in a competitive yet friendly environment. The event is going to attract a large number of participants from both the host institution and other colleges, with a total of 6 diverse competitions and spread on two days.
-            </p>
-            <div className="hero-buttons">
-              <button onClick={() => navigate('/events')} className="btn-primary btn-hover-glow">
-                <span>Register Now</span>
-                <div className="hover-effect"></div>
-              </button>
-              <button onClick={() => navigate('/events')} className="btn-secondary btn-hover-border">
-                <span>Explore Events</span>
-                <div className="hover-effect"></div>
-              </button>
-            </div>
-          </div>
-          <div className="hero-image-container">
-            <img src='https://res.cloudinary.com/dgyykbmt6/image/upload/v1772642480/co91_n7iepy.jpg' alt="TRISHNA Fest" className="hero-image" />
-            <div className="hero-image-overlay"></div>
-          </div>
+    <div className="home-page">
+
+      {/* Hero */}
+      <section style={{
+        minHeight: '60vh',
+        background: 'linear-gradient(135deg, #000 0%, #0a1428 60%, #001a2e 100%)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        textAlign: 'center', padding: '5rem 2rem 3rem', position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 60% 40%, rgba(0,255,136,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <span style={{ color: '#00ff88', fontFamily: 'Orbitron, monospace', fontSize: '0.9rem', letterSpacing: 4, textTransform: 'uppercase', marginBottom: '1rem' }}>Your Vision. Our Expertise.</span>
+        <h1 style={{ fontFamily: 'Orbitron, monospace', fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, color: '#fff', margin: '0 0 1.2rem', lineHeight: 1.1 }}>
+          We Make Every <span style={{ color: '#00ff88' }}>Event</span> Extraordinary
+        </h1>
+        <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', maxWidth: 600, marginBottom: '2rem', lineHeight: 1.7 }}>
+          From intimate celebrations to large-scale corporate events — we bring creativity, precision, and passion to every occasion.
+        </p>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <button onClick={() => navigate('/events')} style={{ background: 'linear-gradient(90deg, #00ff88, #00cc66)', color: '#000', fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: '1rem', padding: '0.8rem 2rem', borderRadius: 8, border: 'none', cursor: 'pointer', letterSpacing: 1 }}>
+            Get a Quote
+          </button>
+          <button onClick={() => navigate('/events')} style={{ background: 'transparent', color: '#00ff88', fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: '1rem', padding: '0.8rem 2rem', borderRadius: 8, border: '2px solid #00ff88', cursor: 'pointer', letterSpacing: 1 }}>
+            Explore Events
+          </button>
         </div>
       </section>
 
-      {/* About Sections - Each as a separate section, alternating layout, with floating image and normal text */}
-      <div className="about-gradient-bg">
-        <section
-          ref={el => sectionRefs.current[0] = el}
-          className="about-section"
-        >
-          <div className="about-section-img">
-            <img src={collegeImg} alt="About College" />
+      {/* Stats Bar */}
+      <div style={{ background: 'rgba(0,255,136,0.07)', borderTop: '1px solid rgba(0,255,136,0.2)', borderBottom: '1px solid rgba(0,255,136,0.2)', padding: '1.5rem 2rem', display: 'flex', justifyContent: 'center', gap: 'clamp(2rem, 6vw, 6rem)', flexWrap: 'wrap' }}>
+        {[['10+', 'Event Types'], ['500+', 'Events Managed'], ['100%', 'Client Satisfaction'], ['24/7', 'Support']].map(([num, label]) => (
+          <div key={label} style={{ textAlign: 'center' }}>
+            <div style={{ fontFamily: 'Orbitron, monospace', fontSize: '2rem', fontWeight: 900, color: '#00ff88' }}>{num}</div>
+            <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', letterSpacing: 1 }}>{label}</div>
           </div>
-          <div className="about-section-content">
-            <h2>About College</h2>
-            <p>
-              Annamacharya Institute of Technology & Sciences, Tirupati (AITS-T) was established in the year 2007, with a belief that education can influence and mould young minds. Within a decade, AITS, Tirupati received the prestigious stature of an institution with quality education.
-            </p>
-            <p>
-              It is a sprawling campus of more than 45 acres of land. Attributing to the historical importance, Annamacharya, the beloved disciple of Lord Venkateswara who always cherishes to find his berth at his lotus feet. Symbolically, the institute has been christened the name of Annamacharya and is established at the foot of Seven Hills the abode of lord Venkateswara.
-            </p>
-            <a href="https://aits-tpt.edu.in/" target="_blank" rel="noopener noreferrer" className="about-detail-vertical-btn">Learn More</a>
-          </div>
-        </section>
-        <section
-          ref={el => sectionRefs.current[1] = el}
-          className="about-section alt"
-        >
-          <div className="about-section-img">
-            <img src={departmentImg} alt="About Department" />
-          </div>
-          <div className="about-section-content">
-            <h2>About Department</h2>
-            <p>
-              Electronics and Communication Engineering department is aimed to set a path of success to “Budding Engineers”. The department further endeavors to impart high quality education and produce graduates with a sound knowledge on advanced research in ECE. It includes a team of well qualified, experienced and dedicated faculty members with industrial and research background.
-            </p>
-            <p>
-              It offers undergraduate, postgraduate programmes in various disciplines of Electronics and Communication Engineering. B.Tech ECE Programme was accredited by NBA first time under tier – II in 2016 and further extension of accreditation in granted up to June 2023.
-            </p>
-            <a href="https://aits-tpt.edu.in/electronics-and-communication-engineering-2/" target="_blank" rel="noopener noreferrer" className="about-detail-vertical-btn">Learn More</a>
-          </div>
-        </section>
-        <section
-          ref={el => sectionRefs.current[2] = el}
-          className="about-section"
-        >
-          <div className="about-section-img">
-            <img src={ieteImg} alt="About IETE" />
-          </div>
-          <div className="about-section-content">
-            <h2>About IETE</h2>
-            <p>
-              The Institution of Electronics and Telecommunication Engineers (IETE) is India’s leading recognised professional society devoted to the advancement of Science and Technology of Electronics, Telecommunication & IT. Founded in 1953.
-            </p>
-            <p>
-              The IETE is the National Apex Professional body of Electronics and Telecommunication, Computer Science and IT Professionals. It serves more than 1,25,000 members (including Corporate, Student and ISF members) through various 63 Centres, spread all over India and abroad.
-            </p>
-            <a href="https://www.iete.org/" target="_blank" rel="noopener noreferrer" className="about-detail-vertical-btn">Learn More</a>
-          </div>
-        </section>
-        <section
-          ref={el => sectionRefs.current[3] = el}
-          className="about-section alt"
-        >
-          <div className="about-section-img">
-            <img src='https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647608/2_fdev28.png' alt="About Trishna 2K26" />
-          </div>
-          <div className="about-section-content">
-            <h2>About CODEATHON 2K26</h2>
-            <p>
-              CODEATHON 2K26, an exciting and vibrant two-day event, is going to host by Department of ECE at Annamacharya Institute of Technology & Sciences (AITS), Tirupati, on 24<sup>th</sup> and 25<sup>th</sup> March 2026. The event was meticulously organising to provide a platform for students to demonstrate their technical expertise, creativity, and leadership abilities in a competitive yet friendly environment. The event is going to attract a large number of participants from both the host institution and other colleges, with a total of 6 diverse competitions and spread on two days.
-            </p>
-          </div>
-        </section>
-        <section
-          ref={el => sectionRefs.current[4] = el}
-          className="about-section"
-        >
-          <div className="about-section-img">
-            <img src= 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647614/3_ecchiu.png'alt="Mascot Design" />
-          </div>
-          <div className="about-section-content">
-            <h2>About Mascot Design</h2>
-            <p>
-              🌟 Meet "MEDHAVI" – The Hybrid Spirit of CODEATHON 2K26 🐘🦚🦉🐅🦜
-            </p>
-            <p>
-              CODEATHON, the official mascot of CODEATHON 2K26, is not just a character — it's a symbol of unity, intelligence, creativity, and energy. Crafted as a hybrid of five magnificent creatures, each element reflects the core values and visionary goals of the fest:
-            </p>
-            <ul style={{marginLeft: '1.2em'}}>
-              <li><b>🐘 Elephant</b> – The base of strength, wisdom, and legacy. It reflects the technical foundation, memory, and leadership needed in engineering and innovation.</li>
-              <li><b>🦚 Peacock Feathers & Colors</b> – Symbolizing beauty, elegance, and creativity, just like the dazzling ideas that light up tech minds.</li>
-              <li><b>🦉 Owl Eyes</b> – Sharp, alert, and wise. They represent deep insight, knowledge, and a hunger for learning — the hallmark of a tech enthusiast.</li>
-              <li><b>🐅 Tiger Stripes</b> – Denote courage, confidence, and power — vital for young engineers taking bold leaps into the future.</li>
-              <li><b>🦜 Parrot's Wings/Voice</b> – Reflecting vibrant communication, articulation, and a spirit that connects, shares, and collaborates.</li>
-            </ul>
-          </div>
-        </section>
+        ))}
       </div>
 
-      <div style={{ marginTop: '100px' }}>
-        
+      {/* Alternating Sections */}
+      <div className="about-gradient-bg" style={{ padding: '2rem 4vw' }}>
+        {sections.map((sec, i) => (
+          <section
+            key={sec.title}
+            ref={el => sectionRefs.current[i] = el}
+            className={`about-section${i % 2 !== 0 ? ' alt' : ''}`}
+            style={{ gap: '3rem', padding: '4rem 0' }}
+          >
+            {/* Image */}
+            <div className="about-section-img">
+              <img
+                src={sec.image}
+                alt={sec.title}
+                style={{ borderColor: sec.color + '66' }}
+              />
+            </div>
+
+            {/* Content */}
+            <div className="about-section-content">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '0.5rem' }}>
+                <span style={{ color: sec.color, fontSize: '1.6rem' }}>{sec.icon}</span>
+                <h2 style={{ color: sec.color, margin: 0 }}>{sec.title}</h2>
+              </div>
+              <p style={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, marginBottom: '1.2rem', fontSize: '1rem' }}>
+                {sec.desc}
+              </p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.5rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {sec.points.map(p => (
+                  <li key={p} style={{ background: sec.color + '18', border: `1px solid ${sec.color}44`, color: sec.color, borderRadius: 20, padding: '4px 14px', fontSize: '0.82rem', fontFamily: 'Orbitron, monospace', fontWeight: 600, letterSpacing: 0.5 }}>
+                    {p}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => navigate('/events')}
+                style={{ background: `linear-gradient(90deg, ${sec.color}, ${sec.color}aa)`, color: '#000', fontFamily: 'Orbitron, monospace', fontWeight: 700, fontSize: '0.9rem', padding: '0.7rem 1.8rem', borderRadius: 8, border: 'none', cursor: 'pointer', letterSpacing: 1 }}
+              >
+                Get Quote →
+              </button>
+            </div>
+          </section>
+        ))}
       </div>
-      
-      <BottomNavBar /> {/* Add the BottomNavBar here */}
+
+      <div style={{ marginTop: '60px' }}>
+        <BottomNavBar />
+      </div>
     </div>
   );
 };

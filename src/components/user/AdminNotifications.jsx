@@ -29,7 +29,7 @@ const AdminNotifications = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
-      setUsers(data.users || data);
+      setUsers(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching users:', err);
     }
