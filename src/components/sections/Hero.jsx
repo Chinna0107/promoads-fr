@@ -9,6 +9,7 @@ import Playground from '../games/Playground';
 import { TracingBeam } from '../TracingBeam'; // Import TracingBeam
 import Details from './Details'; // Import Details component
 
+
 // Image imports
 
 import namepic from '../../assets/images/co4.png';
