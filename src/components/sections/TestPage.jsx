@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import UserMenu from '../user/UserMenu';
-import tkLogo from '../../assets/images/tk26.png';
+import tkLogo from '../../assets/images/logo260.png';
 import useRegisteredEvents from '../../hooks/useRegisteredEvents';
 import '../../styles/Home.css';
 

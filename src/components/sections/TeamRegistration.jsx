@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import tkLogo from '../../assets/images/tk26.png';
+import tkLogo from '../../assets/images/logo260.png';
 import BottomNavBar from './BottomNavBar';
 import config from '../../config';
 

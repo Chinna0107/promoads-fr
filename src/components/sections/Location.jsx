@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaDirections } from 'react-icons/fa';
-import tkLogo from '../../assets/images/tk26.png';
+import tkLogo from '../../assets/images/logo260.png';
 import BottomNavBar from './BottomNavBar';
 
 function Location() {

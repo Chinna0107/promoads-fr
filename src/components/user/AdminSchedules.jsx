@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaCalendarAlt, FaClock } from 'react-icons/fa';
-import tkLogo from '../../assets/images/tk logo.png';
+import tkLogo from '../../assets/images/logo260.png';
 import { useNavigate } from 'react-router-dom';
 // import BottomNavBar from '../sections/BottomNavBar';
 

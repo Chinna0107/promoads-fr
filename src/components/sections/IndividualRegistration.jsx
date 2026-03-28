@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import config from '../../config';
-import tkLogo from '../../assets/images/tk26.png';
+import tkLogo from '../../assets/images/logo260.png';
 
 const BASE_URL = `${config.BASE_URL}/api/users/register-quotation`;
 

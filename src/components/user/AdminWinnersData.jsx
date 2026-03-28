@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import config from '../../config';
-import TrishnaLogo from '../../assets/images/tk26.png';
+import TrishnaLogo from '../../assets/images/logo260.png';
 
 const AdminWinnersData = () => {
   const navigate = useNavigate();

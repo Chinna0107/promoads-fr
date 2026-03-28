@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import tkLogo from '../../assets/images/tk26.png';
+import tkLogo from '../../assets/images/logo260.png';
 import BottomNavBar from './BottomNavBar';
 
 const schedule = {

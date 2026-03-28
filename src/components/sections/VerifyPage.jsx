@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useParticipantVerification from '../../hooks/useParticipantVerification';
-import tkLogo from '../../assets/images/tk26.png';
+import tkLogo from '../../assets/images/logo260.png';
 import '../../styles/verify.css';
 
 const VerifyPage = () => {

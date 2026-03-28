@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaCode, FaGamepad, FaChalkboardTeacher, FaMicrophone, FaLaptopCode, FaPalette, FaLightbulb, FaCube, FaUtensils, FaBrain, FaGithub, FaNetworkWired } from 'react-icons/fa';
-import tkLogo from '../../assets/images/tk26.png';
+import tkLogo from '../../assets/images/logo260.png';
 import '../../styles/Home.css';
 import BottomNavBar from './BottomNavBar';
 import TechQuiz from '../../assets/Rules/techquiz.pdf';

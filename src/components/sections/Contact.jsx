@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWhatsapp } from 'react-icons/fa'
-import tkLogo from '../../assets/images/tk26.png'
+import tkLogo from '../../assets/images/logo260.png'
 import BottomNavBar from './BottomNavBar'
 
 const Contact = () => {

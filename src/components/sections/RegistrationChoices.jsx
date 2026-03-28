@@ -1,5 +1,5 @@
 import { Link, useParams, Navigate } from 'react-router-dom';
-import tkLogo from '../../assets/images/tk logo.png';
+import tkLogo from '../../assets/images/logo260.png';
 import BottomNavBar from './BottomNavBar';
 
 const RegistrationChoices = () => {

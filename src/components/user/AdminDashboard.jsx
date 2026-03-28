@@ -11,7 +11,7 @@ import {
   faTachometerAlt, faCalendarAlt, faUsers, faUserTie, faBell, faCommentDots, faUserCircle, faSignOutAlt, faBars, faTimes, faClock, faTrophy
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import TrishnaLogo from '../../assets/images/tk26.png';
+import TrishnaLogo from '../../assets/images/logo260.png';
 import config from '../../config';
 
 // Simple Modal Component (can be moved to its own file if preferred)
