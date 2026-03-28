@@ -170,7 +170,7 @@ mb-4">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  title: "Cinematic Image / Video Quality",
+                  title: "Cinematic Image ",
                   description:
                     "We deliver stunning, high-definition cinematic visuals that make your event look like a blockbuster production.",
                   icon: FaFilm,

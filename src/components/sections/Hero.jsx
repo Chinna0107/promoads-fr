@@ -12,7 +12,7 @@ import Details from './Details'; // Import Details component
 
 // Image imports
 
-import namepic from '../../assets/images/co4.png';
+import namepic from '../../assets/images/logo260.png';
 
 // Mascot/Logo imports for top-right section
 import ieteMascot from '../../assets/images/ietelogo.png';
@@ -35,11 +35,78 @@ import whatsapp from '../../assets/images/whatsapp.svg';
 const SOCIAL_ICONS = [
   { key: 'linkedin', icon: linkedinIcon, url: 'https://www.linkedin.com/in/aits-tirupati-41142927b/', alt: 'LinkedIn' },
   { key: 'instagram', icon: instagramIcon, url: 'https://www.instagram.com/codeathon_aitt/', alt: 'Instagram' },
-  { key: 'whatsapp', icon: whatsapp, url: 'https://wa.me/918179860935', alt: 'WhatsApp' },
+  { key: 'whatsapp', icon: whatsapp, url: 'https://wa.me/919652945626', alt: 'WhatsApp' },
 ];
+
+const ThunderIntro = ({ onDone }) => {
+  useEffect(() => {
+    // Sequence: dark → flash1 → dark → flash2 → dark → flash3(long) → dark → reveal
+    const flashes = [
+      { delay: 200,  dur: 80  },
+      { delay: 500,  dur: 60  },
+      { delay: 700,  dur: 120 },
+      { delay: 950,  dur: 50  },
+      { delay: 1100, dur: 200 },
+    ];
+    const overlay = document.getElementById('thunder-overlay');
+    const bolt    = document.getElementById('thunder-bolt');
+    if (!overlay || !bolt) return;
+
+    // Show bolt on first flash
+    const boltTimer = setTimeout(() => {
+      bolt.style.opacity = '1';
+      setTimeout(() => { bolt.style.opacity = '0'; }, 300);
+    }, flashes[0].delay);
+
+    const timers = flashes.map(({ delay, dur }) =>
+      setTimeout(() => {
+        overlay.style.background = 'rgba(255,255,255,0.92)';
+        overlay.style.boxShadow  = '0 0 120px 60px rgba(180,220,255,0.7)';
+        setTimeout(() => {
+          overlay.style.background = 'rgba(0,0,0,0.98)';
+          overlay.style.boxShadow  = 'none';
+        }, dur);
+      }, delay)
+    );
+
+    // Final fade out
+    const doneTimer = setTimeout(() => {
+      overlay.style.transition = 'opacity 0.6s ease';
+      overlay.style.opacity = '0';
+      setTimeout(onDone, 650);
+    }, 1600);
+
+    return () => {
+      clearTimeout(boltTimer);
+      clearTimeout(doneTimer);
+      timers.forEach(clearTimeout);
+    };
+  }, [onDone]);
+
+  return (
+    <div id="thunder-overlay" style={{
+      position: 'fixed', inset: 0, zIndex: 9999,
+      background: 'rgba(0,0,0,0.98)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      transition: 'background 0.05s, box-shadow 0.05s',
+      pointerEvents: 'all',
+    }}>
+      {/* Thunder bolt SVG */}
+      <svg id="thunder-bolt" viewBox="0 0 80 160" style={{
+        width: 'clamp(60px, 10vw, 120px)',
+        opacity: 0,
+        transition: 'opacity 0.05s',
+        filter: 'drop-shadow(0 0 30px #a0d8ff) drop-shadow(0 0 60px #ffffff)',
+      }}>
+        <polygon points="50,0 20,90 45,90 30,160 70,60 44,60" fill="white" />
+      </svg>
+    </div>
+  );
+};
 
 const Hero = () => {
   const [iconActive, setIconActive] = useState({});
+  const [showIntro, setShowIntro] = useState(true);
   const navigate = useNavigate();
 
   const handleIconClick = (key, url) => {
@@ -133,6 +200,8 @@ const Hero = () => {
   }, [showMatter]);
 
   return (
+    <>
+      {showIntro && <ThunderIntro onDone={() => setShowIntro(false)} />}
     <TracingBeam className="w-full" beamPosition="250px">
       <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center text-white overflow-hidden">
         {showMatter && <MatterBackground />}
@@ -285,7 +354,7 @@ border-green-400">
 
       
     </TracingBeam>
-    
+    </>
   );
 };
 
