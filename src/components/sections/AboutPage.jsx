@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPalette, FaNetworkWired, FaChalkboardTeacher, FaBrain, FaMicrophone, FaStar, FaQuoteLeft } from 'react-icons/fa';
+import {
+  FaMicrophone, FaChalkboardTeacher, FaPalette,
+  FaNetworkWired, FaFilm, FaStar, FaQuoteLeft,
+  FaArrowRight, FaCheckCircle
+} from 'react-icons/fa';
 import '../../styles/about.css';
 import BottomNavBar from './BottomNavBar';
 
@@ -9,287 +13,250 @@ const sections = [
     title: 'Social Events',
     icon: <FaMicrophone />,
     color: '#00ff88',
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=85',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80',
     points: ['Weddings & Receptions', 'Anniversary Celebrations', 'Engagement Parties', 'Birthday Bashes', 'Surprise Gift Events', 'Personal Milestones'],
-    desc: 'We turn your most cherished personal moments into lifelong memories. From intimate gatherings to grand celebrations, our team handles every detail — décor, photography, coordination, and more.',
+    desc: 'We turn your most cherished personal moments into lifelong memories. From intimate gatherings to grand celebrations, our team handles every detail — décor, photography, coordination, and more — so you can simply enjoy the moment.',
   },
   {
     title: 'Commercial Events',
     icon: <FaChalkboardTeacher />,
     color: '#00cfff',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=85',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80',
     points: ['Political Rallies & Campaigns', 'College & Shop Launches', 'Restaurant Openings', 'Corporate Conferences', 'Team Building Events', 'Award Ceremonies'],
-    desc: 'From high-energy political rallies to polished corporate conferences, we deliver end-to-end commercial event management that makes your brand or cause leave a powerful, lasting impression.',
+    desc: 'From high-energy political rallies to polished corporate conferences, we deliver end-to-end commercial event management that makes your brand or cause leave a powerful, lasting impression on every audience.',
   },
   {
     title: 'Brand Promotions',
     icon: <FaPalette />,
     color: '#ff9900',
-    image: 'https://images.unsplash.com/photo-1493612276216-ee3925520721?w=800&q=85',
+    image: 'https://images.unsplash.com/photo-1493612276216-ee3925520721?w=800&q=80',
     points: ['Social Media Campaigns', 'Outdoor Advertising', 'Product Shoots', 'Influencer Events', 'Hoarding & Banner Ads', 'Digital Promotions'],
-    desc: 'Amplify your brand with strategic promotional campaigns that cut through the noise. We craft visually stunning, audience-targeted promotions across digital and physical platforms.',
+    desc: 'Amplify your brand with strategic promotional campaigns that cut through the noise. We craft visually stunning, audience-targeted promotions across digital and physical platforms to maximize your reach.',
   },
   {
     title: 'Pan-India Operations',
     icon: <FaNetworkWired />,
     color: '#ff4488',
-    image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=85',
+    image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=800&q=80',
     points: ['Metro Cities Coverage', 'Tier-2 & Tier-3 Cities', 'On-ground Execution Teams', 'Local Vendor Network', 'Fast Deployment', '24/7 On-site Support'],
-    desc: "Wherever your event is, we show up. With active operations across metros and tier-2/3 cities, our on-ground teams ensure seamless execution no matter the location.",
+    desc: "Wherever your event is, we show up. With active operations across metros and tier-2/3 cities, our on-ground teams ensure seamless execution no matter the location. One call — and we're there.",
   },
   {
     title: 'Cinematic Production',
-    icon: <FaBrain />,
+    icon: <FaFilm />,
     color: '#aa44ff',
-    image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=85',
+    image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80',
     points: ['4K Video Coverage', 'Drone Aerial Shots', 'Professional Photography', 'Cinematic Editing', 'Reels & Highlight Videos', 'Same-day Delivery'],
-    desc: "Every event deserves to look like a blockbuster. Our production team uses professional-grade cameras, drones, and cinematic editing to deliver stunning visuals.",
+    desc: "Every event deserves to look like a blockbuster. Our production team uses professional-grade cameras, drones, and cinematic editing to deliver stunning visuals you'll want to watch over and over again.",
   },
 ];
 
 const stats = [
-  { num: 500, suffix: '+', label: 'Events Managed' },
-  { num: 10, suffix: '+', label: 'Event Types' },
-  { num: 100, suffix: '%', label: 'Satisfaction' },
-  { num: 50, suffix: '+', label: 'Cities Covered' },
+  { num: '500+', label: 'Events Managed' },
+  { num: '10+',  label: 'Event Types' },
+  { num: '100%', label: 'Satisfaction' },
+  { num: '50+',  label: 'Cities Covered' },
 ];
 
 const steps = [
-  { step: '01', title: 'Consultation', desc: 'Share your vision and requirements with our expert team.', color: '#00ff88' },
-  { step: '02', title: 'Planning', desc: 'We craft a detailed plan tailored to your event and budget.', color: '#00cfff' },
-  { step: '03', title: 'Execution', desc: 'Our on-ground team brings every detail to life flawlessly.', color: '#ff9900' },
-  { step: '04', title: 'Delivery', desc: 'You enjoy the moment while we handle everything behind the scenes.', color: '#aa44ff' },
+  { n: '01', title: 'Consultation',  desc: 'Share your vision and requirements with our expert team.',              color: '#00ff88' },
+  { n: '02', title: 'Planning',      desc: 'We craft a detailed plan tailored to your event and budget.',           color: '#00cfff' },
+  { n: '03', title: 'Execution',     desc: 'Our on-ground team brings every detail to life flawlessly.',            color: '#ff9900' },
+  { n: '04', title: 'Delivery',      desc: 'You enjoy the moment while we handle everything behind the scenes.',    color: '#aa44ff' },
 ];
 
 const testimonials = [
-  { name: 'Priya Sharma', role: 'Wedding Client', text: 'PromoAds made our wedding absolutely magical. Every detail was perfect!', rating: 5 },
-  { name: 'Ravi Kumar', role: 'Corporate Client', text: 'Our product launch was a massive success. Professional team, flawless execution.', rating: 5 },
-  { name: 'Anita Reddy', role: 'Birthday Event', text: 'The surprise party they organized left everyone speechless. Highly recommend!', rating: 5 },
+  { name: 'Priya Sharma',  role: 'Wedding Client',    text: 'PromoAds made our wedding absolutely magical. Every detail was perfect and beyond our expectations!', rating: 5 },
+  { name: 'Ravi Kumar',    role: 'Corporate Client',  text: 'Our product launch was a massive success. Professional team, flawless execution from start to finish.', rating: 5 },
+  { name: 'Anita Reddy',   role: 'Birthday Event',    text: 'The surprise party they organized left everyone speechless. Highly recommend PromoAds to everyone!', rating: 5 },
 ];
-
-// Animated counter hook
-const useCounter = (target, duration = 1800, start = false) => {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let startTime = null;
-    const step = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      setCount(Math.floor(progress * target));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [start, target, duration]);
-  return count;
-};
-
-const StatItem = ({ num, suffix, label, animate }) => {
-  const count = useCounter(num, 1600, animate);
-  return (
-    <div className="about-stat-item">
-      <span className="about-stat-num">{animate ? count : 0}{suffix}</span>
-      <span className="about-stat-label">{label}</span>
-    </div>
-  );
-};
 
 const AboutPage = () => {
   const navigate = useNavigate();
-  const cardRefs = useRef([]);
-  const statsRef = useRef(null);
-  const stepsRef = useRef([]);
-  const [statsVisible, setStatsVisible] = useState(false);
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const cardRefs  = useRef([]);
+  const stepRefs  = useRef([]);
+  const statsRef  = useRef(null);
+  const [statsIn, setStatsIn]   = useState(false);
+  const [activeTesti, setActiveTesti] = useState(0);
 
   useEffect(() => {
-    // Cards observer
-    const cardObserver = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('about-card-visible'); }),
-      { threshold: 0.1 }
-    );
-    cardRefs.current.forEach(r => r && cardObserver.observe(r));
-
-    // Steps observer
-    const stepsObserver = new IntersectionObserver(
-      entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('step-visible'); }),
-      { threshold: 0.15 }
-    );
-    stepsRef.current.forEach(r => r && stepsObserver.observe(r));
-
-    // Stats observer
-    const statsObserver = new IntersectionObserver(
-      entries => { if (entries[0].isIntersecting) setStatsVisible(true); },
+    const io = (refs, cls, threshold = 0.12) => {
+      const obs = new IntersectionObserver(
+        entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add(cls); }),
+        { threshold }
+      );
+      refs.current.forEach(r => r && obs.observe(r));
+      return obs;
+    };
+    const c = io(cardRefs, 'pa-card-in');
+    const s = io(stepRefs, 'pa-step-in');
+    const statsObs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setStatsIn(true); },
       { threshold: 0.3 }
     );
-    if (statsRef.current) statsObserver.observe(statsRef.current);
-
-    return () => { cardObserver.disconnect(); stepsObserver.disconnect(); statsObserver.disconnect(); };
+    if (statsRef.current) statsObs.observe(statsRef.current);
+    return () => { c.disconnect(); s.disconnect(); statsObs.disconnect(); };
   }, []);
 
-  // Auto-rotate testimonials
   useEffect(() => {
-    const t = setInterval(() => setActiveTestimonial(p => (p + 1) % testimonials.length), 4000);
+    const t = setInterval(() => setActiveTesti(p => (p + 1) % testimonials.length), 4500);
     return () => clearInterval(t);
   }, []);
 
   return (
-    <div className="about-root">
+    <div className="pa-root">
 
-      {/* ── Hero ── */}
-      <section className="about-hero">
-        <div className="about-hero-particles">
-          {[...Array(20)].map((_, i) => (
-            <div key={i} className="about-particle" style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 4}s`,
-              animationDuration: `${3 + Math.random() * 4}s`,
-              width: `${2 + Math.random() * 3}px`,
-              height: `${2 + Math.random() * 3}px`,
-            }} />
-          ))}
-        </div>
-        <div className="about-hero-glow" />
-        <div className="about-hero-glow2" />
+      {/* ── HERO ── */}
+      <section className="pa-hero">
+        <div className="pa-hero-bg" />
+        <div className="pa-hero-glow" />
+        <div className="pa-hero-glow pa-hero-glow2" />
 
-        <span className="about-hero-tag">✦ Your Vision. Our Expertise. ✦</span>
-        <h1 className="about-hero-title">
+        <p className="pa-eyebrow">✦ Your Vision. Our Expertise. ✦</p>
+        <h1 className="pa-hero-h1">
           We Make Every<br />
-          <span className="about-hero-highlight">Event</span> Extraordinary
+          <span className="pa-green">Event</span> Extraordinary
         </h1>
-        <p className="about-hero-sub">
-          From intimate celebrations to large-scale corporate events — creativity, precision, and passion in every occasion.
+        <p className="pa-hero-sub">
+          From intimate celebrations to large-scale corporate events —<br className="pa-br" />
+          creativity, precision, and passion in every occasion.
         </p>
-        <div className="about-hero-btns">
-          <button onClick={() => navigate('/events')} className="about-btn-primary">
-            <span>Get a Quote</span>
-            <span className="about-btn-arrow">→</span>
+        <div className="pa-hero-btns">
+          <button className="pa-btn-solid" onClick={() => navigate('/events')}>
+            Get a Quote <FaArrowRight className="pa-btn-icon" />
           </button>
-          <button onClick={() => navigate('/contact')} className="about-btn-outline">Contact Us</button>
+          <button className="pa-btn-ghost" onClick={() => navigate('/contact')}>
+            Contact Us
+          </button>
         </div>
 
-        {/* Scroll hint */}
-        <div className="about-scroll-hint">
-          <div className="about-scroll-line" />
-          <span>Scroll</span>
+        <div className="pa-scroll-hint">
+          <div className="pa-scroll-bar" />
+          <span>SCROLL</span>
         </div>
       </section>
 
-      {/* ── Stats ── */}
-      <div className="about-stats" ref={statsRef}>
-        {stats.map(s => (
-          <StatItem key={s.label} {...s} animate={statsVisible} />
+      {/* ── STATS ── */}
+      <div className="pa-stats" ref={statsRef}>
+        {stats.map((s, i) => (
+          <div key={s.label} className={`pa-stat ${statsIn ? 'pa-stat-in' : ''}`} style={{ transitionDelay: `${i * 0.1}s` }}>
+            <span className="pa-stat-num">{s.num}</span>
+            <span className="pa-stat-label">{s.label}</span>
+          </div>
         ))}
       </div>
 
-      {/* ── Services Cards ── */}
-      <div className="about-section-label">
-        <span className="about-section-tag">What We Do</span>
-        <h2 className="about-section-heading">Our Services</h2>
+      {/* ── SERVICES ── */}
+      <div className="pa-section-head">
+        <span className="pa-eyebrow">What We Do</span>
+        <h2 className="pa-section-h2">Our Services</h2>
       </div>
 
-      <div className="about-cards-wrap">
+      <div className="pa-services">
         {sections.map((sec, i) => (
           <div
             key={sec.title}
             ref={el => cardRefs.current[i] = el}
-            className={`about-card ${i % 2 !== 0 ? 'about-card-alt' : ''}`}
-            style={{ '--accent': sec.color, '--delay': `${i * 0.1}s` }}
+            className={`pa-card ${i % 2 !== 0 ? 'pa-card-rev' : ''}`}
+            style={{ '--c': sec.color }}
           >
-            {/* Image */}
-            <div className="about-card-img-wrap">
-              <img src={sec.image} alt={sec.title} className="about-card-img" loading="lazy" />
-              <div className="about-card-img-overlay" style={{ background: `linear-gradient(135deg, ${sec.color}33 0%, transparent 60%)` }} />
-              <div className="about-card-img-badge" style={{ background: sec.color + '22', border: `1px solid ${sec.color}55`, color: sec.color }}>
-                {sec.icon}
+            {/* Image side */}
+            <div className="pa-card-img-side">
+              <img src={sec.image} alt={sec.title} className="pa-card-img" loading="lazy" />
+              <div className="pa-card-img-tint" />
+              <div className="pa-card-badge">
+                <span className="pa-card-badge-icon">{sec.icon}</span>
               </div>
+              <div className="pa-card-num">0{i + 1}</div>
             </div>
 
-            {/* Content */}
-            <div className="about-card-body">
-              <div className="about-card-header">
-                <h2 className="about-card-title" style={{ color: sec.color }}>{sec.title}</h2>
-                <div className="about-card-line" style={{ background: `linear-gradient(90deg, ${sec.color}, transparent)` }} />
-              </div>
-              <p className="about-card-desc">{sec.desc}</p>
-              <div className="about-card-tags">
+            {/* Content side */}
+            <div className="pa-card-content">
+              <div className="pa-card-accent-line" />
+              <h3 className="pa-card-title">{sec.title}</h3>
+              <p className="pa-card-desc">{sec.desc}</p>
+              <ul className="pa-card-list">
                 {sec.points.map(p => (
-                  <span key={p} className="about-card-tag" style={{ color: sec.color, background: sec.color + '12', border: `1px solid ${sec.color}30` }}>
-                    ✓ {p}
-                  </span>
+                  <li key={p} className="pa-card-li">
+                    <FaCheckCircle className="pa-check" />
+                    {p}
+                  </li>
                 ))}
-              </div>
-              <button
-                onClick={() => navigate('/events')}
-                className="about-card-btn"
-                style={{ background: `linear-gradient(90deg, ${sec.color}, ${sec.color}cc)`, boxShadow: `0 4px 20px ${sec.color}44` }}
-              >
-                Get Quote →
+              </ul>
+              <button className="pa-card-btn" onClick={() => navigate('/events')}>
+                Get Quote <FaArrowRight />
               </button>
             </div>
           </div>
         ))}
       </div>
 
-      {/* ── How It Works ── */}
-      <div className="about-section-label" style={{ marginTop: '3rem' }}>
-        <span className="about-section-tag">Our Process</span>
-        <h2 className="about-section-heading">How It Works</h2>
+      {/* ── HOW IT WORKS ── */}
+      <div className="pa-section-head">
+        <span className="pa-eyebrow">Our Process</span>
+        <h2 className="pa-section-h2">How It Works</h2>
       </div>
 
-      <div className="about-steps-wrap">
+      <div className="pa-steps">
         {steps.map((s, i) => (
-          <div key={s.step} ref={el => stepsRef.current[i] = el} className="about-step" style={{ '--scolor': s.color, '--sdelay': `${i * 0.15}s` }}>
-            <div className="about-step-num" style={{ color: s.color, border: `2px solid ${s.color}44`, background: s.color + '10' }}>{s.step}</div>
-            <div className="about-step-connector" />
-            <h3 className="about-step-title" style={{ color: s.color }}>{s.title}</h3>
-            <p className="about-step-desc">{s.desc}</p>
+          <div
+            key={s.n}
+            ref={el => stepRefs.current[i] = el}
+            className="pa-step"
+            style={{ '--sc': s.color, '--sd': `${i * 0.12}s` }}
+          >
+            <div className="pa-step-num">{s.n}</div>
+            <h4 className="pa-step-title">{s.title}</h4>
+            <p className="pa-step-desc">{s.desc}</p>
           </div>
         ))}
       </div>
 
-      {/* ── Testimonials ── */}
-      <div className="about-section-label" style={{ marginTop: '3rem' }}>
-        <span className="about-section-tag">Client Love</span>
-        <h2 className="about-section-heading">What They Say</h2>
+      {/* ── TESTIMONIALS ── */}
+      <div className="pa-section-head">
+        <span className="pa-eyebrow">Client Love</span>
+        <h2 className="pa-section-h2">What They Say</h2>
       </div>
 
-      <div className="about-testimonials">
-        <div className="about-testimonial-card">
-          <FaQuoteLeft className="about-quote-icon" />
-          <p className="about-testimonial-text">"{testimonials[activeTestimonial].text}"</p>
-          <div className="about-testimonial-stars">
-            {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => <FaStar key={i} />)}
+      <div className="pa-testi-wrap">
+        <div className="pa-testi-card">
+          <FaQuoteLeft className="pa-quote-icon" />
+          <p className="pa-testi-text">"{testimonials[activeTesti].text}"</p>
+          <div className="pa-testi-stars">
+            {[...Array(testimonials[activeTesti].rating)].map((_, i) => <FaStar key={i} />)}
           </div>
-          <div className="about-testimonial-author">
-            <div className="about-testimonial-avatar">{testimonials[activeTestimonial].name[0]}</div>
+          <div className="pa-testi-author">
+            <div className="pa-testi-avatar">{testimonials[activeTesti].name[0]}</div>
             <div>
-              <div className="about-testimonial-name">{testimonials[activeTestimonial].name}</div>
-              <div className="about-testimonial-role">{testimonials[activeTestimonial].role}</div>
+              <div className="pa-testi-name">{testimonials[activeTesti].name}</div>
+              <div className="pa-testi-role">{testimonials[activeTesti].role}</div>
             </div>
           </div>
         </div>
-        <div className="about-testimonial-dots">
+        <div className="pa-testi-dots">
           {testimonials.map((_, i) => (
-            <button key={i} className={`about-dot ${i === activeTestimonial ? 'active' : ''}`} onClick={() => setActiveTestimonial(i)} />
+            <button
+              key={i}
+              className={`pa-dot ${i === activeTesti ? 'pa-dot-active' : ''}`}
+              onClick={() => setActiveTesti(i)}
+            />
           ))}
         </div>
       </div>
 
-      {/* ── CTA Banner ── */}
-      <div className="about-cta-banner">
-        <div className="about-cta-glow" />
-        <span className="about-section-tag" style={{ marginBottom: '1rem', display: 'block' }}>Let's Connect</span>
-        <h2 className="about-cta-title">Ready to Plan Your Event?</h2>
-        <p className="about-cta-sub">Let's create something unforgettable together. One call — and we're there.</p>
-        <div className="about-hero-btns" style={{ justifyContent: 'center' }}>
-          <button onClick={() => navigate('/contact')} className="about-btn-primary">Contact Us Today</button>
-          <button onClick={() => navigate('/events')} className="about-btn-outline">View Services</button>
+      {/* ── CTA ── */}
+      <div className="pa-cta">
+        <div className="pa-cta-glow" />
+        <span className="pa-eyebrow" style={{ display: 'block', marginBottom: '0.8rem' }}>Let's Connect</span>
+        <h2 className="pa-cta-h2">Ready to Plan Your Event?</h2>
+        <p className="pa-cta-sub">Let's create something unforgettable together. One call — and we're there.</p>
+        <div className="pa-hero-btns" style={{ justifyContent: 'center' }}>
+          <button className="pa-btn-solid" onClick={() => navigate('/contact')}>Contact Us Today</button>
+          <button className="pa-btn-ghost" onClick={() => navigate('/events')}>View Services</button>
         </div>
       </div>
 
-      <div style={{ marginTop: 40 }}>
+      <div style={{ marginTop: 48 }}>
         <BottomNavBar />
       </div>
     </div>
