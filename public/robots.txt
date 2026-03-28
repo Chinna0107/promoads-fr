@@ -16,4 +16,4 @@ Allow: /
 Crawl-delay: 1
 
 # Sitemap
-Sitemap: https://www.codeathon2k26.live/sitemap.xml
+Sitemap: https://www.promoads.co.in/sitemap.xml
