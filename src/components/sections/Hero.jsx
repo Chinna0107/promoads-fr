@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from 'react'; // Removed useMemo
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/style.css';
 import MatterBackground from '../MatterBackground'; // Import MatterBackground
@@ -39,67 +39,239 @@ const SOCIAL_ICONS = [
 ];
 
 const ThunderIntro = ({ onDone }) => {
+  const [phase, setPhase] = useState('static');   // static | colorbar | thunder | poweron | done
+  const [flashOn, setFlashOn] = useState(false);
+  const [boltVisible, setBoltVisible] = useState(false);
+  const [scanline, setScanline] = useState(true);
+  const canvasRef = useRef(null);
+  const animRef = useRef(null);
+
+  // Draw CRT static noise on canvas
   useEffect(() => {
-    // Sequence: dark → flash1 → dark → flash2 → dark → flash3(long) → dark → reveal
-    const flashes = [
-      { delay: 200,  dur: 80  },
-      { delay: 500,  dur: 60  },
-      { delay: 700,  dur: 120 },
-      { delay: 950,  dur: 50  },
-      { delay: 1100, dur: 200 },
-    ];
-    const overlay = document.getElementById('thunder-overlay');
-    const bolt    = document.getElementById('thunder-bolt');
-    if (!overlay || !bolt) return;
-
-    // Show bolt on first flash
-    const boltTimer = setTimeout(() => {
-      bolt.style.opacity = '1';
-      setTimeout(() => { bolt.style.opacity = '0'; }, 300);
-    }, flashes[0].delay);
-
-    const timers = flashes.map(({ delay, dur }) =>
-      setTimeout(() => {
-        overlay.style.background = 'rgba(255,255,255,0.92)';
-        overlay.style.boxShadow  = '0 0 120px 60px rgba(180,220,255,0.7)';
-        setTimeout(() => {
-          overlay.style.background = 'rgba(0,0,0,0.98)';
-          overlay.style.boxShadow  = 'none';
-        }, dur);
-      }, delay)
-    );
-
-    // Final fade out
-    const doneTimer = setTimeout(() => {
-      overlay.style.transition = 'opacity 0.6s ease';
-      overlay.style.opacity = '0';
-      setTimeout(onDone, 650);
-    }, 1600);
-
-    return () => {
-      clearTimeout(boltTimer);
-      clearTimeout(doneTimer);
-      timers.forEach(clearTimeout);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let running = true;
+    const draw = () => {
+      if (!running) return;
+      const w = canvas.width = canvas.offsetWidth;
+      const h = canvas.height = canvas.offsetHeight;
+      const img = ctx.createImageData(w, h);
+      for (let i = 0; i < img.data.length; i += 4) {
+        const v = Math.random() * 180;
+        img.data[i] = v; img.data[i+1] = v; img.data[i+2] = v; img.data[i+3] = 200;
+      }
+      ctx.putImageData(img, 0, 0);
+      animRef.current = requestAnimationFrame(draw);
     };
+    if (phase === 'static' || phase === 'thunder') draw();
+    return () => { running = false; cancelAnimationFrame(animRef.current); };
+  }, [phase]);
+
+  // Master sequence
+  useEffect(() => {
+    const t = [];
+    // Phase 1: static (0–900ms)
+    t.push(setTimeout(() => setPhase('colorbar'), 900));
+    // Phase 2: color bars (900–1600ms)
+    t.push(setTimeout(() => setPhase('thunder'), 1600));
+    // Phase 3: thunder flashes
+    const flashes = [1700, 1850, 1950, 2080, 2180, 2300];
+    const durations = [70, 50, 100, 40, 130, 80];
+    flashes.forEach((delay, i) => {
+      t.push(setTimeout(() => {
+        setFlashOn(true);
+        if (i === 0) setBoltVisible(true);
+        setTimeout(() => {
+          setFlashOn(false);
+          if (i === 0) setTimeout(() => setBoltVisible(false), 200);
+        }, durations[i]);
+      }, delay));
+    });
+    // Phase 4: power-on (2500ms)
+    t.push(setTimeout(() => { setPhase('poweron'); setScanline(false); }, 2500));
+    // Phase 5: done (3100ms)
+    t.push(setTimeout(() => { setPhase('done'); onDone(); }, 3100));
+    return () => t.forEach(clearTimeout);
   }, [onDone]);
 
+  if (phase === 'done') return null;
+
+  const colorBars = ['#fff', '#ff0', '#0ff', '#0f0', '#f0f', '#f00', '#00f', '#000'];
+
   return (
-    <div id="thunder-overlay" style={{
+    <div style={{
       position: 'fixed', inset: 0, zIndex: 9999,
-      background: 'rgba(0,0,0,0.98)',
+      background: '#000',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      transition: 'background 0.05s, box-shadow 0.05s',
-      pointerEvents: 'all',
+      fontFamily: 'monospace',
+      opacity: phase === 'poweron' ? 0 : 1,
+      transition: phase === 'poweron' ? 'opacity 0.6s ease' : 'none',
     }}>
-      {/* Thunder bolt SVG */}
-      <svg id="thunder-bolt" viewBox="0 0 80 160" style={{
-        width: 'clamp(60px, 10vw, 120px)',
-        opacity: 0,
-        transition: 'opacity 0.05s',
-        filter: 'drop-shadow(0 0 30px #a0d8ff) drop-shadow(0 0 60px #ffffff)',
+
+      {/* Outer cinema dark frame */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.95) 100%)',
+        pointerEvents: 'none', zIndex: 10,
+      }} />
+
+      {/* Thunder flash overlay */}
+      {flashOn && (
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 20,
+          background: 'rgba(220,240,255,0.92)',
+          boxShadow: '0 0 200px 100px rgba(180,220,255,0.8) inset',
+        }} />
+      )}
+
+      {/* TV Frame */}
+      <div style={{
+        position: 'relative',
+        width: 'clamp(280px, 80vw, 900px)',
+        aspectRatio: '16/10',
+        background: '#111',
+        borderRadius: 'clamp(12px, 3vw, 28px)',
+        boxShadow: '0 0 0 clamp(8px,2vw,20px) #1a1a1a, 0 0 0 clamp(10px,2.5vw,26px) #0a0a0a, 0 30px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,136,0.08)',
+        overflow: 'hidden',
+        zIndex: 5,
       }}>
-        <polygon points="50,0 20,90 45,90 30,160 70,60 44,60" fill="white" />
-      </svg>
+
+        {/* Screen bezel inner shadow */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 30, pointerEvents: 'none',
+          boxShadow: 'inset 0 0 40px rgba(0,0,0,0.8)',
+          borderRadius: 'inherit',
+        }} />
+
+        {/* CRT curvature vignette */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 29, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%)',
+          borderRadius: 'inherit',
+        }} />
+
+        {/* Scanlines */}
+        {scanline && (
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 28, pointerEvents: 'none',
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.25) 2px, rgba(0,0,0,0.25) 4px)',
+            borderRadius: 'inherit',
+          }} />
+        )}
+
+        {/* ── STATIC phase ── */}
+        {phase === 'static' && (
+          <>
+            <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
+            <div style={{
+              position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center', zIndex: 15,
+            }}>
+              <div style={{ color: 'rgba(255,255,255,0.15)', fontSize: 'clamp(0.6rem,2vw,1rem)', letterSpacing: 6, fontFamily: 'monospace' }}>NO SIGNAL</div>
+              <div style={{ color: 'rgba(255,255,255,0.08)', fontSize: 'clamp(0.5rem,1.5vw,0.75rem)', marginTop: 8, letterSpacing: 3 }}>CH 01</div>
+            </div>
+          </>
+        )}
+
+        {/* ── COLOR BARS phase ── */}
+        {phase === 'colorbar' && (
+          <div style={{ display: 'flex', width: '100%', height: '100%' }}>
+            {colorBars.map((c, i) => (
+              <div key={i} style={{ flex: 1, background: c, height: '100%' }} />
+            ))}
+            <div style={{
+              position: 'absolute', bottom: '12%', left: 0, right: 0,
+              textAlign: 'center', color: '#000', fontWeight: 900,
+              fontSize: 'clamp(0.6rem,2vw,1rem)', letterSpacing: 4,
+              fontFamily: 'monospace', mixBlendMode: 'difference',
+              filter: 'invert(1)',
+            }}>PROMOADS BROADCAST</div>
+          </div>
+        )}
+
+        {/* ── THUNDER phase ── */}
+        {phase === 'thunder' && (
+          <>
+            <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block', opacity: 0.4 }} />
+            <div style={{
+              position: 'absolute', inset: 0, zIndex: 15,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexDirection: 'column', gap: 16,
+            }}>
+              {/* Lightning bolt */}
+              <svg
+                viewBox="0 0 80 160"
+                style={{
+                  width: 'clamp(40px,8vw,90px)',
+                  opacity: boltVisible ? 1 : 0.15,
+                  transition: 'opacity 0.04s',
+                  filter: boltVisible
+                    ? 'drop-shadow(0 0 20px #fff) drop-shadow(0 0 50px #a0d8ff) drop-shadow(0 0 80px #ffffff)'
+                    : 'drop-shadow(0 0 6px rgba(255,255,255,0.2))',
+                }}
+              >
+                <polygon points="50,0 20,90 45,90 30,160 70,60 44,60" fill="white" />
+              </svg>
+              <div style={{
+                color: boltVisible ? '#fff' : 'rgba(255,255,255,0.2)',
+                fontSize: 'clamp(0.55rem,1.8vw,0.85rem)',
+                letterSpacing: 6, fontFamily: 'monospace',
+                transition: 'color 0.04s',
+              }}>INCOMING SIGNAL</div>
+            </div>
+          </>
+        )}
+
+        {/* ── POWER ON phase ── */}
+        {phase === 'poweron' && (
+          <div style={{
+            width: '100%', height: '100%',
+            background: '#fff',
+            animation: 'tvPowerOn 0.5s ease-out forwards',
+          }} />
+        )}
+
+        {/* Reflection glare */}
+        <div style={{
+          position: 'absolute', top: '5%', left: '8%',
+          width: '35%', height: '18%',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 100%)',
+          borderRadius: '50%', pointerEvents: 'none', zIndex: 31,
+          transform: 'rotate(-15deg)',
+        }} />
+      </div>
+
+      {/* TV stand */}
+      <div style={{
+        position: 'absolute',
+        bottom: 'clamp(4%, 8vh, 12%)',
+        left: '50%', transform: 'translateX(-50%)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 4,
+      }}>
+        <div style={{ width: 'clamp(40px,8vw,80px)', height: 'clamp(10px,2vw,20px)', background: '#1a1a1a', borderRadius: '0 0 4px 4px' }} />
+        <div style={{ width: 'clamp(80px,16vw,160px)', height: 'clamp(6px,1.2vw,12px)', background: '#111', borderRadius: 4, marginTop: 2 }} />
+      </div>
+
+      {/* Bottom channel info */}
+      <div style={{
+        position: 'absolute', bottom: 'clamp(1.5rem,4vh,3rem)',
+        left: '50%', transform: 'translateX(-50%)',
+        color: 'rgba(255,255,255,0.18)', fontSize: 'clamp(0.5rem,1.5vw,0.7rem)',
+        letterSpacing: 4, fontFamily: 'monospace', zIndex: 6, whiteSpace: 'nowrap',
+      }}>
+        {phase === 'static' && '▶ SEARCHING CHANNEL...'}
+        {phase === 'colorbar' && '▶ SIGNAL FOUND — PROMOADS'}
+        {phase === 'thunder' && '⚡ CONNECTING...'}
+      </div>
+
+      <style>{`
+        @keyframes tvPowerOn {
+          0%   { clip-path: inset(50% 0 50% 0); opacity: 1; }
+          60%  { clip-path: inset(0% 0 0% 0); opacity: 1; }
+          100% { clip-path: inset(0% 0 0% 0); opacity: 0; }
+        }
+      `}</style>
     </div>
   );
 };
