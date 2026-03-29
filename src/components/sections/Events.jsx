@@ -96,9 +96,9 @@ const Events = () => {
             }
           `}
         </style>
-        { !category && (
+        {/* { !category && (
           <img src='https://res.cloudinary.com/dwmjz9csc/image/upload/v1772687256/imgtourl/fd552f0611c2449ca663aa95e1788309.png' alt="Theme Pic moscot" className="mascot-image" style={{ position: 'absolute', right: 18, bottom: 18, width: 320, height: 'auto', zIndex: 101, opacity: 0.95 }} />
-        )}
+        )} */}
         {!category && (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', marginBottom: '2.5rem', marginTop: '5rem', padding: '0 2rem', paddingBottom: '120px', minHeight: '60vh', flexDirection: window.innerWidth < 768 ? 'column' : 'row' }}>
             {categories.map((cat) => {
