@@ -20,7 +20,7 @@ const Contact = () => {
     
     const whatsappMessage = `Hello! I'm ${formData.name}\n\nEmail: ${formData.email}\nPhone: ${formData.phone || 'Not provided'}\nSubject: ${formData.subject}\n\nMessage: ${formData.message}`
     const encodedMessage = encodeURIComponent(whatsappMessage)
-    const whatsappUrl = `https://wa.me/919652945626?text=${encodedMessage}`
+    const whatsappUrl = `https://wa.me/917842971358?text=${encodedMessage}`
     
     setSubmitted(true)
     setTimeout(() => {
@@ -32,7 +32,7 @@ const Contact = () => {
   }
 
   const contacts = [
-    { name: 'PromoAds', phone: '9652945626', ws: 'https://wa.me/919652945626' },
+    { name: 'PromoAds', phone: '7842971358', ws: 'https://wa.me/917842971358' },
   ]
 
   const allCards = [
