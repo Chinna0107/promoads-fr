@@ -33,9 +33,9 @@ import loginIcon from '../../assets/images/userbg.png';
 import whatsapp from '../../assets/images/whatsapp.svg';
 
 const SOCIAL_ICONS = [
-  { key: 'linkedin', icon: linkedinIcon, url: 'https://www.linkedin.com/in/aits-tirupati-41142927b/', alt: 'LinkedIn' },
-  { key: 'instagram', icon: instagramIcon, url: 'https://www.instagram.com/codeathon_aitt/', alt: 'Instagram' },
-  { key: 'whatsapp', icon: whatsapp, url: 'https://wa.me/919652945626', alt: 'WhatsApp' },
+  { key: 'linkedin', icon: linkedinIcon, url: '#', alt: 'LinkedIn' },
+  { key: 'instagram', icon: instagramIcon, url: 'https://www.instagram.com/promoads.ind/', alt: 'Instagram' },
+  { key: 'whatsapp', icon: whatsapp, url: 'https://wa.me/917842971358', alt: 'WhatsApp' },
 ];
 
 const StarIntro = ({ onDone }) => {
