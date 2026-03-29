@@ -38,238 +38,182 @@ const SOCIAL_ICONS = [
   { key: 'whatsapp', icon: whatsapp, url: 'https://wa.me/919652945626', alt: 'WhatsApp' },
 ];
 
-const ThunderIntro = ({ onDone }) => {
-  const [phase, setPhase] = useState('static');   // static | colorbar | thunder | poweron | done
-  const [flashOn, setFlashOn] = useState(false);
-  const [boltVisible, setBoltVisible] = useState(false);
-  const [scanline, setScanline] = useState(true);
+const StarIntro = ({ onDone }) => {
+  const [phase, setPhase] = useState('stars');  // stars | zoom | flash | done
   const canvasRef = useRef(null);
   const animRef = useRef(null);
 
-  // Draw CRT static noise on canvas
+  // Starfield canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    let w = canvas.width = window.innerWidth;
+    let h = canvas.height = window.innerHeight;
+    const cx = w / 2, cy = h / 2;
+
+    const stars = Array.from({ length: 300 }, () => ({
+      x: (Math.random() - 0.5) * w,
+      y: (Math.random() - 0.5) * h,
+      z: Math.random() * w,
+      pz: 0,
+    }));
+
+    let speed = 2;
     let running = true;
+
     const draw = () => {
       if (!running) return;
-      const w = canvas.width = canvas.offsetWidth;
-      const h = canvas.height = canvas.offsetHeight;
-      const img = ctx.createImageData(w, h);
-      for (let i = 0; i < img.data.length; i += 4) {
-        const v = Math.random() * 180;
-        img.data[i] = v; img.data[i+1] = v; img.data[i+2] = v; img.data[i+3] = 200;
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.fillRect(0, 0, w, h);
+
+      speed = Math.min(speed + 0.08, 28);
+
+      for (const s of stars) {
+        s.pz = s.z;
+        s.z -= speed;
+        if (s.z <= 0) {
+          s.x = (Math.random() - 0.5) * w;
+          s.y = (Math.random() - 0.5) * h;
+          s.z = w;
+          s.pz = s.z;
+        }
+        const sx = (s.x / s.z) * w + cx;
+        const sy = (s.y / s.z) * h + cy;
+        const px = (s.x / s.pz) * w + cx;
+        const py = (s.y / s.pz) * h + cy;
+        const size = Math.max(0.3, (1 - s.z / w) * 3.5);
+        const bright = Math.floor((1 - s.z / w) * 255);
+        const g = Math.floor(bright * 0.9);
+
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(sx, sy);
+        ctx.strokeStyle = `rgba(${bright},${255},${g},${(1 - s.z / w) * 0.9})`;
+        ctx.lineWidth = size;
+        ctx.stroke();
       }
-      ctx.putImageData(img, 0, 0);
       animRef.current = requestAnimationFrame(draw);
     };
-    if (phase === 'static' || phase === 'thunder') draw();
+    draw();
     return () => { running = false; cancelAnimationFrame(animRef.current); };
-  }, [phase]);
+  }, []);
 
-  // Master sequence
+  // Phase sequence
   useEffect(() => {
     const t = [];
-    // Phase 1: static (0–900ms)
-    t.push(setTimeout(() => setPhase('colorbar'), 900));
-    // Phase 2: color bars (900–1600ms)
-    t.push(setTimeout(() => setPhase('thunder'), 1600));
-    // Phase 3: thunder flashes
-    const flashes = [1700, 1850, 1950, 2080, 2180, 2300];
-    const durations = [70, 50, 100, 40, 130, 80];
-    flashes.forEach((delay, i) => {
-      t.push(setTimeout(() => {
-        setFlashOn(true);
-        if (i === 0) setBoltVisible(true);
-        setTimeout(() => {
-          setFlashOn(false);
-          if (i === 0) setTimeout(() => setBoltVisible(false), 200);
-        }, durations[i]);
-      }, delay));
-    });
-    // Phase 4: power-on (2500ms)
-    t.push(setTimeout(() => { setPhase('poweron'); setScanline(false); }, 2500));
-    // Phase 5: done (3100ms)
-    t.push(setTimeout(() => { setPhase('done'); onDone(); }, 3100));
+    t.push(setTimeout(() => setPhase('zoom'), 2200));
+    t.push(setTimeout(() => setPhase('flash'), 2800));
+    t.push(setTimeout(() => setPhase('done'), 3400));
     return () => t.forEach(clearTimeout);
   }, [onDone]);
 
-  if (phase === 'done') return null;
+  useEffect(() => {
+    if (phase === 'done') { setTimeout(onDone, 10); }
+  }, [phase, onDone]);
 
-  const colorBars = ['#fff', '#ff0', '#0ff', '#0f0', '#f0f', '#f00', '#00f', '#000'];
+  if (phase === 'done') return null;
 
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 9999,
       background: '#000',
+      overflow: 'hidden',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'monospace',
-      opacity: phase === 'poweron' ? 0 : 1,
-      transition: phase === 'poweron' ? 'opacity 0.6s ease' : 'none',
+      opacity: phase === 'flash' ? 0 : 1,
+      transition: phase === 'flash' ? 'opacity 0.55s ease' : 'none',
     }}>
+      {/* Starfield */}
+      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} />
 
-      {/* Outer cinema dark frame */}
+      {/* Radial vignette */}
       <div style={{
-        position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.95) 100%)',
-        pointerEvents: 'none', zIndex: 10,
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.75) 100%)',
       }} />
 
-      {/* Thunder flash overlay */}
-      {flashOn && (
-        <div style={{
-          position: 'absolute', inset: 0, zIndex: 20,
-          background: 'rgba(220,240,255,0.92)',
-          boxShadow: '0 0 200px 100px rgba(180,220,255,0.8) inset',
-        }} />
-      )}
-
-      {/* TV Frame */}
+      {/* Center logo / text reveal */}
       <div style={{
-        position: 'relative',
-        width: 'clamp(280px, 80vw, 900px)',
-        aspectRatio: '16/10',
-        background: '#111',
-        borderRadius: 'clamp(12px, 3vw, 28px)',
-        boxShadow: '0 0 0 clamp(8px,2vw,20px) #1a1a1a, 0 0 0 clamp(10px,2.5vw,26px) #0a0a0a, 0 30px 80px rgba(0,0,0,0.9), 0 0 60px rgba(0,255,136,0.08)',
-        overflow: 'hidden',
-        zIndex: 5,
+        position: 'relative', zIndex: 10,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16,
+        animation: phase === 'zoom' ? 'starZoomIn 0.6s cubic-bezier(0.34,1.4,0.64,1) forwards' : 'starFadeIn 1.2s ease forwards',
       }}>
+        {/* Star burst */}
+        <svg viewBox="0 0 120 120" style={{
+          width: 'clamp(60px,12vw,110px)',
+          filter: 'drop-shadow(0 0 18px #00ff88) drop-shadow(0 0 40px #00ff8866)',
+          animation: 'starSpin 6s linear infinite',
+        }}>
+          {[0,30,60,90,120,150,180,210,240,270,300,330].map((angle, i) => (
+            <line key={i}
+              x1="60" y1="60"
+              x2={60 + Math.cos(angle * Math.PI / 180) * (i % 2 === 0 ? 52 : 32)}
+              y2={60 + Math.sin(angle * Math.PI / 180) * (i % 2 === 0 ? 52 : 32)}
+              stroke={i % 2 === 0 ? '#00ff88' : '#00cfff'}
+              strokeWidth={i % 2 === 0 ? 2.5 : 1.2}
+              strokeLinecap="round"
+            />
+          ))}
+          <circle cx="60" cy="60" r="10" fill="#00ff88" opacity="0.9" />
+          <circle cx="60" cy="60" r="6" fill="#fff" />
+        </svg>
 
-        {/* Screen bezel inner shadow */}
         <div style={{
-          position: 'absolute', inset: 0, zIndex: 30, pointerEvents: 'none',
-          boxShadow: 'inset 0 0 40px rgba(0,0,0,0.8)',
-          borderRadius: 'inherit',
-        }} />
+          fontFamily: 'Orbitron, monospace',
+          fontSize: 'clamp(1.2rem,4vw,2.2rem)',
+          fontWeight: 900,
+          color: '#fff',
+          letterSpacing: '0.3em',
+          textShadow: '0 0 30px rgba(0,255,136,0.6), 0 0 60px rgba(0,255,136,0.3)',
+          animation: 'starFadeIn 1.5s ease 0.4s both',
+        }}>PROMOADS</div>
 
-        {/* CRT curvature vignette */}
         <div style={{
-          position: 'absolute', inset: 0, zIndex: 29, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%)',
-          borderRadius: 'inherit',
-        }} />
+          color: 'rgba(0,255,136,0.7)',
+          fontFamily: 'Orbitron, monospace',
+          fontSize: 'clamp(0.5rem,1.5vw,0.75rem)',
+          letterSpacing: '0.5em',
+          textTransform: 'uppercase',
+          animation: 'starFadeIn 1.5s ease 0.8s both',
+        }}>Your Vision. Our Execution.</div>
 
-        {/* Scanlines */}
-        {scanline && (
-          <div style={{
-            position: 'absolute', inset: 0, zIndex: 28, pointerEvents: 'none',
-            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.25) 2px, rgba(0,0,0,0.25) 4px)',
-            borderRadius: 'inherit',
-          }} />
-        )}
-
-        {/* ── STATIC phase ── */}
-        {phase === 'static' && (
-          <>
-            <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
-            <div style={{
-              position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
-              alignItems: 'center', justifyContent: 'center', zIndex: 15,
-            }}>
-              <div style={{ color: 'rgba(255,255,255,0.15)', fontSize: 'clamp(0.6rem,2vw,1rem)', letterSpacing: 6, fontFamily: 'monospace' }}>NO SIGNAL</div>
-              <div style={{ color: 'rgba(255,255,255,0.08)', fontSize: 'clamp(0.5rem,1.5vw,0.75rem)', marginTop: 8, letterSpacing: 3 }}>CH 01</div>
-            </div>
-          </>
-        )}
-
-        {/* ── COLOR BARS phase ── */}
-        {phase === 'colorbar' && (
-          <div style={{ display: 'flex', width: '100%', height: '100%' }}>
-            {colorBars.map((c, i) => (
-              <div key={i} style={{ flex: 1, background: c, height: '100%' }} />
-            ))}
-            <div style={{
-              position: 'absolute', bottom: '12%', left: 0, right: 0,
-              textAlign: 'center', color: '#000', fontWeight: 900,
-              fontSize: 'clamp(0.6rem,2vw,1rem)', letterSpacing: 4,
-              fontFamily: 'monospace', mixBlendMode: 'difference',
-              filter: 'invert(1)',
-            }}>PROMOADS BROADCAST</div>
-          </div>
-        )}
-
-        {/* ── THUNDER phase ── */}
-        {phase === 'thunder' && (
-          <>
-            <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block', opacity: 0.4 }} />
-            <div style={{
-              position: 'absolute', inset: 0, zIndex: 15,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexDirection: 'column', gap: 16,
-            }}>
-              {/* Lightning bolt */}
-              <svg
-                viewBox="0 0 80 160"
-                style={{
-                  width: 'clamp(40px,8vw,90px)',
-                  opacity: boltVisible ? 1 : 0.15,
-                  transition: 'opacity 0.04s',
-                  filter: boltVisible
-                    ? 'drop-shadow(0 0 20px #fff) drop-shadow(0 0 50px #a0d8ff) drop-shadow(0 0 80px #ffffff)'
-                    : 'drop-shadow(0 0 6px rgba(255,255,255,0.2))',
-                }}
-              >
-                <polygon points="50,0 20,90 45,90 30,160 70,60 44,60" fill="white" />
-              </svg>
-              <div style={{
-                color: boltVisible ? '#fff' : 'rgba(255,255,255,0.2)',
-                fontSize: 'clamp(0.55rem,1.8vw,0.85rem)',
-                letterSpacing: 6, fontFamily: 'monospace',
-                transition: 'color 0.04s',
-              }}>INCOMING SIGNAL</div>
-            </div>
-          </>
-        )}
-
-        {/* ── POWER ON phase ── */}
-        {phase === 'poweron' && (
-          <div style={{
-            width: '100%', height: '100%',
-            background: '#fff',
-            animation: 'tvPowerOn 0.5s ease-out forwards',
-          }} />
-        )}
-
-        {/* Reflection glare */}
-        <div style={{
-          position: 'absolute', top: '5%', left: '8%',
-          width: '35%', height: '18%',
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 100%)',
-          borderRadius: '50%', pointerEvents: 'none', zIndex: 31,
-          transform: 'rotate(-15deg)',
-        }} />
+        {/* Horizontal lines */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, animation: 'starFadeIn 1.5s ease 1s both' }}>
+          <div style={{ width: 'clamp(40px,8vw,80px)', height: 1, background: 'linear-gradient(90deg, transparent, #00ff88)' }} />
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#00ff88', boxShadow: '0 0 10px #00ff88' }} />
+          <div style={{ width: 'clamp(40px,8vw,80px)', height: 1, background: 'linear-gradient(90deg, #00ff88, transparent)' }} />
+        </div>
       </div>
 
-      {/* TV stand */}
-      <div style={{
-        position: 'absolute',
-        bottom: 'clamp(4%, 8vh, 12%)',
-        left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 4,
-      }}>
-        <div style={{ width: 'clamp(40px,8vw,80px)', height: 'clamp(10px,2vw,20px)', background: '#1a1a1a', borderRadius: '0 0 4px 4px' }} />
-        <div style={{ width: 'clamp(80px,16vw,160px)', height: 'clamp(6px,1.2vw,12px)', background: '#111', borderRadius: 4, marginTop: 2 }} />
-      </div>
-
-      {/* Bottom channel info */}
-      <div style={{
-        position: 'absolute', bottom: 'clamp(1.5rem,4vh,3rem)',
-        left: '50%', transform: 'translateX(-50%)',
-        color: 'rgba(255,255,255,0.18)', fontSize: 'clamp(0.5rem,1.5vw,0.7rem)',
-        letterSpacing: 4, fontFamily: 'monospace', zIndex: 6, whiteSpace: 'nowrap',
-      }}>
-        {phase === 'static' && '▶ SEARCHING CHANNEL...'}
-        {phase === 'colorbar' && '▶ SIGNAL FOUND — PROMOADS'}
-        {phase === 'thunder' && '⚡ CONNECTING...'}
-      </div>
+      {/* Corner decorations */}
+      {[['0','0','right','bottom'],['0','auto','right','top'],['auto','0','left','bottom'],['auto','auto','left','top']].map(([b,t,r,l], i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          bottom: b !== 'auto' ? 'clamp(16px,4vw,40px)' : 'auto',
+          top: t !== 'auto' ? 'clamp(16px,4vw,40px)' : 'auto',
+          right: r !== 'auto' ? 'clamp(16px,4vw,40px)' : 'auto',
+          left: l !== 'auto' ? 'clamp(16px,4vw,40px)' : 'auto',
+          width: 'clamp(20px,4vw,40px)', height: 'clamp(20px,4vw,40px)',
+          borderTop: (t !== 'auto') ? '2px solid rgba(0,255,136,0.4)' : 'none',
+          borderBottom: (b !== 'auto') ? '2px solid rgba(0,255,136,0.4)' : 'none',
+          borderLeft: (l !== 'auto') ? '2px solid rgba(0,255,136,0.4)' : 'none',
+          borderRight: (r !== 'auto') ? '2px solid rgba(0,255,136,0.4)' : 'none',
+          animation: `starFadeIn 1s ease ${0.3 + i * 0.1}s both`,
+        }} />
+      ))}
 
       <style>{`
-        @keyframes tvPowerOn {
-          0%   { clip-path: inset(50% 0 50% 0); opacity: 1; }
-          60%  { clip-path: inset(0% 0 0% 0); opacity: 1; }
-          100% { clip-path: inset(0% 0 0% 0); opacity: 0; }
+        @keyframes starFadeIn {
+          from { opacity: 0; transform: scale(0.92); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes starZoomIn {
+          from { transform: scale(1); }
+          to   { transform: scale(4); opacity: 0; }
+        }
+        @keyframes starSpin {
+          from { transform: rotate(0deg); }
+          to   { transform: rotate(360deg); }
         }
       `}</style>
     </div>
@@ -373,7 +317,7 @@ const Hero = () => {
 
   return (
     <>
-      {showIntro && <ThunderIntro onDone={() => setShowIntro(false)} />}
+      {showIntro && <StarIntro onDone={() => setShowIntro(false)} />}
     <TracingBeam className="w-full" beamPosition="250px">
       <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center text-white overflow-hidden">
         {showMatter && <MatterBackground />}
