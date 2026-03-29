@@ -393,52 +393,117 @@ const Hero = () => {
           </Link> */}
         </div>
         
-        {/* Main Hero Content Container - Updated Structure */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-center p-4 md:p-8 w-full">
-        
-          {/* Section 2: Logo and Buttons */}
-          <div className="hero-logo-and-buttons flex flex-col items-center w-full">
-            {/* Logo - Centered, further reduced bottom margin to bring buttons closer */}
-            <div className="name-logo flex justify-center">
-              <span className="mobile-only">
-                <img src={namepic} alt="Trishna 2K25 Logo" className="h-auto max-w-[320px] sm:max-w-[320px] md:max-w-[400px] lg:max-w-[450px]" style={{ marginTop: '16rem' }} />
-              </span>
+        {/* Main Hero Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center w-full" style={{ minHeight: '100vh', paddingTop: '80px' }}>
 
-              
-              <span className="hide-on-mobile">
-                <img src={namepic} alt="Trishna 2K25 Logo" className="h-auto max-w-[1200px] sm:max-w-[1200px] md:max-w-[1200px] lg:max-w-[900px]" style={{ marginTop: '11rem' }} />
-              </span>
-              
+          {/* Logo with green edge lighting */}
+          <div style={{
+            position: 'relative',
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '0 16px',
+            marginTop: '60px',
+          }}>
+            {/* Ambient glow behind logo */}
+            <div style={{
+              position: 'absolute',
+              width: '70%', height: '60%',
+              background: 'radial-gradient(ellipse at center, rgba(0,255,136,0.18) 0%, rgba(0,207,255,0.06) 50%, transparent 75%)',
+              filter: 'blur(40px)',
+              pointerEvents: 'none',
+              animation: 'logoBgPulse 3s ease-in-out infinite alternate',
+            }} />
 
+            {/* Green edge border frame */}
+            <div style={{ position: 'absolute', inset: '0 8px', pointerEvents: 'none', zIndex: 2 }}>
+              <div style={{ position: 'absolute', top: 0, left: '10%', right: '10%', height: '2px', background: 'linear-gradient(90deg, transparent, #00ff88, #00cfff, #00ff88, transparent)', animation: 'edgeScan 2.5s ease-in-out infinite alternate', boxShadow: '0 0 12px #00ff88, 0 0 24px rgba(0,255,136,0.4)' }} />
+              <div style={{ position: 'absolute', bottom: 0, left: '10%', right: '10%', height: '2px', background: 'linear-gradient(90deg, transparent, #00ff88, #00cfff, #00ff88, transparent)', animation: 'edgeScan 2.5s ease-in-out infinite alternate-reverse', boxShadow: '0 0 12px #00ff88, 0 0 24px rgba(0,255,136,0.4)' }} />
+              <div style={{ position: 'absolute', left: 0, top: '15%', bottom: '15%', width: '2px', background: 'linear-gradient(180deg, transparent, #00ff88, #00cfff, #00ff88, transparent)', animation: 'edgeScanV 3s ease-in-out infinite alternate', boxShadow: '0 0 12px #00ff88' }} />
+              <div style={{ position: 'absolute', right: 0, top: '15%', bottom: '15%', width: '2px', background: 'linear-gradient(180deg, transparent, #00ff88, #00cfff, #00ff88, transparent)', animation: 'edgeScanV 3s ease-in-out infinite alternate-reverse', boxShadow: '0 0 12px #00ff88' }} />
+              {[['top','left'],['top','right'],['bottom','left'],['bottom','right']].map(([v,h]) => (
+                <div key={v+h} style={{
+                  position: 'absolute', [v]: -3, [h]: -3,
+                  width: 8, height: 8, borderRadius: '50%',
+                  background: '#00ff88',
+                  boxShadow: '0 0 8px #00ff88, 0 0 16px rgba(0,255,136,0.6)',
+                  animation: 'cornerPulse 2s ease-in-out infinite alternate',
+                }} />
+              ))}
             </div>
 
-            {/* Buttons - In a row, centered below logo */}
-            <div className="hero-buttons flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 -mt-8" style={{ marginTop: '-2rem' }}>
-              <button onClick={() => navigate('/events')} className="px-6 py-2.5 
-px-6 py-2.5 
-bg-green-400 
-text-black 
-text-base 
-font-sci-fi 
-font-medium 
-rounded-full 
-shadow-xl 
-transform 
-hover:scale-105 
-hover:bg-transparent 
-hover:text-green-400 
-transition-all 
-duration-300 
-focus:outline-none 
-focus:ring-2 
-focus:ring-green-300 
-focus:ring-opacity-75 
-border-2 
-border-green-400">
-                <span className="menu-btn-text">Explore Us</span>
-              </button>
-            </div>
+            {/* Mobile logo */}
+            <img src={namepic} alt="PromoAds" className="mobile-only" style={{
+              width: '100%', maxWidth: '340px', height: 'auto',
+              objectFit: 'contain', position: 'relative', zIndex: 3,
+              filter: 'drop-shadow(0 0 24px rgba(0,255,136,0.5)) drop-shadow(0 0 8px rgba(0,207,255,0.3))',
+              animation: 'logoPulse 3s ease-in-out infinite alternate',
+            }} />
+            {/* Desktop logo */}
+            <img src={namepic} alt="PromoAds" className="hide-on-mobile" style={{
+              width: '88vw', maxWidth: '1380px', height: 'auto',
+              objectFit: 'fill', position: 'relative', zIndex: 3,
+              filter: 'drop-shadow(0 0 40px rgba(0,255,136,0.5)) drop-shadow(0 0 16px rgba(0,207,255,0.25))',
+              animation: 'logoPulse 3s ease-in-out infinite alternate',
+            }} />
           </div>
+
+          {/* Tagline */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 20 }}>
+            <div style={{ width: 'clamp(30px,5vw,60px)', height: 1, background: 'linear-gradient(90deg, transparent, #00ff88)' }} />
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 'clamp(0.65rem,1.8vw,0.9rem)', letterSpacing: '0.3em', textTransform: 'uppercase', fontFamily: 'Orbitron, monospace', margin: 0 }}>
+              Your Vision. Our Execution.
+            </p>
+            <div style={{ width: 'clamp(30px,5vw,60px)', height: 1, background: 'linear-gradient(90deg, #00ff88, transparent)' }} />
+          </div>
+
+          {/* CTA Buttons */}
+          <div style={{ display: 'flex', gap: 14, marginTop: 32, flexWrap: 'wrap', justifyContent: 'center', padding: '0 16px' }}>
+            <button onClick={() => navigate('/events')}
+              style={{ padding: 'clamp(10px,2vw,14px) clamp(24px,4vw,40px)', background: 'linear-gradient(90deg, #00ff88, #00cc66)', color: '#000', fontWeight: 700, fontSize: 'clamp(0.78rem,1.8vw,1rem)', border: 'none', borderRadius: '50px', cursor: 'pointer', fontFamily: 'Orbitron, monospace', letterSpacing: '1px', boxShadow: '0 0 28px rgba(0,255,136,0.5), 0 4px 16px rgba(0,0,0,0.3)', transition: 'all 0.3s ease' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 0 44px rgba(0,255,136,0.7), 0 8px 24px rgba(0,0,0,0.4)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 0 28px rgba(0,255,136,0.5), 0 4px 16px rgba(0,0,0,0.3)'; }}
+            >Get a Quote ✦</button>
+            <button onClick={() => navigate('/contact')}
+              style={{ padding: 'clamp(10px,2vw,14px) clamp(24px,4vw,40px)', background: 'transparent', color: '#00ff88', fontWeight: 700, fontSize: 'clamp(0.78rem,1.8vw,1rem)', border: '2px solid rgba(0,255,136,0.5)', borderRadius: '50px', cursor: 'pointer', fontFamily: 'Orbitron, monospace', letterSpacing: '1px', transition: 'all 0.3s ease', backdropFilter: 'blur(4px)' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,255,136,0.1)'; e.currentTarget.style.borderColor = '#00ff88'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(0,255,136,0.5)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            >Contact Us</button>
+          </div>
+
+          {/* Scroll indicator */}
+          <div style={{ marginTop: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, opacity: 0.35, animation: 'scrollBounce 2s ease-in-out infinite' }}>
+            <span style={{ color: '#00ff88', fontSize: '0.6rem', letterSpacing: '3px', fontFamily: 'Orbitron, monospace' }}>SCROLL</span>
+            <div style={{ width: 1, height: 36, background: 'linear-gradient(to bottom, #00ff88, transparent)' }} />
+          </div>
+
+          <style>{`
+            @keyframes logoPulse {
+              0%   { filter: drop-shadow(0 0 28px rgba(0,255,136,0.4)) drop-shadow(0 0 8px rgba(0,207,255,0.2)); }
+              100% { filter: drop-shadow(0 0 52px rgba(0,255,136,0.65)) drop-shadow(0 0 20px rgba(0,207,255,0.4)); }
+            }
+            @keyframes logoBgPulse {
+              0%   { opacity: 0.6; transform: scale(1); }
+              100% { opacity: 1;   transform: scale(1.1); }
+            }
+            @keyframes edgeScan {
+              0%   { opacity: 0.5; transform: scaleX(0.7); }
+              100% { opacity: 1;   transform: scaleX(1); }
+            }
+            @keyframes edgeScanV {
+              0%   { opacity: 0.5; transform: scaleY(0.7); }
+              100% { opacity: 1;   transform: scaleY(1); }
+            }
+            @keyframes cornerPulse {
+              0%   { opacity: 0.5; transform: scale(0.8); }
+              100% { opacity: 1;   transform: scale(1.3); }
+            }
+            @keyframes scrollBounce {
+              0%, 100% { transform: translateY(0); }
+              50%       { transform: translateY(8px); }
+            }
+          `}</style>
         </div>
 
 

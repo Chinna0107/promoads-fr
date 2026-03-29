@@ -250,10 +250,8 @@ const Events = () => {
                       Get Quote
                     </button>
                     
-                    <a 
-                      href={event.pdf} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
+                    <button
+                      onClick={() => navigate(`/event/${event.eventId}?category=${category}`)}
                       style={{
                         ...sciFiBtnStyle,
                         minWidth: 90,
@@ -262,16 +260,16 @@ const Events = () => {
                         background: 'rgba(0,255,136,0.1)',
                         color: '#00ff88',
                         border: '1px solid #00ff88',
-                        textDecoration: 'none',
                         padding: '0.5rem 1rem',
                         display: 'inline-flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        borderRadius: '8px'
+                        borderRadius: '8px',
+                        cursor: 'pointer',
                       }}
                     >
                       View Details
-                    </a>
+                    </button>
                   </div>
                 </div>
               ))}
