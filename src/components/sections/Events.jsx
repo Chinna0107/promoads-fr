@@ -103,9 +103,9 @@ const Events = () => {
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem', marginBottom: '2.5rem', marginTop: '5rem', padding: '0 2rem', paddingBottom: '120px', minHeight: '60vh', flexDirection: window.innerWidth < 768 ? 'column' : 'row' }}>
             {categories.map((cat) => {
               const categoryImages = {
-                'Social': 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772685897/co2_gr2len.jpg',
-                'Commercial': 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772685892/co1_o7auwb.jpg',
-                'Promotions': 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647792/5_i0dcqp.png'
+                'Social': 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772515317/pm1_fd9py4.jpg',
+                'Commercial': 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772515587/pm9_yeknsm.jpg',
+                'Promotions': 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772515594/pm10_jyvqi4.jpg'
               };
               
               return (
@@ -286,20 +286,20 @@ const Events = () => {
 function filteredEvents(category) {
   const allEvents = {
     Social: [
-      { id: '1', eventId: 'weddings', title: 'Weddings', description: 'Capture and celebrate the most special day with elegant event coverage.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647792/5_i0dcqp.png', pdf: Webdev, icon: <FaPalette /> },
-      { id: '2', eventId: 'anniversaries', title: 'Anniversaries', description: 'Celebrate milestones of love and togetherness with memorable events.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647786/4_p9eplw.png', pdf: CracktheCode, icon: <FaCode /> },
-      { id: '3', eventId: 'engagement-parties', title: 'Engagement Parties', description: 'Mark the beginning of a lifelong journey with a beautiful engagement event.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647798/6_pbrkg5.png', pdf: Hackathon, icon: <FaLaptopCode /> },
-      { id: '4', eventId: 'surprise-gifts', title: 'Surprise Gifts', description: 'Plan and execute the perfect surprise gift experience for your loved ones.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647786/4_p9eplw.png', pdf: CracktheCode, icon: <FaLightbulb /> },
-      { id: '5', eventId: 'birthday-celebrations', title: 'Birthday Celebrations', description: 'Make every birthday unforgettable with custom-themed celebrations.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647798/6_pbrkg5.png', pdf: Hackathon, icon: <FaGamepad /> },
-      { id: '6', eventId: 'personal-events', title: 'Personal Events', description: 'Tailored event management for any personal milestone or gathering.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647772/2_fdomhf.png', pdf: Presentation, icon: <FaMicrophone /> },
+      { id: '1', eventId: 'weddings', title: 'Weddings', description: 'Capture and celebrate the most special day with elegant event coverage.', tags: ['Individual'], image: 'https://cbeditz.com/public/cbeditz/preview/hindu-wedding-marriage-background-hd-wallpaper-eykcs.jpg', pdf: Webdev, icon: <FaPalette /> },
+      { id: '2', eventId: 'anniversaries', title: 'Anniversaries', description: 'Celebrate milestones of love and togetherness with memorable events.', tags: ['Individual'], image: 'https://m.media-amazon.com/images/I/71S4Vf4v5JL._AC_UF1000,1000_QL80_.jpg', pdf: CracktheCode, icon: <FaCode /> },
+      { id: '3', eventId: 'engagement-parties', title: 'Engagement Parties', description: 'Mark the beginning of a lifelong journey with a beautiful engagement event.', tags: ['Individual'], image: 'https://images.pexels.com/photos/3156648/pexels-photo-3156648.jpeg?cs=srgb&dl=pexels-westernsydneyweddings-3156648.jpg&fm=jpg', pdf: Hackathon, icon: <FaLaptopCode /> },
+      { id: '4', eventId: 'surprise-gifts', title: 'Surprise Gifts', description: 'Plan and execute the perfect surprise gift experience for your loved ones.', tags: ['Individual'], image: 'https://static.vecteezy.com/system/resources/thumbnails/075/502/320/small/wrapped-presents-holiday-stacked-gifts-festive-celebration-surprise-boxes-new-year-photo.jpg', pdf: CracktheCode, icon: <FaLightbulb /> },
+      { id: '5', eventId: 'birthday-celebrations', title: 'Birthday Celebrations', description: 'Make every birthday unforgettable with custom-themed celebrations.', tags: ['Individual'], image: 'https://i.ytimg.com/vi/xQUaoteTShM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDEI83DXHCc6LDT_HGIkqyBKpNs6w', pdf: Hackathon, icon: <FaGamepad /> },
+      { id: '6', eventId: 'personal-events', title: 'Personal Events', description: 'Tailored event management for any personal milestone or gathering.', tags: ['Individual'], image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJjHy569runRU6YJYr1cKLqlOEzfb2oXdbUg&s', pdf: Presentation, icon: <FaMicrophone /> },
     ],
     Commercial: [
-      { id: '7', eventId: 'political-events', title: 'Political Events', description: 'Professional management for rallies, campaigns, and political gatherings.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647765/1_vcbzgr.png', pdf: Circuitron, icon: <FaNetworkWired /> },
-      { id: '8', eventId: 'launching-events', title: 'Launching Events', description: 'Grand launch events for colleges, shops, restaurants, and more.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647772/2_fdomhf.png', pdf: Presentation, icon: <FaChalkboardTeacher /> },
-      { id: '9', eventId: 'corporate-events', title: 'Corporate Events', description: 'End-to-end management for corporate meets, conferences, and team events.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647779/3_ci7xts.png', pdf: TechQuiz, icon: <FaBrain /> },
+      { id: '7', eventId: 'political-events', title: 'Political Events', description: 'Professional management for rallies, campaigns, and political gatherings.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772515323/pm2_vbmn4j.jpg', pdf: Circuitron, icon: <FaNetworkWired /> },
+      { id: '8', eventId: 'launching-events', title: 'Launching Events', description: 'Grand launch events for colleges, shops, restaurants, and more.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772515336/pm4_k7ij03.jpg', pdf: Presentation, icon: <FaChalkboardTeacher /> },
+      { id: '9', eventId: 'corporate-events', title: 'Corporate Events', description: 'End-to-end management for corporate meets, conferences, and team events.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772515329/pm3_qgv8wm.jpg', pdf: TechQuiz, icon: <FaBrain /> },
     ],
     Promotions: [
-      { id: '10', eventId: 'advertising-promoting', title: 'Advertising / Promoting', description: 'Strategic advertising and promotional campaigns to boost your brand visibility.', tags: ['Individual'], image: 'https://res.cloudinary.com/dgyykbmt6/image/upload/v1772647792/5_i0dcqp.png', pdf: Webdev, icon: <FaPalette /> },
+      { id: '10', eventId: 'advertising-promoting', title: 'Advertising / Promoting', description: 'Strategic advertising and promotional campaigns to boost your brand visibility.', tags: ['Individual'], image: 'https://wallpapercave.com/wp/wp7929986.jpg', pdf: Webdev, icon: <FaPalette /> },
     ]
   };
   return allEvents[category] || [];
