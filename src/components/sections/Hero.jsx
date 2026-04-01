@@ -406,8 +406,8 @@ const Hero = () => {
             padding: '0 16px',
             marginTop: '60px',
           }}>
-            {/* Ambient glow behind logo */}
-            <div style={{
+            {/* Ambient glow behind logo - desktop only */}
+            <div className="hide-on-mobile" style={{
               position: 'absolute',
               width: '70%', height: '60%',
               background: 'radial-gradient(ellipse at center, rgba(0,255,136,0.18) 0%, rgba(0,207,255,0.06) 50%, transparent 75%)',
