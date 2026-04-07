@@ -32,7 +32,7 @@ const LoginPage = () => {
       const res = await fetch(`${apiUrl}/api/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: emailOrMobile, password })
+        body: JSON.stringify({ emailOrMobile, password })
       });
 
       const data = await res.json();
